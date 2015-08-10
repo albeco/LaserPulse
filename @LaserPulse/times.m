@@ -1,6 +1,6 @@
 function res = times(pulse1, pulse2)
-% TIMES multiplies two pulses in time-domain.
-% It is equivalent to convolution in frequency-domain.
+% TIMES multiplies two pulses in the active domain of the first pulse.
+% It is equivalent to convolution in the reciprocal domain.
 %
 % INPUTS:
 %   pulse1: instance of LaserPulse
@@ -22,7 +22,7 @@ if ~isa(pulse2, 'LaserPulse')
 elseif ~isa(pulse1, 'LaserPulse')
   res = multByDouble(pulse2, pulse1);
 else % both operators are pulses
-  res = binaryOperator(@polarTimes, pulse1, pulse2, 'time');
+  res = binaryOperator(@polarTimes, pulse1, pulse2, pulse.activeDomain);
 end
 end
 

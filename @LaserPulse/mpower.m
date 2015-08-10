@@ -1,5 +1,5 @@
 function res = mpower(pulse1, n)
-% MPOWER calculate the n-th power of a pulse in time domain.
+% MPOWER calculate the n-th power of a pulse in the active domain.
 % In this implementation, it is the same as power(pulse1, n)
 %
 % INPUTS:

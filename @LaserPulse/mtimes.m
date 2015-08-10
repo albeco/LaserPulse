@@ -1,6 +1,6 @@
 function res = mtimes(pulse1, pulse2)
-% MTIMES multiplies two pulses in time-domain.
-% It is equivalent to convolution in frequency-domain.
+% MTIMES multiplies two pulses in the active domain of the first pulse.
+% It is equivalent to convolution in the reciprocal domain.
 %
 % In this implementation mtimes is the same as times.
 %

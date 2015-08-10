@@ -5,11 +5,19 @@ function normalize(pulse)
 % This file is part of LaserPulse. See README.txt for copyright and licence
 % notice.
 
+% CHANGE LOG
+% 10/08/2015: now using activeDomain instead of updatedDomain_
+
 % normalize on active domain to avoid phase wrapping caused by fft
-if strcmp(pulse.updatedDomain_, 'time')
-  area = trapz(pulse.timeArray, (pulse.temporalAmplitude).^2);
-  pulse.temporalAmplitude = pulse.temporalAmplitude / sqrt(area);
-else
-  area = trapz(pulse.frequencyArray, (pulse.spectralAmplitude).^2);
-  pulse.spectralAmplitude = pulse.spectralAmplitude / sqrt(area);
+switch pulse.activeDomain
+  case 'time'
+    area = trapz(pulse.timeArray, (pulse.temporalAmplitude).^2);
+    pulse.temporalAmplitude = pulse.temporalAmplitude / sqrt(area);
+  case 'frequency'
+    area = trapz(pulse.frequencyArray, (pulse.spectralAmplitude).^2);
+    pulse.spectralAmplitude = pulse.spectralAmplitude / sqrt(area);
+  otherwise
+    error('LaserPulse:normalize', 'activeDomain not properly set');
+end
+
 end

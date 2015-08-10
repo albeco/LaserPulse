@@ -1,5 +1,5 @@
 function res = mrdivide(pulse1, pulse2)
-% MRDIVIDE calculates the ratio of two pulses is time-domain.
+% MRDIVIDE calculates the ratio of two pulses in the active domain of the first pulse.
 % It is equivalent to a deconvolution in frequency domain.
 % 
 % In this implementation, it is equivalent to rdivide.

@@ -151,6 +151,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     timeArray = []; % time array
   end
   properties
+    activeDomain = 'time'; % Fourier domain used for mathematical operators
     nPoints = 0; % number of domain points
   end
   %% electric field public properties

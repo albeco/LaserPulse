@@ -18,10 +18,8 @@ function res = binaryOperator(op, pulse1, pulse2, activeDomain)
 % OUTPUTS:
 %   p: the output pulse
 %
-% The operator is applied on the active domain of the first pulse. The
-% active domain of the second pulse is changed if needed (i.e. recalculated
-% from the active one using fft). If needed, both pulses are interpolated
-% over a common domain
+% If not specified otherwise, the operator is applied on the active domain
+% of the first pulse.
 
 %% Copyright (C) 2015 Alberto Comin, LMU Muenchen
 %
@@ -37,13 +35,16 @@ function res = binaryOperator(op, pulse1, pulse2, activeDomain)
 %  received a copy of the GNU General Public License along with
 %  LaserPulse.  If not, see <http://www.gnu.org/licenses/>.
 
+% CHANGE LOG
+% 10/08/2015: now using the property activeDomain
+
 assert(...
   isa(pulse1,'LaserPulse') && isa(pulse2,'LaserPulse') && ...
   ~strcmp(pulse1.updatedDomain_,'none') && ~strcmp(pulse2.updatedDomain_,'none'), ...
   ['LaserPulse:binaryOperator arguments of ', func2str(op),' are empty or not valid']);
 
 if ~exist('activeDomain', 'var')
-  activeDomain = pulse1.updatedDomain_;
+  activeDomain = pulse1.activeDomain;
 end
 
 p1 = copy(pulse1);

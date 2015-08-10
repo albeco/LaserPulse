@@ -18,6 +18,9 @@ end
 assert(mod(n,1)==0 && n>0, ['LaserPulse:harmonic', ...
   ' the order of harmonic must be a positive integer']);
 
+% make sure to calculatw pulse.^n in time domain
+pulse.activeDomain = 'time';
+
 p = pulse.^n;
 
 end
