@@ -53,7 +53,10 @@ classdef LaserPulse < matlab.mixin.Copyable
   %   'pulse1 = pulse2.copy()'.
   %  The assignment 'pulse1 = pulse2' does not create a copy of the object,
   %  but only a second reference to it.
-
+  %
+  % REQUIREMENTS:
+  %   The LaserPulseMatlab uses features introduced with matlab R2011a,
+  %   like for example the matlab.mixin.Copyable class.
   
   %% Copyright (C) 2015 Alberto Comin, LMU Muenchen
   %
