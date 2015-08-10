@@ -24,6 +24,10 @@ Afterwards, both domains are automatically synchronized.
    sum(abs(complexfield).^2,2) for a 2D array. This can be useful for
    storing the field components for different orthogonal polarizations.
 
+#####Requirements:
+   The LaserPulse class was tested on Matlab2015a, but it should work with
+   Matlab version R2011a or more recent.
+
 #####Installation:
  * Automatic Installation:
     From matlab: go to the folder where the LaserPulse is located (for example 
