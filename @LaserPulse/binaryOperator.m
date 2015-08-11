@@ -47,6 +47,14 @@ if ~exist('activeDomain', 'var')
   activeDomain = pulse1.activeDomain;
 end
 
+% check if active domain are different, and warn the user if they are
+if ~strcmp(pulse1.activeDomain, pulse2.activeDomain)
+  fprintf(['\nWarning: The two operands of "%s" have different ', ...
+    'activeDomain.\n Applying %s in the activeDomain of the ', ...
+    'first operator (%s).\n'], func2str(op), func2str(op), pulse1.activeDomain);
+end
+
+% create local copies because LaserPulse objects are copied by reference
 p1 = copy(pulse1);
 p2 = copy(pulse2);
 
@@ -54,18 +62,19 @@ p2 = copy(pulse2);
 samplingTolerance = 1e-10;
 matchDomains(p1, p2, samplingTolerance)
 
-if strcmp(activeDomain, 'time') || strcmp(activeDomain, 'all')
- [newTempAmp, newTempPhase] = op( ...
-   p1.temporalAmplitude, p1.temporalPhase, ...
-   p2.temporalAmplitude, p2.temporalPhase);
- res = LaserPulse(p1.timeArray, p1.timeUnits, newTempAmp, newTempPhase);
-elseif strcmp(activeDomain, 'frequency') 
- [newSpecAmp, newSpecPhase] = op( ...
-   p1.spectralAmplitude, p1.spectralPhase, ...
-   p2.spectralAmplitude, p2.spectralPhase);
- res = LaserPulse(p1.frequencyArray, p1.frequencyUnits, newSpecAmp, newSpecPhase);
-else
-  warning('LaserPulse:binaryOperator domains not propertly set');
+switch activeDomain
+  case 'time'
+    [newTempAmp, newTempPhase] = op( ...
+      p1.temporalAmplitude, p1.temporalPhase, ...
+      p2.temporalAmplitude, p2.temporalPhase);
+    res = LaserPulse(p1.timeArray, p1.timeUnits, newTempAmp, newTempPhase);
+  case 'frequency'
+    [newSpecAmp, newSpecPhase] = op( ...
+      p1.spectralAmplitude, p1.spectralPhase, ...
+      p2.spectralAmplitude, p2.spectralPhase);
+    res = LaserPulse(p1.frequencyArray, p1.frequencyUnits, newSpecAmp, newSpecPhase);
+  otherwise
+    warning('LaserPulse:binaryOperator domains not propertly set');
 end
 
 end
