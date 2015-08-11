@@ -22,7 +22,7 @@ if ~isa(pulse2, 'LaserPulse')
 elseif ~isa(pulse1, 'LaserPulse')
   res = multByDouble(pulse2, pulse1);
 else % both operators are pulses
-  res = binaryOperator(@polarTimes, pulse1, pulse2, pulse.activeDomain);
+  res = binaryOperator(@polarTimes, pulse1, pulse2, pulse1.activeDomain);
 end
 end
 
