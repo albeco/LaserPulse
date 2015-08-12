@@ -36,44 +36,49 @@ function [x0, ix0, cm] = getCenterOfMass(x, y, selectedPulse)
 % for copyright and licence notice.
 
 % version log:
-% 2015/06/18: added option 'total' for calculating the center of mass like
-% the input would be just one big array
+% 18/06/2015: added option 'total' for calculating the center of mass like
+%   the input would be just one big array
+% 12/08/2015: added support for the case in which both x and y are
+%    multi-dimensional arrays
 
+%% process optional input arguments
 if ~exist('selectedPulse','var') || isempty(selectedPulse)
     selectedPulse = 'first';
 end
-if isvector(y) 
-    y = y(:);  % if also y is 1D we transform both into column arrays
-end
 if isempty(x)
     x = (1:size(y,1)).'; % x == column index
+end
+
+%% check if inputs are arrays of compatible size
+if isvector(x) == 1
+   assert(size(x,1) == size(y,1), 'the size of x and y are not compatible');
 else
-    assert(isvector(x),'x must be 1D array');
-    x = x(:); % we turn x into column array
+  assert(all(size(x) == size(y)), 'the size of x and y are not compatible');
 end
 
-
-assert(size(x,1) == size(y,1), 'the size of x and y aree not compatible');
-
-% for simplicity temporary transform input in a 2D array
-arraySize = size(y);
-if numel(arraySize) > 2
-   y = reshape(y, arraySize(1), []);
-end
+%% main body
 
 switch selectedPulse
-   case 'first'
-      mass = y(:, 1);
-   case 'middle'
-      mass = y(:, ceil(arraySize(2) / 2));
+  case 'first'
+    x = x(:, 1);
+    y = y(:, 1);
+  case 'middle'
+    nMiddle = ceil(size(y,2) / 2);
+    if isvector(x); x = x(:,1); else x = x(:, nMiddle); end
+    y = y(:, nMiddle);
   case 'total'
-    mass = sum(y, 2);
-   otherwise
-      error('centerOfMass:ArgChk',['valid optiona arguments are',...
-         ' ''first'' or ''middle''.']);
+    % for simplicity transform inputs in a 2D array
+    x = reshape(x, size(x, 1), []);
+    y = reshape(y, size(y, 1), []);
+  otherwise
+    error('centerOfMass:ArgChk',['valid optiona arguments are',...
+      ' ''first'' or ''middle''.']);
 end
 
-cm = sum(x .* mass) ./ sum(mass);
-[~, ix0] = min(abs(x - cm));
+% get the center of mass
+weightedSum = bsxfun(@times, x, y);
+cm = sum(weightedSum(:)) / sum(y(:));
+% get the array element closest to the center of mass
+[~, ix0] = min(abs(x(:,1) - cm));
 x0 = x(ix0);
 end
