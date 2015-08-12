@@ -474,13 +474,14 @@ classdef LaserPulse < matlab.mixin.Copyable
   methods
    p = plus(pulse1, pulse2); % sum two pulses in active domain
    p = minus(pulse1, pulse2); % subtract two pulses in active domain
-   p = times(pulse1, pulse2); % multiplies in time, convolve in frequency
+   p = times(pulse1, pulse2); % multiplies in active domain, convolve in reciprocal domain
    p = mtimes(pulse1, pulse2); % same as 'times', in this implementation
-   p = rdivide(pulse1, pulse); % divide in time, deconvolve in frequency
+   p = rdivide(pulse1, pulse); % divide in active domain, deconvolve in reciprocal domain
    p = mrdivide(pulse1, pulse2); % mrdivide == rdivide, in this implementation
    p = power(pulse1, n); % n-th power in time domain
    p = mpower(pulse1, n); % same as power, in this implementation
-   p2 = conj(p2); % conjugate in time domain
+   p = conj(pulse1); % conjugate in active domain
+   p = abs(pulse1); % absoulte value in active domain
   end
   
   %% derived physical quantities

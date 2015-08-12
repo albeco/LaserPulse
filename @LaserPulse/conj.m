@@ -3,10 +3,9 @@ function res = conj(pulse1)
 %
 % INPUTS:
 %   pulse1: instance of LaserPulse
-%   pulse2: instance of LaserPulse
 %
 % OUTPUTS:
-%   p: the resulting pulse
+%   res: the resulting pulse
 
 % Copyright (C) 2015 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt for copyright and licence
