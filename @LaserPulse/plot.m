@@ -39,31 +39,31 @@ if isempty(ax)
   % creating a new figure
   figure()
   ax(1) = subplot(2,2,1);
-  plot(pulse.timeArray(timeRegion), pulse.temporalAmplitude(timeRegion));
+  plot(pulse.timeArray(timeRegion, :), pulse.temporalAmplitude(timeRegion, :));
   grid on
   
   ax(2) = subplot(2,2,2);
-  plot(pulse.timeArray(timeRegion), pulse.temporalPhase(timeRegion));
+  plot(pulse.timeArray(timeRegion, :), pulse.temporalPhase(timeRegion, :));
   grid on
   
   ax(3) = subplot(2,2,3);
-  plot(pulse.frequencyArray(freqRegion), pulse.spectralAmplitude(freqRegion));
+  plot(pulse.frequencyArray(freqRegion, :), pulse.spectralAmplitude(freqRegion, :));
   grid on
   
   ax(4)= subplot(2,2,4);
-  plot(pulse.frequencyArray(freqRegion), pulse.spectralPhase(freqRegion));
+  plot(pulse.frequencyArray(freqRegion, :), pulse.spectralPhase(freqRegion, :));
   grid on
   
 else
   % adding on top of a old figure
   axes(ax(1)); hold on
-  plot(pulse.timeArray(timeRegion), pulse.temporalAmplitude(timeRegion));
+  plot(pulse.timeArray(timeRegion, :), pulse.temporalAmplitude(timeRegion, :));
   axes(ax(2)); hold on
-  plot(pulse.timeArray(timeRegion), pulse.temporalPhase(timeRegion));
+  plot(pulse.timeArray(timeRegion, :), pulse.temporalPhase(timeRegion, :));
   axes(ax(3)); hold on
-  plot(pulse.frequencyArray(freqRegion), pulse.spectralAmplitude(freqRegion));
+  plot(pulse.frequencyArray(freqRegion, :), pulse.spectralAmplitude(freqRegion, :));
   axes(ax(4)); hold on
-  plot(pulse.frequencyArray(freqRegion), pulse.spectralPhase(freqRegion));
+  plot(pulse.frequencyArray(freqRegion, :), pulse.spectralPhase(freqRegion, :));
 end
 
 xlabel(ax(1), sprintf('time (%s)', pulse.timeUnits))

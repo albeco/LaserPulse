@@ -26,25 +26,45 @@ function varargout = std(pulse, domain, mode)
 % This file is part of LaserPulse. See README.txt for copyright and licence
 % notice.
 
-if ~exist('domain', 'var')
-  domain = 'all';
-end
-
-if ~exist('mode', 'var')
-  mode = 1;
-end
+% process optional input arguments
+if ~exist('domain', 'var'); domain = 'all'; end
+if ~exist('mode', 'var'); mode = 1; end
 
 n = 0;
+
 if strcmp(domain, 'time') || strcmp(domain, 'all')
   n = n+1;
-  varargout{n} = sqrt(var(pulse.timeArray, ...
-    abs(pulse.temporalAmplitude).^mode, 1,'omitnan'));
-end
-if strcmp(domain, 'frequency') || strcmp(domain, 'all')
-  n = n+1;
-  varargout{n} = sqrt(var(pulse.frequencyArray, ...
-    abs(pulse.spectralAmplitude).^mode, 1, 'omitnan'));
+  varargout{n} = stdev(pulse.timeArray, pulse.temporalIntensity, mode);
 end
 
+if strcmp(domain, 'frequency') || strcmp(domain, 'all')
+  n = n+1;
+  varargout{n} = stdev(pulse.frequencyArray, pulse.spectralIntensity, mode);
+end
+
+end
+
+function v = stdev(x, fieldInt, mode)
+% STDDEV gives the averaged standard deviation of a pulse or a pulse train
+% 
+% stdev(x, y, 2) calculates the standard deviation of the total
+% intensity of the pulse train
+%
+% stdev(x, y, 1) calculates the standard deviation of the amplitude of the
+% pulse train, defined as the square root of the total intesity
+
+% if pulse train, get the total intensity
+if ndims(fieldInt)>1
+  % first stack all the sub-pulses in a matrix, and them sum them
+  fieldInt = reshape(fieldInt, size(fieldInt,1), []);
+  fieldInt = sum(fieldInt, 2);
+end
+
+switch mode
+  case 2 % variance of the signal intensity
+    v = sqrt(var(x, fieldInt, 1,'omitnan'));
+  case 1 % variance of the signal amplitude
+    v = sqrt(var(x, sqrt(fieldInt), 1,'omitnan'));
+end
 end
 
