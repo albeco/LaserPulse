@@ -12,8 +12,8 @@ p = gaussianPulse('f0', 300/800,'dt',0.2,'nPoints',2^10,'fwhm',10);
 GDD = 100; % fs^2
 p.polynomialPhase([GDD 0 0]);
 
-%% Create a pulse train
-% For creating a pulse train, we multiply the frequency domain electric
+%% Create a pulse sequence
+% For creating a pulse sequence, we multiply the frequency domain electric
 % field by a cosine amplitude modulation.
 
 % the cosine amplitude modulation is stored in a matrix with frequency
@@ -24,7 +24,7 @@ timeShift = cos(2*pi * p.frequencyArray * p.timeArray'/2);
 p.activeDomain = 'frequency';
 
 p = p * timeShift;
-% now p contains a pulse train
+% now p contains a pulse sequence
 
 %% Calculate the second harmonic
 

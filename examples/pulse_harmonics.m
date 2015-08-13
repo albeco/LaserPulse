@@ -13,7 +13,7 @@ p1 = LaserPulse(t, 'fs', Et);
 p1.normalize()
 
 %% Calculate harmonics
-% The power operator works on the time dimension. This allows
+% The power operator works, by default, on the time dimension. This allows
 % calculating harmonics using a short notation:
 pshg = p1.^2; 
 pthg = p1.^3; 

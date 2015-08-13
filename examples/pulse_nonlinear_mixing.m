@@ -1,10 +1,11 @@
 %% Eample of nonlinear mixing
-% Within the LaserPulse class, multiplications and divisions are carried on
-% in time domain. Physically the multiplication of two pulses gives the
-% sum-frequency signal. The difference frequency is obtained by multiplying
-% the first pulse by the complex conjugate of the second.
+% Within the LaserPulse class, by default multiplications and divisions
+% between pulses are done in the time domain. Multiplying two pulses then
+% gives the sum-frequency signal. The difference frequency is obtained by
+% multiplying the first pulse by the complex conjugate of the second.
 
 %% First laser pulse
+% Let us define a 10fs Gaussian pulse centered at 0.4 PHz (750 nm)
 
 % parameters
 n = 2^12; dt = 0.1; s = 10; t0 = 10; f0 = 0.4;
@@ -15,19 +16,23 @@ p1 = LaserPulse(t, 'fs', et);
 
 
 %% Second laser pulse
+% Now let us a define a second pulse centered at a different frequency: 0.6
+% PHz (500 nm)
 
 % modified parameters
-et2 = exp(-(t).^2/(s/2)^2 -2i*pi*t*(0.6));
+f0 = 0.6;
+et2 = exp(-(t).^2/(s/2)^2 -2i*pi*t*f0);
 % pulse initialization
 p2 = LaserPulse(t, 'fs', et2);
 
 %% Sum Frequency
-psf = p1 .* p2 ;
+% The sum frequency can be obtained by simple multiplication.
+psf = p1 * p2 ;
 
 %% Difference Frequency
-
-% the complex conjugated operates by default on the time domain:
-pdf = p2 .* conj(p1);
+% The frequency difference can be obtained by multiplying the first pulse
+% with the complex conjugate of the second.
+pdf = p2 * conj(p1);
 
 %% Plot pulses
 figure()
