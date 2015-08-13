@@ -485,13 +485,13 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% derived physical quantities
   methods
-    p = harmonic(pulse, n); % calculate n^th harmonic
+    p = harmonic(pulse, n); % calculates n^th harmonic
     ac = autocorrelation(pulse); % interferometric autocorrelation
   end
   
   %% utility methods
   methods (Access = private)
-    updateField(pulse, domainType); % update fields using fft
+    updateField(pulse, domainType); % updates fields using fft
   end
   methods
     tau = calculateShortestDuration(pulse); % calculates shortest pulse duration
@@ -505,5 +505,6 @@ classdef LaserPulse < matlab.mixin.Copyable
     increaseTimeRange(pulse, newrange, units); % decreases frequency step to increase time range
     newax = plot(pulse, nstd, ax); % plots the fields
     disp(pulse); % displays pulse information
+    varargout = size(pulse, varargin); % gives the array size of the electric field
   end
 end

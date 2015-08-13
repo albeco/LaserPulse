@@ -6,7 +6,7 @@ function zeropad(p, domain, nExtraPoints)
 % for copyright and licence notice.
 
 p.updateField(domain);
-arraySize = size(p.specAmp_);
+arraySize = size(p);
 % to double-check following lines run centeredRange(n) and see where zero goes
 if rem(p.nPoints, 2) == 0 % even number of previuos points
   leftZeros = zeros([floor(nExtraPoints/2), arraySize(2:end)]);

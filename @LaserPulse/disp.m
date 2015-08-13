@@ -6,15 +6,7 @@ function disp(pulse)
 % notice.
 
 % determine size of pulse and number of subpulses;
-switch pulse.updatedDomain_
-  case {'time','all'}
-    sz = size(pulse.tempAmp_);
-  case 'frequency'
-    sz = size(pulse.specAmp_);
-  otherwise
-    disp('domain information still unset');
-    return
-end
+sz = size(pulse);
 nsub = prod(sz(2:end));
 
 % display pulse information
