@@ -1,0 +1,159 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Example of MIIPS simulation</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-13"><meta name="DC.source" content="pulse_MIIPS.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Example of MIIPS simulation</h1><!--introduction--><p>Multiphoton Intrapulse Interference Phase Scan (MIIPS) is a popular technique for femtosecond pulse compression, which involves modulating the spectral phase and recording second harmonic spectra.</p><p>The second harmonic generation (SHG) is sensitive to the spectral phase, so by analyzing the dependence of the SHG from the modulation parameters it is possible to derive an estimate of the spectral phase.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialize laser pulse</a></li><li><a href="#2">Set up the modulation parameters</a></li><li><a href="#3">Create a matrix with the phase modulation mask</a></li><li><a href="#4">Calculate the MIIPS trace</a></li><li><a href="#6">Display the MIIPS trace</a></li></ul></div><h2>Initialize laser pulse<a name="1"></a></h2><pre class="codeinput">p = gaussianPulse(<span class="string">'f0'</span>, 300/800, <span class="string">'t0'</span>, 0, <span class="string">'fwhm'</span>, 20, <span class="keyword">...</span>
+  <span class="string">'dt'</span>,1, <span class="string">'nPoints'</span>, 2^12);
+p.polynomialPhase([1e4 100 0 0])
+</pre><h2>Set up the modulation parameters<a name="2"></a></h2><p>In the most common implementation of MIIPS, the phase modulation is a sinusoid, given by:</p><p>amp * sin( tau * (w - w0) - phi)</p><p>where phi is a scanning parameter.</p><pre class="codeinput"><span class="comment">% modulation amplitude</span>
+amp = 10; <span class="comment">% rad</span>
+<span class="comment">% modulation frequency</span>
+tau = 10; <span class="comment">% fs</span>
+<span class="comment">% scanning parameters</span>
+phaseSteps = -2*pi: 0.01 : 2*pi;
+</pre><h2>Create a matrix with the phase modulation mask<a name="3"></a></h2><p>The modulation mask must be a matrix with frequency on the first dimension and scanning parameter on the second dimension.</p><pre class="codeinput">[W, PHI] = ndgrid(2*pi * p.frequencyArray, phaseSteps);
+W0 = 2*pi * p.centralFrequency;
+<span class="comment">% the phase modulation mask is:</span>
+modulationMask = exp(1i * amp * sin(tau * (W-W0) - PHI));
+</pre><h2>Calculate the MIIPS trace<a name="4"></a></h2><p>Multiply the pulse by the phase modulation mask</p><pre class="codeinput"><span class="comment">% make sure to multiply in the frequency domain</span>
+p.activeDomain = <span class="string">'frequency'</span>;
+p = p * modulationMask;
+</pre><p>Calculate the second harmonic and get a LaserPulse object which contain the MIIPS trace.</p><pre class="codeinput"><span class="comment">% harmonics are easier to calculate in time domain</span>
+p.activeDomain = <span class="string">'time'</span>;
+miips = p^2;
+</pre><h2>Display the MIIPS trace<a name="6"></a></h2><pre class="codeinput">figure(1)
+pcolor(PHI, W, miips.spectralIntensity); shading <span class="string">flat</span>
+ylim([-4*pi, 4*pi]*miips.bandwidth + 2*pi*miips.centralFrequency)
+
+xlabel(<span class="string">'scanning phase (rad)'</span>);
+ylabel(sprintf(<span class="string">' angular frequency (rad / %s)'</span>, miips.timeUnits))
+</pre><img vspace="5" hspace="5" src="pulse_MIIPS_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Example of MIIPS simulation
+% Multiphoton Intrapulse Interference Phase Scan (MIIPS) is a popular
+% technique for femtosecond pulse compression, which involves modulating
+% the spectral phase and recording second harmonic spectra.
+%
+% The second harmonic generation (SHG) is sensitive to the spectral
+% phase, so by analyzing the dependence of the SHG from the modulation
+% parameters it is possible to derive an estimate of the spectral phase.
+
+%% Initialize laser pulse
+p = gaussianPulse('f0', 300/800, 't0', 0, 'fwhm', 20, ...
+  'dt',1, 'nPoints', 2^12);
+p.polynomialPhase([1e4 100 0 0])
+
+%% Set up the modulation parameters
+% In the most common implementation of MIIPS, the phase modulation is a
+% sinusoid, given by:
+%
+% amp * sin( tau * (w - w0) - phi)
+%
+% where phi is a scanning parameter.
+
+
+% modulation amplitude
+amp = 10; % rad
+% modulation frequency
+tau = 10; % fs
+% scanning parameters
+phaseSteps = -2*pi: 0.01 : 2*pi;
+
+%% Create a matrix with the phase modulation mask
+% The modulation mask must be a matrix with frequency on the first
+% dimension and scanning parameter on the second dimension.
+[W, PHI] = ndgrid(2*pi * p.frequencyArray, phaseSteps);
+W0 = 2*pi * p.centralFrequency;
+% the phase modulation mask is:
+modulationMask = exp(1i * amp * sin(tau * (W-W0) - PHI));
+
+%% Calculate the MIIPS trace
+% Multiply the pulse by the phase modulation mask
+
+% make sure to multiply in the frequency domain
+p.activeDomain = 'frequency';
+p = p * modulationMask;
+
+%%
+% Calculate the second harmonic and get a LaserPulse object which contain
+% the MIIPS trace.
+
+% harmonics are easier to calculate in time domain
+p.activeDomain = 'time';
+miips = p^2;
+
+%% Display the MIIPS trace
+figure(1)
+pcolor(PHI, W, miips.spectralIntensity); shading flat
+ylim([-4*pi, 4*pi]*miips.bandwidth + 2*pi*miips.centralFrequency)
+
+xlabel('scanning phase (rad)');
+ylabel(sprintf(' angular frequency (rad / %s)', miips.timeUnits))
+
+
+##### SOURCE END #####
+--></body></html>

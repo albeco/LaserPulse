@@ -118,4 +118,7 @@ legend('p1', 'p2')
 %       example simulation of self-phase modulation using LaserPulse class
 % *  <./example_files/pulse_interferometric_FROG.html pulse_interferometric_FROG.m>
 % (<matlab:edit('pulse_interferometric_FROG.m') source>)
-%       example of interometric frequency resolved autocorrelation
+%       example of Interometric Frequency Resolved Autocorrelation
+% *  <./example_files/pulse_MIIPS.html pulse_MIIPS.m>
+% (<matlab:edit('pulse_MIIPS.m') source>)
+%       example of Multiphoton Intrapulse Interference Phase Scan 
