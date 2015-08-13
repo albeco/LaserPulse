@@ -5,12 +5,9 @@ function normalize(pulse)
 % This file is part of LaserPulse. See README.txt for copyright and licence
 % notice.
 
-% CHANGE LOG
-% 10/08/2015: now using activeDomain instead of updatedDomain_
-
-% normalize on active domain to avoid phase wrapping caused by fft
-switch pulse.activeDomain
-  case 'time'
+% normalize on the updated domain to avoid phase wrapping caused by fft
+switch pulse.updatedDomain_
+  case {'time', 'all'}
     area = trapz(pulse.timeArray, (pulse.temporalAmplitude).^2);
     pulse.temporalAmplitude = pulse.temporalAmplitude / sqrt(area);
   case 'frequency'
