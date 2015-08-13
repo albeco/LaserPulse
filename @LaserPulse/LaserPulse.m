@@ -36,10 +36,11 @@ classdef LaserPulse < matlab.mixin.Copyable
   %   calculated and provided as dependent properties.
   % # Mathematical Operators:
   %   The LaserPulse class supports arithmetic operations, convolutions and
-  %   calculation of higher harmonics. The operators are applied in time
-  %   domain, so for instance p1*p2 is a multiplication in time domain and
-  %   a convolution in frequency domain. See the example files for more
-  %   information.
+  %   calculation of higher harmonics. The operators are applied by
+  %   default in time domain, so for instance p1*p2 is a multiplication in
+  %   time domain and a convolution in frequency domain. See the example
+  %   files for more information. For applying the operators in the
+  %   frequency domain set the property 'activeDomain' to 'frequency'.
   % # Pulse Trains:
   %   Multiple sub-pulses are stored as columns in a multidimensional
   %   arrays. Pulse parameters, like pulse duration and bandwidth, are
@@ -92,22 +93,20 @@ classdef LaserPulse < matlab.mixin.Copyable
   % - There are two reference systems. The reference system used for the
   %  public properties is centered at (t=0,f=0), as usual. The reference
   %  system used for the private properties is centered at
-  %  (timeOffset,frequencyOffset). Therea are two reasons for this choice:
+  %  (timeOffset,frequencyOffset). There are two reasons for this choice:
   %  1) reduce the number of points; 2) minimize phase wrapping issues,
   %  which occur when the derivative of the phase is too steep.
   %
-  % - Due to properties of fourier transform, the time array offset is also
+  % - Due to properties of fourier transform, the time offset is also
   %  a derivative offset for the spectral phase, and the other way round.
-  %  For this reason, both time and frequency offset belong to both time
-  %  and frequency domains. The phase offset is also shared between
-  %  domains.
+  %  For this reason, both time and frequency offsets belong to both time
+  %  and frequency domains.
   %
   % - Fourier transforms are performed on private properties defined
   %  in a offsetted reference system (see above). For this reason the fft
-  %  formula include a extra phase term (2*pi*timeOffset*frequencyOffset).
-  %  If this term would not be included, the carrier-envelope phase could
-  %  be altered, for example after translating the domain when one of the
-  %  offsets is not integer.
+  %  formulas include a extra phase term (2*pi*timeOffset*frequencyOffset).
+  %  If this term would not be included, the carrier-envelope phase offset
+  %  could be altered when translating a domain axes (see translate.m).
   
   
   %% time and frequency domain private properties
@@ -478,7 +477,7 @@ classdef LaserPulse < matlab.mixin.Copyable
    p = mtimes(pulse1, pulse2); % same as 'times', in this implementation
    p = rdivide(pulse1, pulse); % divide in active domain, deconvolve in reciprocal domain
    p = mrdivide(pulse1, pulse2); % mrdivide == rdivide, in this implementation
-   p = power(pulse1, n); % n-th power in time domain
+   p = power(pulse1, n); % n-th power in active domain
    p = mpower(pulse1, n); % same as power, in this implementation
    p = conj(pulse1); % conjugate in active domain
    p = abs(pulse1); % absoulte value in active domain
@@ -497,14 +496,14 @@ classdef LaserPulse < matlab.mixin.Copyable
   methods
     tau = calculateShortestDuration(pulse); % calculates shortest pulse duration
     polynomialPhase(pulse, taylorCoeff) % sets the spectral phase to a polynomium
-    detrend(pulse, domain) % remove derivative phase offset
-    varargout = std(pulse, domain, mode); % calculate standard deviation in time or freq. domain
-    normalize(pulse); % set intensity area to one.
-    translate(pulse, domain, dx); % translate the time or frequency axis
-    matchDomains(p1, p2, tol) % make time/frequency domains of two pulses the same.
+    detrend(pulse, domain) % removes derivative phase offset
+    varargout = std(pulse, domain, mode); % calculates standard deviation in time or freq. domain
+    normalize(pulse); % sets intensity area to one.
+    translate(pulse, domain, dx); % translates the time or frequency axis
+    matchDomains(p1, p2, tol) % makes time/frequency domains of two pulses the same.
     increaseTimeResolution(pulse, minPointsPerPeriod); % interpolates using fft
-    increaseTimeRange(pulse, newrange, units); % decrease frequency step to increase time range
-    newax = plot(pulse, nstd, ax); % plot the fields
+    increaseTimeRange(pulse, newrange, units); % decreases frequency step to increase time range
+    newax = plot(pulse, nstd, ax); % plots the fields
     disp(pulse); % displays pulse information
   end
 end
