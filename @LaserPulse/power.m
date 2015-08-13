@@ -30,7 +30,7 @@ switch pulse1.activeDomain
       complexPower(res.temporalAmplitude, res.temporalPhase, n);
   case 'frequency'
     [res.spectralAmplitude, res.spectralPhase] = ...
-      complexPower(res.spectralAmplitude, res.spectralPhase);
+      complexPower(res.spectralAmplitude, res.spectralPhase, n);
   otherwise
     error('LaserPulse:normalize', 'activeDomain not properly set');
 end
