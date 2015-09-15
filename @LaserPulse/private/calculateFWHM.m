@@ -17,7 +17,7 @@ function FWHM = calculateFWHM(x, y)
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 
-assert(isvector(x), 'the indipendent variable x must be a vector');
+assert(iscolumn(x), 'the indipendent variable x must be a column vector');
 
 x = x(:);
 y = reshape(y, size(y,1), []); % convert 'y' to 2D array
@@ -25,7 +25,9 @@ y = sum(y,2); % compact 'y' into one column
 
 assert(numel(x)==numel(y), 'x and y must have compatible dimensions');
 
-yNorm = abs(y(:)) / max(y(:));
+yMax = max(y(:));
+yMin = min(y(:));
+yNorm = (y - yMin) / (yMax - yMin);
 trend = diff( sign( yNorm - 0.5-eps ) );
 
 crossPoint = find(trend);
