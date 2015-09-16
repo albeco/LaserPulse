@@ -30,7 +30,7 @@ timeUnitIndex = find(strcmp(timeUnits, inputUnit));
 if timeUnitIndex
   % it is a time domain unit
   unitType = 'time';
-  exponent = 3 * (timeUnitIndex-ceil(numel(SIpref)/2));
+  exponent = 3 * (timeUnitIndex - ceil(numel(SIpref)/2));
   inverseUnit = freqUnits{numel(timeUnits)+1-timeUnitIndex};
   return;
 end
@@ -40,7 +40,7 @@ freqUnitIndex = find(strcmp(freqUnits, inputUnit));
 if freqUnitIndex
   % it is a frequency domain unit
   unitType = 'frequency';
-  exponent = 3 * (ceil(numel(SIpref)/2) - freqUnitIndex);
+  exponent = 3 * (freqUnitIndex - ceil(numel(SIpref)/2));
   inverseUnit = timeUnits{numel(timeUnits)+1-freqUnitIndex};
   return;
 end
