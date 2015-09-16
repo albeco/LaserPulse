@@ -16,7 +16,7 @@ phase = p.spectralPhase;
 
 % set to zero the timeOffset because we use the property
 % p.spectralPhase which already includes the offset
-p.timeOffset = 0; % we
+p.timeOffset = 0;
 p.frequencyArray = newfreq;
 p.spectralAmplitude = interp1(freqArray, amp, newfreq, 'linear',0);
 p.spectralPhase = interp1(freqArray, phase, newfreq, 'linear', 0);

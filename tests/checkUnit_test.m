@@ -9,10 +9,8 @@ end
 
 %%
 function testTimeUnits(testCase)
-timeUnits = {'ys', 'zs', 'as', 'fs', 'ps', 'ns', 'us', 'ms','s', ...
-             'ks', 'Ms', 'Gs', 'Ts', 'Ps', 'Es', 'Zs', 'Ys'};
-frequencyUnits = {'yHz', 'zHz', 'aHz', 'fHz', 'pHz', 'nHz', 'uHz', 'mHz','Hz', ...
-                  'kHz', 'MHz', 'GHz', 'THz', 'PHz', 'EHz', 'ZHz', 'YHz'};
+timeUnits = testCase.TestData.timeUnits;
+frequencyUnits = testCase.TestData.frequencyUnits;
 
 for n = 1:numel(timeUnits)
   [unitType, exponent, inverseUnit ] = testCase.TestData.func( timeUnits{n} );
@@ -23,10 +21,8 @@ end
 end
 
 function testFrequencyUnits(testCase)
-timeUnits = {'ys', 'zs', 'as', 'fs', 'ps', 'ns', 'us', 'ms','s', ...
-             'ks', 'Ms', 'Gs', 'Ts', 'Ps', 'Es', 'Zs', 'Ys'};
-frequencyUnits = {'yHz', 'zHz', 'aHz', 'fHz', 'pHz', 'nHz', 'uHz', 'mHz','Hz', ...
-                  'kHz', 'MHz', 'GHz', 'THz', 'PHz', 'EHz', 'ZHz', 'YHz'};
+timeUnits = testCase.TestData.timeUnits;
+frequencyUnits = testCase.TestData.frequencyUnits;
 
 for n = 1:numel(frequencyUnits)
   [unitType, exponent, inverseUnit ] = testCase.TestData.func( frequencyUnits{n} );
@@ -43,4 +39,11 @@ testCase.TestData.func = getPrivateFunction('../@LaserPulse/private', 'checkUnit
 % set relative tolerance for equality comparison
 testCase.TestData.reltol = 1e-6;
 testCase.TestData.abstol = 1e-6;
+% define list of supported units
+testCase.TestData.timeUnits = ...
+  {'ys', 'zs', 'as', 'fs', 'ps', 'ns', 'us', 'ms','s', ...
+   'ks', 'Ms', 'Gs', 'Ts', 'Ps', 'Es', 'Zs', 'Ys'};
+testCase.TestData.frequencyUnits = ...
+  {'yHz', 'zHz', 'aHz', 'fHz', 'pHz', 'nHz', 'uHz', 'mHz','Hz', ...
+   'kHz', 'MHz', 'GHz', 'THz', 'PHz', 'EHz', 'ZHz', 'YHz'};
 end
