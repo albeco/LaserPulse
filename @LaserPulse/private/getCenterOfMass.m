@@ -63,6 +63,7 @@ switch selectedPulse
     x = x(:, 1);
     y = y(:, 1);
   case 'middle'
+    assert(ismatrix(y) && ~isvector(y),'option "middle" only valid for 2D arrays');
     nMiddle = ceil(size(y,2) / 2);
     if isvector(x); x = x(:,1); else x = x(:, nMiddle); end
     y = y(:, nMiddle);
