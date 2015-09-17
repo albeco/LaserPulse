@@ -1,10 +1,10 @@
 function  tests = calculateFWHM_test
-% CALCULATEFWHM_TEST is a test function for checkUnit.m,
+% CALCULATEFWHM_TEST is a test function for calculateFWHM.m,
 % a private function of LaserPulse Class
 
 % 2015 Alberto Comin, LMU Muenchen
 
-  tests = functiontests(localfunctions);
+tests = functiontests(localfunctions);
 end
 
 %%
