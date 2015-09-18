@@ -14,11 +14,10 @@ relTolerance = testCase.TestData.reltol;
 
 n = 10;
 x = testCase.TestData.func(n);
-xshifted = ifftshift(x);
 
-assertEqual(testCase, x(1), -floor(n/2), 'RelTol', relTolerance, 'AbsTol', tolerance);
-assertEqual(testCase, xshifted(1), 0, 'RelTol', relTolerance, 'AbsTol', tolerance);
-assertEqual(testCase, xshifted(end), -1, 'RelTol', relTolerance, 'AbsTol', tolerance);
+assertEqual(testCase, n, numel(x));
+assertEqual(testCase, x(1), -floor(n/2));
+assertTrue(testCase, all(diff(x)==1));
 end
 
 function testOddPoints(testCase)
@@ -28,11 +27,10 @@ relTolerance = testCase.TestData.reltol;
 
 n = 11;
 x = testCase.TestData.func(n);
-xshifted = ifftshift(x);
 
-assertEqual(testCase, x(1), -floor(n/2), 'RelTol', relTolerance, 'AbsTol', tolerance);
-assertEqual(testCase, xshifted(1), 0, 'RelTol', relTolerance, 'AbsTol', tolerance);
-assertEqual(testCase, xshifted(end), -1, 'RelTol', relTolerance, 'AbsTol', tolerance);
+assertEqual(testCase, n, numel(x));
+assertEqual(testCase, x(1), -floor(n/2));
+assertTrue(testCase, all(diff(x)==1));
 end
 
 

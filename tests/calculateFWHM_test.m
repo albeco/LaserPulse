@@ -9,9 +9,10 @@ end
 
 %%
 function testGaussian(testCase)
-fwhm = 1;
+fwhm = 1.3;
+offset = 2.123;
 x = (-10 : 0.01 : 10)';
-y = exp(-4*log(2)*x.^2/fwhm^2);
+y = exp(-4*log(2)*x.^2/fwhm^2) + offset;
 
 actSolution = testCase.TestData.func(x, y);
 expSolution = fwhm;
@@ -21,9 +22,10 @@ assertEqual(testCase, actSolution, expSolution,'RelTol', relTolerance);
 end
 
 function testNegativeGaussian(testCase)
-fwhm = 1;
+fwhm = 0.7;
+offset = 0.2;
 x = (-10 : 0.01 : 10)';
-y = -1 * exp(-4*log(2)*x.^2/fwhm^2);
+y = -1 * exp(-4*log(2)*x.^2/fwhm^2) + offset;
 
 actSolution = testCase.TestData.func(x, y);
 expSolution = fwhm;
@@ -32,9 +34,8 @@ relTolerance = testCase.TestData.reltol;
 assertEqual(testCase, actSolution, expSolution,'RelTol', relTolerance);
 end
 
-
 function testSquare(testCase)
-fwhm = 1;
+fwhm = 2.24;
 x = (-10 : 0.01 : 10)';
 y = abs(x) <= fwhm/2;
 
@@ -46,7 +47,7 @@ assertEqual(testCase, actSolution, expSolution,'RelTol', relTolerance);
 end
 
 function testNegativeSquare(testCase)
-fwhm = 1;
+fwhm = 1.37;
 x = (-10 : 0.01 : 10)';
 y = abs(x) <= fwhm/2;
 
@@ -56,8 +57,6 @@ relTolerance = testCase.TestData.reltol;
 
 assertEqual(testCase, actSolution, expSolution,'RelTol', relTolerance);
 end
-
-
 
 %%
 function setupOnce(testCase)
