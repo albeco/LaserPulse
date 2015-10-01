@@ -4,14 +4,12 @@ function newax = plot(pulse, ax, nstd)
 % USAGE:
 % p.plot()
 %   plots the central region of the pulse
-% p.plot(hf, n)
+% p.plot(hf)
 %   plots on the figure specified by 'hf' (handle)
-% p.plot(ax, n)
-%   plots on the axes specified by 'ax' (array of 4 elements)
+% p.plot(ax)
+%   plots on the axes array specified by 'ax' (4 elements)
 % p.plot([], n)
-%   plots the region of the pulse within +/-n standard deviations
-% p.plot(ax, n)
-%   plots +/-n standard deviations on the specified axis
+%   create new figure and restrict horizontal range to +/-n standard deviations
 %
 % The first argument ('ax') is optional. It can be either a handle to a
 % figure, or an array with four axes handles (as obtained by subplot(2,2,n)
@@ -26,7 +24,7 @@ if ~exist('nstd', 'var') || isempty(nstd)
   nstd = 5; % default no. stddev for plot
 end
 
-if ~exist('ax', 'var')       % need to create new figure and new axes
+if ~exist('ax', 'var') || isempty(ax) % create new figure and new axes
   hf = figure();
   ax = get_subplot_axes(hf);
 elseif numel(ax)==1          % user provided handle to figure
