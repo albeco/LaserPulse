@@ -182,6 +182,8 @@ classdef LaserPulse < matlab.mixin.Copyable
       [domainType, ~, inverseUnits ] = checkUnit( domainUnits );
       
       assert(isvector(domainValues), 'LaserPulse:ArgChk domainValues must be a vector');
+      % convert domainValue to column array
+      domainValues = domainValues(:);
       
       % if phase is not specified, assume that amplitude is complex
       if ~exist('phase','var')
@@ -189,15 +191,11 @@ classdef LaserPulse < matlab.mixin.Copyable
         amp = abs(amp);
       end
       
-      % if only one field is present we put it in column form, for
+      % if only one subpulse is present we put it in column form, for
       % matrices we assume that the time/frequency axis is along the
       % first dimension
-      if isrow(amp)
-        amp = reshape(amp,[],1);
-      end
-      if isrow(phase)
-        phase = reshape(phase,[],1);
-      end
+      if isrow(amp), amp = reshape(amp,[],1); end
+      if isrow(phase), phase = reshape(phase,[],1); end
       
       assert(all(size(amp)==size(phase)), ...
         'expected phase and amplitude to be similar arrays');
