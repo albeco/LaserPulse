@@ -1,6 +1,6 @@
 #LaserPulse
 
-LaserPulse is a class for storing and handling laser pulses.
+[LaserPulse](http://albeco.github.io/LaserPulse) is a class for storing and handling laser pulses.
 Pulses can be defined in either time or frequency domain.
 Afterwards, both domains are automatically synchronized.
 
