@@ -1,0 +1,151 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Example of interometric frequency resolved optical gating</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-13"><meta name="DC.source" content="pulse_interferometric_FROG.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Example of interometric frequency resolved optical gating</h1><!--introduction--><p>Frequency resolved Optical Gating (FROG) is a popular technique for measuring ultrafast laser pulses. In this example we show how to simulate FROG in collinear geometry. This is not the most common implementation, but it is the easiest to implement using a pulse-shaper.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Define a LaserPulse object</a></li><li><a href="#2">Create a pulse sequence</a></li><li><a href="#3">Calculate the second harmonic</a></li><li><a href="#4">Plot the FROG traces</a></li></ul></div><h2>Define a LaserPulse object<a name="1"></a></h2><p>Let us define a 10fs Gaussian pulse, centered at 800 nm, with a group delay dispersion of 100 fs^2.</p><pre class="codeinput">p = gaussianPulse(<span class="string">'f0'</span>, 300/800,<span class="string">'dt'</span>,0.2,<span class="string">'nPoints'</span>,2^10,<span class="string">'fwhm'</span>,10);
+GDD = 100; <span class="comment">% fs^2</span>
+p.polynomialPhase([GDD 0 0]);
+</pre><h2>Create a pulse sequence<a name="2"></a></h2><p>For creating a pulse sequence, we multiply the frequency domain electric field by a cosine amplitude modulation.</p><pre class="codeinput"><span class="comment">% the cosine amplitude modulation is stored in a matrix with frequency</span>
+<span class="comment">% on the first dimension and time delay on the second dimension</span>
+timeShift = cos(2*pi * p.frequencyArray * p.timeArray'/2);
+
+<span class="comment">% set activeDomain to perform the multiplication in the frequency domain</span>
+p.activeDomain = <span class="string">'frequency'</span>;
+
+p = p * timeShift;
+<span class="comment">% now p contains a pulse sequence</span>
+</pre><h2>Calculate the second harmonic<a name="3"></a></h2><pre class="codeinput"><span class="comment">% harmonics are easier to calculate in time domain</span>
+p.activeDomain = <span class="string">'time'</span>;
+p2 = p.^2;
+</pre><h2>Plot the FROG traces<a name="4"></a></h2><pre class="codeinput">figure()
+
+subplot(2,1,1)
+pcolor(p2.timeArray,p2.timeArray, p2.temporalIntensity); shading <span class="string">flat</span>
+xlabel(sprintf(<span class="string">'time delay (%s)'</span>, p2.timeUnits))
+ylabel(sprintf(<span class="string">'time (%s)'</span>, p2.timeUnits))
+title(<span class="string">'Interferometric FROG - time domain'</span>)
+
+subplot(2,1,2)
+pcolor(p2.timeArray,p2.frequencyArray,p2.spectralIntensity); shading <span class="string">flat</span>
+xlim([-100, 100]); ylim([-1.5 1.5]*p2.bandwidth+p2.centralFrequency)
+xlabel(sprintf(<span class="string">'time delay (%s)'</span>, p2.timeUnits))
+ylabel(sprintf(<span class="string">'frequency (%s)'</span>, p2.frequencyUnits))
+title(<span class="string">'Interferometric FROG - frequency domain'</span>)
+</pre><img vspace="5" hspace="5" src="pulse_interferometric_FROG_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Example of interometric frequency resolved optical gating
+% Frequency resolved Optical Gating (FROG) is a popular technique for
+% measuring ultrafast laser pulses. In this example we show how to simulate
+% FROG in collinear geometry. This is not the most common implementation, but
+% it is the easiest to implement using a pulse-shaper.
+
+%% Define a LaserPulse object
+% Let us define a 10fs Gaussian pulse, centered at 800 nm, with a group
+% delay dispersion of 100 fs^2.
+
+p = gaussianPulse('f0', 300/800,'dt',0.2,'nPoints',2^10,'fwhm',10);
+GDD = 100; % fs^2
+p.polynomialPhase([GDD 0 0]);
+
+%% Create a pulse sequence
+% For creating a pulse sequence, we multiply the frequency domain electric
+% field by a cosine amplitude modulation.
+
+% the cosine amplitude modulation is stored in a matrix with frequency
+% on the first dimension and time delay on the second dimension
+timeShift = cos(2*pi * p.frequencyArray * p.timeArray'/2);
+
+% set activeDomain to perform the multiplication in the frequency domain
+p.activeDomain = 'frequency';
+
+p = p * timeShift;
+% now p contains a pulse sequence
+
+%% Calculate the second harmonic
+
+% harmonics are easier to calculate in time domain
+p.activeDomain = 'time';
+p2 = p.^2;
+
+%% Plot the FROG traces
+
+figure()
+
+subplot(2,1,1)
+pcolor(p2.timeArray,p2.timeArray, p2.temporalIntensity); shading flat
+xlabel(sprintf('time delay (%s)', p2.timeUnits))
+ylabel(sprintf('time (%s)', p2.timeUnits))
+title('Interferometric FROG - time domain')
+
+subplot(2,1,2)
+pcolor(p2.timeArray,p2.frequencyArray,p2.spectralIntensity); shading flat
+xlim([-100, 100]); ylim([-1.5 1.5]*p2.bandwidth+p2.centralFrequency)
+xlabel(sprintf('time delay (%s)', p2.timeUnits))
+ylabel(sprintf('frequency (%s)', p2.frequencyUnits))
+title('Interferometric FROG - frequency domain')
+##### SOURCE END #####
+--></body></html>

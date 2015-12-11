@@ -1,0 +1,229 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>LaserPulse</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-13"><meta name="DC.source" content="laserpulse_overview.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>LaserPulse</h1><!--introduction--><p>The <a href="matlab:doc('LaserPulse')">LaserPulse</a> class allows to store pulses in a convenient way, analyze them and perform simple mathematical operations.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialization</a></li><li><a href="#3">Physical Properties</a></li><li><a href="#4">Names and Definitions</a></li><li><a href="#5">Plotting Fields</a></li><li><a href="#8">Examples</a></li></ul></div><h2>Initialization<a name="1"></a></h2><p>A <a href="matlab:doc('LaserPulse')">LaserPulse</a> object can be initialized in either time of frequency domain:</p><pre class="codeinput"><span class="comment">% time domain pulse:</span>
+t = -10 : 0.01 : 9.99;
+p1 = LaserPulse(t, <span class="string">'fs'</span>, exp(-t.^2 - 2i*pi*t));
+
+<span class="comment">% frequency domain pulse:</span>
+f = -10 : 0.01 : 9.99;
+p2 = LaserPulse(f, <span class="string">'PHz'</span>, exp(-(f-2).^2 + 2i*pi*f));
+</pre><p>In either case both time and frequency domains are computed and kept automatically synchronized.</p><h2>Physical Properties<a name="3"></a></h2><p>Several properties are automatically calculated and can be accessed using the dot notation. For instance, using the following commands, we can display pulse duration, bandwidth and central frequency:</p><pre class="codeinput"><span class="comment">% display pulse duration for p1 and p2</span>
+fprintf(<span class="string">'pulse durations are %.2f %s and %.2f %s\n'</span>, <span class="keyword">...</span>
+  p1.duration, p1.timeUnits, p2.duration, p2.timeUnits);
+
+<span class="comment">% display pulse bandwidth for p1 and p2</span>
+fprintf(<span class="string">'pulse bandwidths are %.2f %s and %.2f %s\n'</span>, <span class="keyword">...</span>
+  p1.bandwidth, p1.frequencyUnits, p2.bandwidth, p2.frequencyUnits);
+
+<span class="comment">% display central frequency for p1 and p2</span>
+fprintf(<span class="string">'central frequencies are %.2f %s and %.2f %s\n'</span>, <span class="keyword">...</span>
+  p1.centralFrequency, p1.frequencyUnits, <span class="keyword">...</span>
+  p2.centralFrequency, p2.frequencyUnits);
+</pre><pre class="codeoutput">pulse durations are 1.18 fs and 0.38 fs
+pulse bandwidths are 0.38 PHz and 1.18 PHz
+central frequencies are 1.00 PHz and 2.00 PHz
+</pre><h2>Names and Definitions<a name="4"></a></h2><p>The <a href="matlab:doc('LaserPulse')">LaserPulse</a> class uses relatively long names in order to distinguish between fields in time and frequency domain. The fields are defined as follows:</p><p>time domain fields:</p><pre class="language-matlab">p.temporalField == p.temporalAmplitude * exp(1i * p.temporalPhase)
+</pre><p>frequency domain fields:</p><pre class="language-matlab">p.spectralField == p.spectralAmplitude * exp(1i * p.spectralPhase)
+</pre><p>Internally the fields are synchronized using a fft routine. The sign convention for the fft is:</p><p><img src="laserpulse_overview_eq11980092375281309006.png" alt="$$E(t) = \int_{-\infty}^{+\infty} E(f)\,\exp(-2\pi\, f\, t)\,\mathrm{d}f$$"></p><p><img src="laserpulse_overview_eq17408574107807000615.png" alt="$$E(f) = \int_{-\infty}^{+\infty} E(t)\,\exp(+2\pi\, f\, t)\,\mathrm{d}t$$"></p><h2>Plotting Fields<a name="5"></a></h2><p>In the LaserPulse class the <a href="matlab:doc('LaserPulse/plot')">plot()</a> method is overloaded to provide a quick way to visualize fields in time and frequency domain:</p><pre class="codeinput">h = p1.plot();
+</pre><img vspace="5" hspace="5" src="laserpulse_overview_01.png" alt=""> <p>Two pulses can be displayed on the same axes, by calling <a href="matlab:doc('LaserPulse/plot')">plot()</a>  with a second argument</p><pre class="codeinput">p2.plot(h);
+</pre><img vspace="5" hspace="5" src="laserpulse_overview_02.png" alt=""> <p>More plot types can be obtained using the standard matlab commands. For instance, the next figure shows how to display the real part of the electric field in time domain:</p><pre class="codeinput">figure()
+plot(p1.timeArray, real(p1.temporalField), <span class="keyword">...</span>
+     p2.timeArray, real(p2.temporalField));
+xlim([-2, 2]*p1.duration)
+xlabel(sprintf(<span class="string">'time (%s)'</span>, p1.timeUnits));
+ylabel(<span class="string">'E(t)'</span>);
+legend(<span class="string">'p1'</span>, <span class="string">'p2'</span>)
+</pre><img vspace="5" hspace="5" src="laserpulse_overview_03.png" alt=""> <h2>Examples<a name="8"></a></h2><div><ul><li><a href="./example_files/pulse_autocorrelation.html">pulse_autocorrelation.m</a> (<a href="matlab:edit('pulse_autocorrelation.m')">source</a>)       example of interferometric autocorrelation</li><li><a href="./example_files/pulse_create_new.html">pulse_create_new.m</a> (<a href="matlab:edit('pulse_create_new.m')">source</a>)     examples of how to set-up a LaserPulse object</li><li><a href="./example_files/pulse_display_properties.html">pulse_display_properties.m</a> (<a href="matlab:edit('pulse_display_properties.m')">source</a>)       example of how to obtain LaserPulse properties</li><li><a href="./example_files/pulse_four_wave_mixing.html">pulse_four_wave_mixing.m</a> (<a href="matlab:edit('pulse_four_wave_mixing.m')">source</a>)       example of nonlinear process with LaserPulse class</li><li><a href="./example_files/pulse_harmonics.html">pulse_harmonics.m</a> (<a href="matlab:edit('pulse_harmonics.m')">source</a>)       examples of higher harmonics</li><li><a href="./example_files/pulse_linear_mixing.html">pulse_linear_mixing.m</a> (<a href="matlab:edit('pulse_linear_mixing.m')">source</a>)       examples of linear superposition of LaserPulse objects</li><li><a href="./example_files/pulse_nonlinear_mixing.html">pulse_nonlinear_mixing.m</a> (<a href="matlab:edit('pulse_nonlinear_mixing.m')">source</a>)       example of nonlinear mixing of LaserPulse objects</li><li><a href="./example_files/pulse_replicas.html">pulse_replicas.m</a> (<a href="matlab:edit('pulse_replicas.m')">source</a>)       example of how to create time-shifted replicas and pulse trains</li><li><a href="./example_files/pulse_gaussian_sech_lorentzian.html">pulse_gaussian_sech_lorentzian.m</a> (<a href="matlab:edit('pulse_gaussian_sech_lorentzian.m')">source</a>)       example of Gaussian, Lorentian and hyperbolic secant pulse shapes</li><li><a href="./example_files/pulse_self_phase_modulation.html">pulse_self_phase_modulation.m</a> (<a href="matlab:edit('pulse_self_phase_modulation.m')">source</a>)       example simulation of self-phase modulation using LaserPulse class</li><li><a href="./example_files/pulse_interferometric_FROG.html">pulse_interferometric_FROG.m</a> (<a href="matlab:edit('pulse_interferometric_FROG.m')">source</a>)       example of Interometric Frequency Resolved Autocorrelation</li><li><a href="./example_files/pulse_MIIPS.html">pulse_MIIPS.m</a> (<a href="matlab:edit('pulse_MIIPS.m')">source</a>)       example of Multiphoton Intrapulse Interference Phase Scan</li></ul></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% LaserPulse
+%
+% The <matlab:doc('LaserPulse') LaserPulse> class allows to store pulses in
+% a convenient way, analyze them and perform simple mathematical
+% operations.
+
+%% Initialization
+%
+% A <matlab:doc('LaserPulse') LaserPulse> object can be initialized in
+% either time of frequency domain:
+
+% time domain pulse:
+t = -10 : 0.01 : 9.99;
+p1 = LaserPulse(t, 'fs', exp(-t.^2 - 2i*pi*t));
+
+% frequency domain pulse:
+f = -10 : 0.01 : 9.99;
+p2 = LaserPulse(f, 'PHz', exp(-(f-2).^2 + 2i*pi*f));
+
+%%
+% In either case both time and frequency domains are computed and kept
+% automatically synchronized.
+
+%% Physical Properties
+%
+% Several properties are automatically calculated and can be accessed using
+% the dot notation. For instance, using the following commands, we can
+% display pulse duration, bandwidth and central frequency:
+
+% display pulse duration for p1 and p2
+fprintf('pulse durations are %.2f %s and %.2f %s\n', ...
+  p1.duration, p1.timeUnits, p2.duration, p2.timeUnits);
+
+% display pulse bandwidth for p1 and p2
+fprintf('pulse bandwidths are %.2f %s and %.2f %s\n', ...
+  p1.bandwidth, p1.frequencyUnits, p2.bandwidth, p2.frequencyUnits);
+
+% display central frequency for p1 and p2
+fprintf('central frequencies are %.2f %s and %.2f %s\n', ...
+  p1.centralFrequency, p1.frequencyUnits, ...
+  p2.centralFrequency, p2.frequencyUnits);
+
+%% Names and Definitions
+%
+% The <matlab:doc('LaserPulse') LaserPulse> class uses relatively long
+% names in order to distinguish between fields in time and frequency
+% domain. The fields are defined as follows:
+%
+% time domain fields:
+%
+%   p.temporalField == p.temporalAmplitude * exp(1i * p.temporalPhase)
+%
+% frequency domain fields:
+%
+%   p.spectralField == p.spectralAmplitude * exp(1i * p.spectralPhase)
+%
+% Internally the fields are synchronized using a fft routine. The sign
+% convention for the fft is:
+% 
+% $$E(t) = \int_{-\infty}^{+\infty} E(f)\,\exp(-2\pi\, f\, t)\,\mathrm{d}f$$
+%
+% $$E(f) = \int_{-\infty}^{+\infty} E(t)\,\exp(+2\pi\, f\, t)\,\mathrm{d}t$$
+
+%% Plotting Fields
+%
+% In the LaserPulse class the <matlab:doc('LaserPulse/plot') plot()> method
+% is overloaded to provide a quick way to visualize fields in time and
+% frequency domain:
+h = p1.plot();
+%%
+% Two pulses can be displayed on the same axes, by calling
+% <matlab:doc('LaserPulse/plot') plot()>  with a second argument
+p2.plot(h);
+
+%%
+% More plot types can be obtained using the standard matlab commands. For
+% instance, the next figure shows how to display the real part of the
+% electric field in time domain:
+figure()
+plot(p1.timeArray, real(p1.temporalField), ...
+     p2.timeArray, real(p2.temporalField));
+xlim([-2, 2]*p1.duration)
+xlabel(sprintf('time (%s)', p1.timeUnits));
+ylabel('E(t)');
+legend('p1', 'p2')
+
+%% Examples
+%
+% *  <./example_files/pulse_autocorrelation.html pulse_autocorrelation.m>
+% (<matlab:edit('pulse_autocorrelation.m') source>)
+%       example of interferometric autocorrelation
+% *  <./example_files/pulse_create_new.html pulse_create_new.m>
+% (<matlab:edit('pulse_create_new.m') source>)
+%     examples of how to set-up a LaserPulse object
+% *  <./example_files/pulse_display_properties.html pulse_display_properties.m>
+% (<matlab:edit('pulse_display_properties.m') source>)
+%       example of how to obtain LaserPulse properties
+% *  <./example_files/pulse_four_wave_mixing.html pulse_four_wave_mixing.m>
+% (<matlab:edit('pulse_four_wave_mixing.m') source>)
+%       example of nonlinear process with LaserPulse class
+% *  <./example_files/pulse_harmonics.html pulse_harmonics.m>
+% (<matlab:edit('pulse_harmonics.m') source>)
+%       examples of higher harmonics
+% *  <./example_files/pulse_linear_mixing.html pulse_linear_mixing.m>
+% (<matlab:edit('pulse_linear_mixing.m') source>)
+%       examples of linear superposition of LaserPulse objects
+% *  <./example_files/pulse_nonlinear_mixing.html pulse_nonlinear_mixing.m>
+% (<matlab:edit('pulse_nonlinear_mixing.m') source>)
+%       example of nonlinear mixing of LaserPulse objects
+% *  <./example_files/pulse_replicas.html pulse_replicas.m>
+% (<matlab:edit('pulse_replicas.m') source>)
+%       example of how to create time-shifted replicas and pulse trains 
+% *  <./example_files/pulse_gaussian_sech_lorentzian.html pulse_gaussian_sech_lorentzian.m>
+% (<matlab:edit('pulse_gaussian_sech_lorentzian.m') source>)
+%       example of Gaussian, Lorentian and hyperbolic secant pulse shapes
+% *  <./example_files/pulse_self_phase_modulation.html pulse_self_phase_modulation.m>
+% (<matlab:edit('pulse_self_phase_modulation.m') source>)
+%       example simulation of self-phase modulation using LaserPulse class
+% *  <./example_files/pulse_interferometric_FROG.html pulse_interferometric_FROG.m>
+% (<matlab:edit('pulse_interferometric_FROG.m') source>)
+%       example of Interometric Frequency Resolved Autocorrelation
+% *  <./example_files/pulse_MIIPS.html pulse_MIIPS.m>
+% (<matlab:edit('pulse_MIIPS.m') source>)
+%       example of Multiphoton Intrapulse Interference Phase Scan 
+##### SOURCE END #####
+--></body></html>
