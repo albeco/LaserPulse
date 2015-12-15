@@ -407,9 +407,9 @@ classdef LaserPulse < matlab.mixin.Copyable
       pulse.spectralAmplitude = sqrt(z);
       % updatedDomain_ has been set to 'frequency'
     end
-    function set.centralFrequency(pulse, ~)
+    function set.centralFrequency(pulse, newCentralFrequency)
+      pulse.frequencyOffset = pulse.frequencyOffset + (newCentralFrequency - pulse.centralFrequency);
       disp(['current centralFrequency = ', num2str(pulse.centralFrequency)]);
-      warning('pulse centralFrequency cannot be set directly');
     end
     function set.bandwidth(pulse, ~)
       disp(['current bandwidth = ', num2str(pulse.bandwidth)]);
@@ -454,9 +454,9 @@ classdef LaserPulse < matlab.mixin.Copyable
       pulse.temporalAmplitude = sqrt(z);
       % updatedDomain_ was implicitly updated
     end
-    function set.arrivalTime(pulse, ~)
+    function set.arrivalTime(pulse, newArrivalTime)
+      pulse.timeOffset = pulse.timeOffset + (newArrivalTime - pulse.arrivalTime);
       disp(['current pulse arrival time = ', num2str(pulse.arrivalTime)]);
-      warning('pulse arrival time cannot be set directly');
     end
     function set.duration(pulse, ~)
       disp(['current pulse duration = ', num2str(pulse.duration)]);
