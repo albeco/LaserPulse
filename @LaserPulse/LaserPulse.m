@@ -163,6 +163,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     spectralIntensity;% intensity of frequency domain field
     centralFrequency; % center of mass of spectral intensity
     bandwidth; % FWHM of spectral intensity
+    phaseOffset; % carrier envelope phase offset
   end
   properties (Dependent)
     temporalAmplitude; % amplitude of time domain field
@@ -338,6 +339,19 @@ classdef LaserPulse < matlab.mixin.Copyable
       pulse.updateField('time');
       dt = calculateFWHM(pulse.timeArray, abs(pulse.tempAmp_).^2);
     end
+    function phi = get.phaseOffset(pulse)
+      switch pulse.updatedDomain_
+        case {'time', 'all'}
+          [~, it0, ~] = getCenterOfMass(pulse.timeArray, abs(pulse.tempAmp_).^2);
+          phi = pulse.temporalPhase(it0);
+        case 'frequency'
+          [~, if0, ~] = getCenterOfMass(pulse.frequencyArray, abs(pulse.specAmp_).^2);
+          phi = pulse.spectralPhase(if0);
+        otherwise
+          phi = nan;
+          warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
+      end
+    end
   end
   
   %% time and frequency domain setter methods
@@ -492,6 +506,18 @@ classdef LaserPulse < matlab.mixin.Copyable
     function set.duration(pulse, ~)
       disp(['current pulse duration = ', num2str(pulse.duration)]);
       warning('pulse duration cannot be set directly');
+    end
+    
+    function set.phaseOffset(pulse, phi)
+      switch pulse.updatedDomain_
+        case {'time', 'all'}
+          pulse.temporalPhase = pulse.temporalPhase - pulse.phaseOffset + phi;
+        case 'frequency'
+          pulse.spectralPhase = pulse.spectralPhase - pulse.phaseOffset + phi;
+        otherwise
+          phi = nan;
+          warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
+      end
     end
   end
   %% mathematical operators
