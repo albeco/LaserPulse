@@ -289,7 +289,7 @@ classdef LaserPulse < matlab.mixin.Copyable
         case {'frequency', 'all'}
           [~, ~, f] = getCenterOfMass(pulse.frequencyArray, abs(pulse.specAmp_).^2);
         case 'time'
-          f = getCenterOfMass(pulse.instantaneousFrequency, abs(pulse.tempAmp_).^2);
+          [~, ~, f] = getCenterOfMass(pulse.instantaneousFrequency, abs(pulse.tempAmp_).^2);
         otherwise
           f = nan;
           warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
@@ -326,10 +326,9 @@ classdef LaserPulse < matlab.mixin.Copyable
     function f = get.arrivalTime(pulse)
       switch pulse.updatedDomain_
         case {'time', 'all'}
-          [~, ~, f] = ...
-            getCenterOfMass(pulse.timeArray, abs(pulse.tempAmp_).^2);
+          [~, ~, f] = getCenterOfMass(pulse.timeArray, abs(pulse.tempAmp_).^2);
         case 'frequency'
-          f = getCenterOfMass(pulse.groupDelay, abs(pulse.specAmp_).^2);
+          [~, ~, f] = getCenterOfMass(pulse.groupDelay, abs(pulse.specAmp_).^2);
         otherwise
           f = nan;
           warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
@@ -393,7 +392,7 @@ classdef LaserPulse < matlab.mixin.Copyable
       pulse.updatedDomain_ = 'frequency';
     end
     
-    function set.groupDelay(pulse, groupDelay)                             % should this reset the time offset?
+    function set.groupDelay(pulse, groupDelay)                             
       if isscalar(groupDelay)
         groupDelay = groupDelay * ones(size(pulse.frequencyArray));
       elseif isrow(groupDelay)
@@ -403,7 +402,7 @@ classdef LaserPulse < matlab.mixin.Copyable
         pulse.frequencyArray, groupDelay, pulse.centralFrequency, 1);
     end
     
-    function set.groupDelayDispersion(pulse, GDD)                          % should this reset the time offset?
+    function set.groupDelayDispersion(pulse, GDD)                          
       if isscalar(GDD)
         GDD = GDD * ones(size(pulse.frequencyArray));
       elseif isrow(GDD)
@@ -462,7 +461,7 @@ classdef LaserPulse < matlab.mixin.Copyable
       pulse.updatedDomain_ = 'time';
     end
     
-     function set.instantaneousFrequency(pulse, instFreq)                  % should this reset the freq.offset?
+     function set.instantaneousFrequency(pulse, instFreq)                  
       if isscalar(instFreq)
         instFreq = instFreq * ones(size(pulse.timeArray));
       elseif isrow(instFreq)
