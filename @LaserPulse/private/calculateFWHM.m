@@ -37,11 +37,9 @@ if length(crossPoint) ~= 2
   return;
 end
 
-% take an extra point on both sides, otherwise interp1 may fail if the
-% crossing is exactly on a grid point
 try
-  firstInterv = [crossPoint(1)-1, crossPoint(1)+2];
-  secondInterv = [crossPoint(2)-1, crossPoint(2)+2];
+  firstInterv = [crossPoint(1), crossPoint(1)+1];
+  secondInterv = [crossPoint(2), crossPoint(2)+1];
   x1 = interp1( yNorm(firstInterv), x(firstInterv),  0.5);
   x2 = interp1( yNorm(secondInterv), x(secondInterv), 0.5);
   FWHM = abs(x2-x1);
