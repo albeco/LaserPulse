@@ -556,7 +556,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     normalize(pulse); % sets intensity area to one.
     translate(pulse, domain, dx); % translates the time or frequency axis
     matchDomains(p1, p2, tol) % makes time/frequency domains of two pulses the same.
-    increaseTimeResolution(pulse, minPointsPerPeriod); % interpolates using fft
+    increaseTimeResolution(pulse, minPointsPerPeriod, perPeriod); % interpolates using fft
     increaseTimeRange(pulse, newrange, units); % decreases frequency step to increase time range
     newax = plot(pulse, nstd, ax); % plots the fields
     disp(pulse); % displays pulse information
