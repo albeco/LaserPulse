@@ -10,7 +10,7 @@ function tau = calculateShortestDuration(pulse)
 p0 = pulse.copy;
 
 % set spectral phase to zero get the shortest pulse duration
-p0.spectralPhase = 0;
+p0.spectralPhase = 0 * p0.spectralPhase;
 
 tau = p0.duration;
 
