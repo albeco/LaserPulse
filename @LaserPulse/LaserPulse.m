@@ -111,6 +111,8 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% time and frequency domain private properties
   properties (Access = private)
+    freqUnits_ = 'Hz'; % physical units for frequency (private variable)
+    tempUnits_ = 's'; % physical units for time (private variable)
     % the updatedDomain_ can be 'frequency', 'time', 'all', 'none'
     updatedDomain_ = 'none';
   end
@@ -134,18 +136,18 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% time and frequency domain public properties
   properties
-    frequencyUnits = 'Hz'; % physical units for frequency
     frequencyOffset = 0; % offset of the frequency array
     frequencyStep = 0; % frequency step
   end
   properties (Dependent)
+    frequencyUnits; % physical units for frequency
     frequencyArray = []; % frequency array
   end
   properties
-    timeUnits = 's'; % physical units for time
     timeOffset = 0; % offset of the time array
   end
   properties (Dependent)
+    timeUnits; % physical units for time
     timeStep = 0; % time step
     timeArray = []; % time array
   end
@@ -205,16 +207,16 @@ classdef LaserPulse < matlab.mixin.Copyable
       
       switch domainType
         case 'frequency'
-          pulse.frequencyUnits = domainUnits;
-          pulse.timeUnits = inverseUnits;
+          pulse.freqUnits_ = domainUnits;
+          pulse.tempUnits_ = inverseUnits;
           pulse.frequencyArray = domainValues;
           pulse.spectralAmplitude = amp;
           pulse.spectralPhase = phase;
           % remove derivative offset and store it as timeOffset
           pulse.detrend('frequency');
         case 'time'
-          pulse.timeUnits = domainUnits;
-          pulse.frequencyUnits = inverseUnits;
+          pulse.tempUnits_ = domainUnits;
+          pulse.freqUnits_ = inverseUnits;
           pulse.timeArray = domainValues;
           pulse.temporalAmplitude = amp;
           pulse.temporalPhase = phase;
@@ -237,11 +239,17 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
   end
   methods
+    function units = get.frequencyUnits(pulse)
+      units = pulse.freqUnits_;
+    end
     function f = get.frequencyArray(pulse)
       f = pulse.frequencyOffset + pulse.shiftedFreqArray_;
     end
   end
   methods
+    function units = get.timeUnits(pulse)
+      units = pulse.tempUnits_;
+    end
     function dt = get.timeStep(pulse)
       dt = 1/((pulse.nPoints) * pulse.frequencyStep);
     end
@@ -356,12 +364,30 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% time and frequency domain setter methods
   methods
+    function set.frequencyUnits(pulse, units)
+      [domainType, ~, inverseUnits ] = checkUnit(units);
+      if strcmp(domainType, 'frequency')
+        pulse.freqUnits_ = units;
+        pulse.tempUnits_ = inverseUnits;
+      else
+        error('LaserPulse:setFrequencyUnits', 'received non valid frequency units')
+      end
+    end
     function set.frequencyArray(pulse, freqArray)
       pulse.nPoints = numel(freqArray);
       [~, pulse.frequencyOffset, pulse.frequencyStep] = centerArray(freqArray);
     end
   end
   methods
+    function set.timeUnits(pulse, units)
+      [domainType, ~, inverseUnits ] = checkUnit(units);
+      if strcmp(domainType, 'time')
+        pulse.tempUnits_ = units;
+        pulse.freqUnits_ = inverseUnits;
+      else
+        error('LaserPulse:setTimeUnits', 'received non valid time units')
+      end
+    end
     function set.timeStep(pulse, dt)
       pulse.frequencyStep = 1/((pulse.nPoints) * dt);
     end
