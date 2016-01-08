@@ -1,5 +1,14 @@
 function polynomialPhase(pulse, taylorCoeff)
 % POLYNOMIALPHASE sets the spectral phase to a polynomium
+%
+% Input:
+% taylorCoeff: taylor coefficients in descending powers (as in polyval)
+% 
+% Examples:
+% p.polynomialPhase([GDD 0 0 ]); % sets a parabolic spectral phase
+% p.polynomialPhase([TOD 0 0 0]); % sets a cubic spectral phase
+%
+% See also: polyval
 
 % Copyright (C) 2015 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt for copyright and licence

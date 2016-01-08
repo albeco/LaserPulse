@@ -52,7 +52,7 @@ p.activeDomain = 'time';
 miips = p^2;
 
 %% Display the MIIPS trace
-figure(1)
+figure()
 pcolor(PHI, W, miips.spectralIntensity); shading flat
 ylim([-4*pi, 4*pi]*miips.bandwidth + 2*pi*miips.centralFrequency)
 

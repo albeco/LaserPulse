@@ -31,16 +31,22 @@ yNorm = (y - yMin) / (yMax - yMin);
 trend = diff( sign( yNorm - 0.5-eps ) );
 
 crossPoint = find(trend);
-if length(crossPoint) == 2
-  % take an extra point on both sides, otherwise interp1 may fail if the
-  % crossing is exactly on a grid point
-   firstInterv = [crossPoint(1)-1, crossPoint(1)+2];
-   secondInterv = [crossPoint(2)-1, crossPoint(2)+2];
-   x1 = interp1( yNorm(firstInterv), x(firstInterv),  0.5);
-   x2 = interp1( yNorm(secondInterv), x(secondInterv), 0.5);  
-   FWHM = abs(x2-x1);
-else
-   FWHM=NaN;
+
+if length(crossPoint) ~= 2
+  FWHM = NaN;
+  return;
 end
+
+try
+  firstInterv = [crossPoint(1), crossPoint(1)+1];
+  secondInterv = [crossPoint(2), crossPoint(2)+1];
+  x1 = interp1( yNorm(firstInterv), x(firstInterv),  0.5);
+  x2 = interp1( yNorm(secondInterv), x(secondInterv), 0.5);
+  FWHM = abs(x2-x1);
+catch ME
+  warning(['error in calculating FWHM (',ME.identifier,')']);
+  FWHM = NaN;
+end
+
 end
 

@@ -4,11 +4,14 @@ function increaseTimeRange(pulse, newrange, units)
 %
 % USAGE:
 % for setting a new range of (deltaT) femtoseconds
-% pulse = pulse.increaseTimeRange(deltaT)
-% pulse = pulse.increaseTimeRange(deltaT ,'fs')
+% pulse.increaseTimeRange(deltaT)
+% pulse.increaseTimeRange(deltaT ,'fs')
+%
+% for setting a range of n times the pulse duration (fwhm)
+% pulse.increaseTimeRange(deltaT, 'fwhm'); 
 %
 % for setting a range of n standard deviations
-% pulse = pulse.increaseTimeRange(n, 'std')
+% pulse.increaseTimeRange(n, 'std')
 
 %% Copyright (C) 2015 Alberto Comin, LMU Muenchen
 %
@@ -32,8 +35,10 @@ function increaseTimeRange(pulse, newrange, units)
 %% MAIN BODY:
 if ~exist('units', 'var') || strcmp(units, 'fs')
   newTimeRange = newrange;
-elseif strcmp(units, 'std')
+elseif strcmp(units, 'fwhm')
   newTimeRange = newrange * pulse.duration;
+elseif strcmp(units, 'std')
+  newTimeRange = newrange * pulse.std('time');
 else
   error('LaserPulse:increasTimeRage:argChk', 'unsupported unit type');
 end
@@ -48,10 +53,11 @@ if pulse.nPoints < minTimePoints
   oldFreqArray = pulse.shiftedFreqArray_;
   % it is enough to change nPoints and frequencyStep, to update both time
   % and frequency arrays
-  pulse.nPoints = 2^nextpow2(minTimePoints);
+  pulse.nPoints = roundeven(minTimePoints);
   pulse.frequencyStep = oldFreqStep * nOldPoints / pulse.nPoints;
   % now pulse.shiftedFreqArray_ has been automatically updated
   pulse.specAmp_ = interp1(oldFreqArray, pulse.specAmp_, pulse.shiftedFreqArray_, 'pchip',0);
   pulse.specPhase_ = interp1(oldFreqArray, pulse.specPhase_, pulse.shiftedFreqArray_, 'pchip',0);
+  pulse.updatedDomain_ = 'frequency';
 end
 end

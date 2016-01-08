@@ -2,13 +2,13 @@
 % Very basic simulation, assuming thin sample and instantaneous rensponse
 % (see e.g. Boyd 'Nonlinear Optics' Academic Press 2008).
 %
-% Theself-phase modulation phase is:
+% The self-phase modulation phase is:
 %
 %  phi_NL(t) == n2eff * I(t)
 %
-% where |n2f| is an effective nonlinear refreactive index, given by:
+% where |n2eff| is an effective nonlinear refreactive index, given by:
 %
-%  n2f == n2 * 2*pi*centralFrequency/speedOfLight * sampleThickness
+%  n2eff == n2 * 2*pi*centralFrequency/speedOfLight * sampleThickness
 
 %% Set-up simulation
 

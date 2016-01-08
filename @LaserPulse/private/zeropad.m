@@ -5,6 +5,13 @@ function zeropad(p, domain, nExtraPoints)
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 
+% make sure nExtraPoints is positive integer
+if ~isnumeric(nExtraPoints) || ~isfinite(nExtraPoints) || ...
+    nExtraPoints < 0 || mod(nExtraPoints, 1) ~= 0
+  error('LaserPulse:zeropad:argChk', ...
+    'The number of extra points must be a positive integer.');
+end
+
 p.updateField(domain);
 arraySize = size(p);
 % to double-check following lines run centeredRange(n) and see where zero goes

@@ -62,7 +62,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   %% Copyright (C) 2015 Alberto Comin, LMU Muenchen
   %
   %  This file is part of LaserPulse.
-  % 
+  %
   %  LaserPulse is free software: you can redistribute it and/or modify it
   %  under the terms of the GNU General Public License as published by the
   %  Free Software Foundation, either version 3 of the License, or (at your
@@ -111,6 +111,8 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% time and frequency domain private properties
   properties (Access = private)
+    freqUnits_ = 'Hz'; % physical units for frequency (private variable)
+    tempUnits_ = 's'; % physical units for time (private variable)
     % the updatedDomain_ can be 'frequency', 'time', 'all', 'none'
     updatedDomain_ = 'none';
   end
@@ -134,18 +136,18 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% time and frequency domain public properties
   properties
-    frequencyUnits = 'Hz'; % physical units for frequency
     frequencyOffset = 0; % offset of the frequency array
     frequencyStep = 0; % frequency step
   end
   properties (Dependent)
+    frequencyUnits; % physical units for frequency
     frequencyArray = []; % frequency array
   end
   properties
-    timeUnits = 's'; % physical units for time
     timeOffset = 0; % offset of the time array
   end
   properties (Dependent)
+    timeUnits; % physical units for time
     timeStep = 0; % time step
     timeArray = []; % time array
   end
@@ -163,6 +165,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     spectralIntensity;% intensity of frequency domain field
     centralFrequency; % center of mass of spectral intensity
     bandwidth; % FWHM of spectral intensity
+    phaseOffset; % carrier envelope phase offset
   end
   properties (Dependent)
     temporalAmplitude; % amplitude of time domain field
@@ -182,6 +185,8 @@ classdef LaserPulse < matlab.mixin.Copyable
       [domainType, ~, inverseUnits ] = checkUnit( domainUnits );
       
       assert(isvector(domainValues), 'LaserPulse:ArgChk domainValues must be a vector');
+      % convert domainValue to column array
+      domainValues = domainValues(:);
       
       % if phase is not specified, assume that amplitude is complex
       if ~exist('phase','var')
@@ -189,15 +194,11 @@ classdef LaserPulse < matlab.mixin.Copyable
         amp = abs(amp);
       end
       
-      % if only one field is present we put it in column form, for
+      % if only one subpulse is present we put it in column form, for
       % matrices we assume that the time/frequency axis is along the
       % first dimension
-      if isrow(amp)
-        amp = reshape(amp,[],1);
-      end
-      if isrow(phase)
-        phase = reshape(phase,[],1);
-      end
+      if isrow(amp), amp = reshape(amp,[],1); end
+      if isrow(phase), phase = reshape(phase,[],1); end
       
       assert(all(size(amp)==size(phase)), ...
         'expected phase and amplitude to be similar arrays');
@@ -206,16 +207,16 @@ classdef LaserPulse < matlab.mixin.Copyable
       
       switch domainType
         case 'frequency'
-          pulse.frequencyUnits = domainUnits;
-          pulse.timeUnits = inverseUnits;
+          pulse.freqUnits_ = domainUnits;
+          pulse.tempUnits_ = inverseUnits;
           pulse.frequencyArray = domainValues;
           pulse.spectralAmplitude = amp;
           pulse.spectralPhase = phase;
           % remove derivative offset and store it as timeOffset
           pulse.detrend('frequency');
         case 'time'
-          pulse.timeUnits = domainUnits;
-          pulse.frequencyUnits = inverseUnits;
+          pulse.tempUnits_ = domainUnits;
+          pulse.freqUnits_ = inverseUnits;
           pulse.timeArray = domainValues;
           pulse.temporalAmplitude = amp;
           pulse.temporalPhase = phase;
@@ -238,11 +239,17 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
   end
   methods
+    function units = get.frequencyUnits(pulse)
+      units = pulse.freqUnits_;
+    end
     function f = get.frequencyArray(pulse)
       f = pulse.frequencyOffset + pulse.shiftedFreqArray_;
     end
   end
   methods
+    function units = get.timeUnits(pulse)
+      units = pulse.tempUnits_;
+    end
     function dt = get.timeStep(pulse)
       dt = 1/((pulse.nPoints) * pulse.frequencyStep);
     end
@@ -267,8 +274,8 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
     function phi = get.spectralPhase(pulse)
       pulse.updateField('frequency');
-        phi = bsxfun(@plus, pulse.specPhase_,...
-          2*pi * pulse.timeOffset * pulse.shiftedFreqArray_);
+      phi = bsxfun(@plus, pulse.specPhase_,...
+        2*pi * pulse.timeOffset * pulse.shiftedFreqArray_);
     end
     function tg = get.groupDelay(pulse)
       pulse.updateField('frequency');
@@ -291,7 +298,7 @@ classdef LaserPulse < matlab.mixin.Copyable
         case {'frequency', 'all'}
           [~, ~, f] = getCenterOfMass(pulse.frequencyArray, abs(pulse.specAmp_).^2);
         case 'time'
-          f = getCenterOfMass(pulse.instantaneousFrequency, abs(pulse.tempAmp_).^2);
+          [~, ~, f] = getCenterOfMass(pulse.instantaneousFrequency, abs(pulse.tempAmp_).^2);
         otherwise
           f = nan;
           warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
@@ -309,8 +316,8 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
     function phi = get.temporalPhase(pulse)
       pulse.updateField('time');
-        phi = bsxfun(@plus, pulse.tempPhase_, ...
-          -2*pi * pulse.frequencyOffset * pulse.shiftedTimeArray_);
+      phi = bsxfun(@plus, pulse.tempPhase_, ...
+        -2*pi * pulse.frequencyOffset * pulse.shiftedTimeArray_);
     end
     function fi = get.instantaneousFrequency(pulse)
       pulse.updateField('time');
@@ -328,29 +335,59 @@ classdef LaserPulse < matlab.mixin.Copyable
     function f = get.arrivalTime(pulse)
       switch pulse.updatedDomain_
         case {'time', 'all'}
-          [~, ~, f] = ...
-            getCenterOfMass(pulse.timeArray, abs(pulse.tempAmp_).^2);
+          [~, ~, f] = getCenterOfMass(pulse.timeArray, abs(pulse.tempAmp_).^2);
         case 'frequency'
-          f = getCenterOfMass(pulse.groupDelay, abs(pulse.specAmp_).^2);
+          [~, ~, f] = getCenterOfMass(pulse.groupDelay, abs(pulse.specAmp_).^2);
         otherwise
           f = nan;
           warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
       end
     end
     function dt = get.duration(pulse)
-     pulse.updateField('time');
+      pulse.updateField('time');
       dt = calculateFWHM(pulse.timeArray, abs(pulse.tempAmp_).^2);
+    end
+    function phi = get.phaseOffset(pulse)
+      switch pulse.updatedDomain_
+        case {'time', 'all'}
+          [~, it0, ~] = getCenterOfMass(pulse.timeArray, abs(pulse.tempAmp_).^2);
+          phi = pulse.temporalPhase(it0);
+        case 'frequency'
+          [~, if0, ~] = getCenterOfMass(pulse.frequencyArray, abs(pulse.specAmp_).^2);
+          phi = pulse.spectralPhase(if0);
+        otherwise
+          phi = nan;
+          warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
+      end
     end
   end
   
   %% time and frequency domain setter methods
   methods
+    function set.frequencyUnits(pulse, units)
+      [domainType, ~, inverseUnits ] = checkUnit(units);
+      if strcmp(domainType, 'frequency')
+        pulse.freqUnits_ = units;
+        pulse.tempUnits_ = inverseUnits;
+      else
+        error('LaserPulse:setFrequencyUnits', 'received non valid frequency units')
+      end
+    end
     function set.frequencyArray(pulse, freqArray)
       pulse.nPoints = numel(freqArray);
       [~, pulse.frequencyOffset, pulse.frequencyStep] = centerArray(freqArray);
     end
   end
-  methods 
+  methods
+    function set.timeUnits(pulse, units)
+      [domainType, ~, inverseUnits ] = checkUnit(units);
+      if strcmp(domainType, 'time')
+        pulse.tempUnits_ = units;
+        pulse.freqUnits_ = inverseUnits;
+      else
+        error('LaserPulse:setTimeUnits', 'received non valid time units')
+      end
+    end
     function set.timeStep(pulse, dt)
       pulse.frequencyStep = 1/((pulse.nPoints) * dt);
     end
@@ -385,15 +422,36 @@ classdef LaserPulse < matlab.mixin.Copyable
     function set.spectralPhase(pulse, phase)
       if isrow(phase)
         phase = reshape(phase,[],1);
-      end  
+      end
       % make sure frequency domain is updated, to avoid information loss
       if strcmp(pulse.updatedDomain_, 'time')
         pulse.updateField('frequency');
       end
       pulse.specPhase_ = ...
-        bsxfun(@plus, phase, -2*pi*pulse.timeOffset * pulse.shiftedFreqArray_); 
+        bsxfun(@plus, phase, -2*pi*pulse.timeOffset * pulse.shiftedFreqArray_);
       pulse.updatedDomain_ = 'frequency';
     end
+    
+    function set.groupDelay(pulse, groupDelay)                             
+      if isscalar(groupDelay)
+        groupDelay = groupDelay * ones(size(pulse.frequencyArray));
+      elseif isrow(groupDelay)
+        groupDelay = reshape(groupDelay, [], 1);
+      end
+      pulse.spectralPhase = 2*pi * integrateFromCenter(...
+        pulse.frequencyArray, groupDelay, pulse.centralFrequency, 1);
+    end
+    
+    function set.groupDelayDispersion(pulse, GDD)                          
+      if isscalar(GDD)
+        GDD = GDD * ones(size(pulse.frequencyArray));
+      elseif isrow(GDD)
+        GDD = reshape(GDD, [], 1);
+      end
+      pulse.spectralPhase = (2*pi)^2 * integrateFromCenter(...
+        pulse.frequencyArray, GDD, pulse.centralFrequency, 2);
+    end
+    
     function set.spectralField(pulse, efield)
       if isrow(efield)
         efield = reshape(efield,[],1);
@@ -409,9 +467,9 @@ classdef LaserPulse < matlab.mixin.Copyable
       pulse.spectralAmplitude = sqrt(z);
       % updatedDomain_ has been set to 'frequency'
     end
-    function set.centralFrequency(pulse, ~)
+    function set.centralFrequency(pulse, newCentralFrequency)
+      pulse.frequencyOffset = pulse.frequencyOffset + (newCentralFrequency - pulse.centralFrequency);
       disp(['current centralFrequency = ', num2str(pulse.centralFrequency)]);
-      warning('pulse centralFrequency cannot be set directly');
     end
     function set.bandwidth(pulse, ~)
       disp(['current bandwidth = ', num2str(pulse.bandwidth)]);
@@ -442,6 +500,17 @@ classdef LaserPulse < matlab.mixin.Copyable
         bsxfun(@plus, phase, +2*pi*pulse.frequencyOffset * pulse.shiftedTimeArray_);
       pulse.updatedDomain_ = 'time';
     end
+    
+     function set.instantaneousFrequency(pulse, instFreq)                  
+      if isscalar(instFreq)
+        instFreq = instFreq * ones(size(pulse.timeArray));
+      elseif isrow(instFreq)
+        instFreq = reshape(instFreq, [], 1);
+      end
+      pulse.temporalPhase = -2*pi * integrateFromCenter(...
+        pulse.timeArray, instFreq, pulse.arrivalTime, 1);
+    end
+    
     function set.temporalField(pulse, efield)
       if isrow(efield)
         efield = reshape(efield,[],1);
@@ -456,31 +525,43 @@ classdef LaserPulse < matlab.mixin.Copyable
       pulse.temporalAmplitude = sqrt(z);
       % updatedDomain_ was implicitly updated
     end
-    function set.arrivalTime(pulse, ~)
+    function set.arrivalTime(pulse, newArrivalTime)
+      pulse.timeOffset = pulse.timeOffset + (newArrivalTime - pulse.arrivalTime);
       disp(['current pulse arrival time = ', num2str(pulse.arrivalTime)]);
-      warning('pulse arrival time cannot be set directly');
     end
     function set.duration(pulse, ~)
       disp(['current pulse duration = ', num2str(pulse.duration)]);
       warning('pulse duration cannot be set directly');
     end
+    
+    function set.phaseOffset(pulse, phi)
+      switch pulse.updatedDomain_
+        case {'time', 'all'}
+          pulse.temporalPhase = pulse.temporalPhase - pulse.phaseOffset + phi;
+        case 'frequency'
+          pulse.spectralPhase = pulse.spectralPhase - pulse.phaseOffset + phi;
+        otherwise
+          phi = nan;
+          warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
+      end
+    end
   end
   %% mathematical operators
   methods (Access = private)
-  p = binaryOperator(op, pulse1, pulse2, activeDomain);
-  p = multByDouble(pulse1, x); % rescale field by a numerical factor
+    p = binaryOperator(op, pulse1, pulse2, activeDomain);
+    p = multByDouble(pulse1, x); % rescale field by a numerical factor
   end
   methods
-   p = plus(pulse1, pulse2); % sum two pulses in active domain
-   p = minus(pulse1, pulse2); % subtract two pulses in active domain
-   p = times(pulse1, pulse2); % multiplies in active domain, convolve in reciprocal domain
-   p = mtimes(pulse1, pulse2); % same as 'times', in this implementation
-   p = rdivide(pulse1, pulse); % divide in active domain, deconvolve in reciprocal domain
-   p = mrdivide(pulse1, pulse2); % mrdivide == rdivide, in this implementation
-   p = power(pulse1, n); % n-th power in active domain
-   p = mpower(pulse1, n); % same as power, in this implementation
-   p = conj(pulse1); % conjugate in active domain
-   p = abs(pulse1); % absoulte value in active domain
+    p = plus(pulse1, pulse2); % sum two pulses in active domain
+    p = minus(pulse1, pulse2); % subtract two pulses in active domain
+    p = times(pulse1, pulse2); % multiplies in active domain, convolve in reciprocal domain
+    p = mtimes(pulse1, pulse2); % same as 'times', in this implementation
+    p = rdivide(pulse1, pulse); % divide in active domain, deconvolve in reciprocal domain
+    p = mrdivide(pulse1, pulse2); % mrdivide == rdivide, in this implementation
+    p = power(pulse1, n); % n-th power in active domain
+    p = mpower(pulse1, n); % same as power, in this implementation
+    p = conj(pulse1); % conjugate in active domain
+    p = abs(pulse1); % absoulte value in active domain
   end
   
   %% derived physical quantities
@@ -501,7 +582,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     normalize(pulse); % sets intensity area to one.
     translate(pulse, domain, dx); % translates the time or frequency axis
     matchDomains(p1, p2, tol) % makes time/frequency domains of two pulses the same.
-    increaseTimeResolution(pulse, minPointsPerPeriod); % interpolates using fft
+    increaseTimeResolution(pulse, minPointsPerPeriod, perPeriod); % interpolates using fft
     increaseTimeRange(pulse, newrange, units); % decreases frequency step to increase time range
     newax = plot(pulse, nstd, ax); % plots the fields
     disp(pulse); % displays pulse information
