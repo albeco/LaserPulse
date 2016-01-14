@@ -148,8 +148,8 @@ classdef LaserPulse < matlab.mixin.Copyable
   end
   properties (Dependent)
     timeUnits; % physical units for time
-    timeStep = 0; % time step
-    timeArray = []; % time array
+    timeStep; % time step
+    timeArray; % time array
   end
   properties
     activeDomain = 'time'; % Fourier domain used for mathematical operators
