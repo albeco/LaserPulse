@@ -22,7 +22,7 @@ phase = polyval(...
 
 % replicate the phase for all sub-pulses
 if ~isvector(pulse.spectralPhase)
-  phase = bsxfun(phase, ones(size(pulse.spectralPhase)));
+  phase = bsxfun(@times, phase, ones(size(pulse.spectralPhase)));
 end
 
 % apply the phase
