@@ -1,6 +1,7 @@
 function increaseTimeRange(pulse, newrange, units)
 % INCREASETIMERANGE increases the time range of the pulse.
-% In order to increase the time range, the frequency step is made smaller.
+% It increases the number of time steps while keeping timeStep constant,
+% zhen it interpolates over the frequency domain.
 %
 % USAGE:
 % for setting a new range of (deltaT) femtoseconds
@@ -28,9 +29,9 @@ function increaseTimeRange(pulse, newrange, units)
 %  LaserPulse.  If not, see <http://www.gnu.org/licenses/>.
 
 %% IMPLEMENTATION DETAILS:
-%  increasing time range by reducing the frequency step is better than doing
-%  so by padding time domain arrays with zeros, because in the second case
-%  the temporal field is not changed.
+%  increasing time range by interpolating over the frequency domain is
+%  better than doing so by padding time domain arrays with zeros, because
+%  in the second case the temporal field is not changed.
 
 %% MAIN BODY:
 if ~exist('units', 'var') || strcmp(units, 'fs')
@@ -43,19 +44,17 @@ else
   error('LaserPulse:increasTimeRage:argChk', 'unsupported unit type');
 end
 
-% dermine the number of required points
-minTimePoints = newTimeRange/pulse.timeStep;
+% determine the number of required points
+new_nPoints = roundeven(newTimeRange/pulse.timeStep);
 
-if pulse.nPoints < minTimePoints
+if pulse.nPoints < new_nPoints
+  % update frequency domain before changing step sizes, to avoid rescaling
+  % signal amplitude when calculating fft integrals (see updateField.m)
   pulse.updateField('frequency');
-  nOldPoints = pulse.nPoints;
-  oldFreqStep = pulse.frequencyStep;
   oldFreqArray = pulse.shiftedFreqArray_;
-  % it is enough to change nPoints and frequencyStep, to update both time
-  % and frequency arrays
-  pulse.nPoints = roundeven(minTimePoints);
-  pulse.frequencyStep = oldFreqStep * nOldPoints / pulse.nPoints;
-  % now pulse.shiftedFreqArray_ has been automatically updated
+  % decrease frequencyStep by increasing nPoints keeping timeStep fixed
+  pulse.increaseNumberTimeSteps(new_nPoints);
+  % pulse.shiftedFreqArray_ has been automatically updated
   pulse.specAmp_ = interp1(oldFreqArray, pulse.specAmp_, pulse.shiftedFreqArray_, 'pchip',0);
   pulse.specPhase_ = interp1(oldFreqArray, pulse.specPhase_, pulse.shiftedFreqArray_, 'pchip',0);
   pulse.updatedDomain_ = 'frequency';

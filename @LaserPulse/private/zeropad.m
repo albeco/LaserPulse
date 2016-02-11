@@ -22,15 +22,13 @@ else                       % odd number of previuos points
   leftZeros = zeros([ceil(nExtraPoints/2), arraySize(2:end)]);
   rightZeros = zeros([floor(nExtraPoints/2), arraySize(2:end)]);
 end
-nOldPoints = p.nPoints;
-p.nPoints = p.nPoints + nExtraPoints;
+
 if strcmp(domain, 'time')
-  % to keep the same timeStep while changing nPoints, it is necessary
-  % to change frequencyStep, because timeStep is calculated from it.
-  p.frequencyStep = p.frequencyStep * nOldPoints/p.nPoints;
+  p.increaseNumberTimeSteps(p.nPoints + nExtraPoints);
   p.tempAmp_ = [leftZeros; p.tempAmp_; rightZeros];
   p.tempPhase_ = [leftZeros; p.tempPhase_; rightZeros];
 elseif strcmp(domain, 'frequency')
+  p.increaseNumberFreqSteps(p.nPoints + nExtraPoints);
   p.specAmp_ = [leftZeros; p.specAmp_; rightZeros];
   p.specPhase_ = [leftZeros; p.specPhase_; rightZeros];
 else
