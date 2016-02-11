@@ -9,7 +9,7 @@ function interpFreqDomain(p, newfreq)
 
 %% MAIN BODY:
 % save the old spectralPhase, because it automatically changes when
-% resetting frequencyArray.
+% resetting frequencyArray (see get.spectralPhase in LaserPulse.m).
 freqArray = p.frequencyArray;
 amp = p.spectralAmplitude;
 phase = p.spectralPhase;
