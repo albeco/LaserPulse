@@ -111,7 +111,8 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% time and frequency domain private properties
   properties (Access = private)
-    freqUnits_ = waveUnit('Hz'); % physical units for frequency (private variable)
+    freqUnits_ = WaveUnit('Hz'); % physical units for frequency (private variable)
+    wlUnits_ = WaveUnit('m'); % physical units for wavelength (private variable)
     % the updatedDomain_ can be 'frequency', 'time', 'all', 'none'
     updatedDomain_ = 'none';
   end
@@ -141,6 +142,8 @@ classdef LaserPulse < matlab.mixin.Copyable
   properties (Dependent)
     frequencyUnits; % physical units for frequency
     frequencyArray = []; % frequency array
+    wavelengthUnits; % physical units for wavelength
+    wavelengthArray; % wavelength array
   end
   properties
     timeOffset = 0; % offset of the time array
@@ -165,6 +168,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     spectralField; % complex field in frequency domain
     spectralIntensity;% intensity of frequency domain field
     centralFrequency; % center of mass of spectral intensity
+    centralWavelength; % speedOfLight / centralFrequency
     bandwidth; % FWHM of spectral intensity
     phaseOffset; % carrier envelope phase offset
   end
@@ -183,7 +187,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     function pulse = LaserPulse(domainValues, domainUnits, amp, phase)
       % LaserPulse construct a femtosecond pulse object
       
-      if ~isa(domainUnits,'waveUnit'), domainUnits = waveUnit(domainUnits); end  
+      if ~isa(domainUnits,'WaveUnit'), domainUnits = WaveUnit(domainUnits); end  
       assert(isvector(domainValues), 'LaserPulse:ArgChk domainValues must be a vector');
       domainValues = reshape(domainValues, [], 1);
       
@@ -222,6 +226,9 @@ classdef LaserPulse < matlab.mixin.Copyable
           error('LaserPulse:ArgChk', ...
             'valid domain types are: ''time'', ''frequency''.');
       end
+      % set optimized units for wavelength
+      [~, pulse.wlUnits_] = ...
+        WaveUnit.frequency2wavelength(pulse.centralFrequency, pulse.freqUnits_, 'auto');
     end
   end
   
@@ -240,6 +247,13 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
     function f = get.frequencyArray(pulse)
       f = pulse.frequencyOffset + pulse.shiftedFreqArray_;
+    end
+    function units = get.wavelengthUnits(pulse)
+      units = pulse.wlUnits_.name;
+    end
+    function wl = get.wavelengthArray(pulse)
+      wl = WaveUnit.frequency2wavelength(pulse.frequencyArray, ...
+        pulse.freqUnits_, pulse.wlUnits_);
     end
   end
   methods
@@ -299,6 +313,10 @@ classdef LaserPulse < matlab.mixin.Copyable
           f = nan;
           warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
       end
+    end
+    function wl = get.centralWavelength(pulse)
+      wl = WaveUnit.frequency2wavelength(pulse.centralFrequency, ...
+        pulse.freqUnits_, pulse.wlUnits_);
     end
     function fwhm = get.bandwidth(pulse)
       pulse.updateField('frequency');
@@ -360,25 +378,32 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% time and frequency domain setter methods
   methods
-    function set.frequencyUnits(pulse, units)
-      if ~isa(units,'waveUnit'), units = waveUnit(units); end
-      assert(strcmp(units.baseUnit, 'Hz'), ...
+    function set.frequencyUnits(pulse, newUnits)
+      if ~isa(newUnits,'WaveUnit'), newUnits = WaveUnit(newUnits); end
+      assert(strcmp(newUnits.baseUnit, 'Hz'), ...
         'LaserPulse:setFrequencyUnits received non valid frequency units');
-      pulse.freqUnits_ = units;
+      pulse.frequencyStep = WaveUnit.convert(pulse.frequencyStep, ...
+        pulse.freqUnits_, newUnits);
+      pulse.frequencyOffset = WaveUnit.convert(pulse.frequencyOffset, ...
+        pulse.freqUnits_, newUnits);
+      pulse.timeOffset = WaveUnit.convert(pulse.timeOffset, ...
+        pulse.freqUnits_.inverse, newUnits.inverse);
+      pulse.freqUnits_ = newUnits;
     end
     function set.frequencyArray(pulse, freqArray)
       pulse.nPoints = numel(freqArray);
       [~, pulse.frequencyOffset, pulse.frequencyStep] = centerArray(freqArray);
     end
+    function set.wavelengthUnits(pulse, newUnits)
+      pulse.wlUnits_ = WaveUnit(newUnits);
+    end
   end
   methods
-    function set.timeUnits(pulse, units)
-      if ~isa(units,'waveUnit'), units = waveUnit(units); end
-      if strcmp(units.baseUnit, 's')
-        pulse.freqUnits_ = units.inverse;
-      else
-        error('LaserPulse:setTimeUnits', 'received non valid time units')
-      end
+    function set.timeUnits(pulse, newUnits)
+      if ~isa(newUnits,'WaveUnit'), newUnits = WaveUnit(newUnits); end
+      assert(strcmp(newUnits.baseUnit, 's'), ...
+        'LaserPulse:setFrequencyUnits received non valid time units');
+      pulse.frequencyUnits = newUnits.inverse;
     end
     function set.timeStep(pulse, dt)
       pulse.frequencyStep = 1/((pulse.nPoints) * dt);
@@ -461,7 +486,10 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
     function set.centralFrequency(pulse, newCentralFrequency)
       pulse.frequencyOffset = pulse.frequencyOffset + (newCentralFrequency - pulse.centralFrequency);
-      disp(['current centralFrequency = ', num2str(pulse.centralFrequency)]);
+    end
+    function set.centralWavelength(pulse, wl)
+      pulse.centralFrequency = WaveUnit.wavelength2frequency(wl, ...
+        pulse.wlUnits_, pulse.freqUnits_);
     end
     function set.bandwidth(pulse, ~)
       disp(['current bandwidth = ', num2str(pulse.bandwidth)]);
@@ -533,7 +561,6 @@ classdef LaserPulse < matlab.mixin.Copyable
         case 'frequency'
           pulse.spectralPhase = pulse.spectralPhase - pulse.phaseOffset + phi;
         otherwise
-          phi = nan;
           warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
       end
     end

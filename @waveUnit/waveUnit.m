@@ -1,4 +1,4 @@
-classdef waveUnit < handle
+classdef WaveUnit < handle
   %WAVEUNIT is a simple module for converting between optical units.
   %
   % functionalities:
@@ -13,28 +13,28 @@ classdef waveUnit < handle
   %
   % examples:
   % to validate and store a unit:
-  %   u = waveUnit('ms') % millisecond
-  %   u = waveUnit('THz') % terahertz
+  %   u = WaveUnit('ms') % millisecond
+  %   u = WaveUnit('THz') % terahertz
   % to find the inverse unit:
-  %   u2 = waveUnit('ms').inverse;
-  %   u2 = waveUnit('THz').inverse;
+  %   u2 = WaveUnit('ms').inverse;
+  %   u2 = WaveUnit('THz').inverse;
   % to convert between equivalent units:
-  %    waveUnit.convert(1200, 'us', 'ms');
-  %    waveUnit.convert(4, 'aJ', 'eV');
+  %    WaveUnit.convert(1200, 'us', 'ms');
+  %    WaveUnit.convert(4, 'aJ', 'eV');
   %    % most commands process both unit strings and unit objects:
-  %    waveUnit.convert(4, waveUnit('aJ'), 'eV');
+  %    WaveUnit.convert(4, WaveUnit('aJ'), 'eV');
   % to optimize the prefix of a unit:
-  %    [newValue, newUnit] = waveUnit.optimize(1200, 'nm')
-  %    [newValue, newUnit] = waveUnit.optimize(3.2e, waveUnit('nm'))
+  %    [newValue, newUnit] = WaveUnit.optimize(1200, 'nm')
+  %    [newValue, newUnit] = WaveUnit.optimize(3.2e, WaveUnit('nm'))
   % to convert between frequency and wavelength:
-  %    waveUnit.frequency2wavelength(1e-2, 'GHz', 'mm')
-  %    waveUnit.wavelength2frequency(1000, 'nm', 'PHz')
+  %    WaveUnit.frequency2wavelength(1e-2, 'GHz', 'mm')
+  %    WaveUnit.wavelength2frequency(1000, 'nm', 'PHz')
   %    % can also set the target unit to 'auto':
-  %    [freqValue, freqUnit] = waveUnit.wavelength2frequency(1, 'um', 'auto')
+  %    [freqValue, freqUnit] = WaveUnit.wavelength2frequency(1, 'um', 'auto')
   % to convert between frequency and photon energy:
-  %    waveUnit.frequency2energy(1,'PHz', 'eV')
-  %    waveUnit.energy2frequency(2.3,'eV', 'Hz')
-  %    [enValue, enUnit] = waveUnit.frequency2energy(3.2, 'kHz', 'auto')
+  %    WaveUnit.frequency2energy(1,'PHz', 'eV')
+  %    WaveUnit.energy2frequency(2.3,'eV', 'Hz')
+  %    [enValue, enUnit] = WaveUnit.frequency2energy(3.2, 'kHz', 'auto')
   
   %% Copyright (c) 2016, Alberto Comin All rights reserved.
   %
@@ -87,19 +87,19 @@ classdef waveUnit < handle
   end
   %%
   methods
-    function obj = waveUnit(unitName)
+    function obj = WaveUnit(unitName)
       % WAVEUNIT stores a physical unit in SI format
-      % usage: u = waveUnit(unitname)
-      % example: u = waveUnit('MHz');
+      % usage: u = WaveUnit(unitname)
+      % example: u = WaveUnit('MHz');
       try
-        [obj.SIprefix, obj.baseUnit] = waveUnit.parseUnit(unitName);
+        [obj.SIprefix, obj.baseUnit] = WaveUnit.parseUnit(unitName);
       catch ME
-        if strcmp(ME.identifier, 'waveUnit:parseUnit')
+        if strcmp(ME.identifier, 'WaveUnit:parseUnit')
           obj.SIprefix = '';
           obj.baseUnit = 'none';
           warning(ME.message);
         else
-          error('waveUnit:setName', 'error setting physical unit');
+          error('WaveUnit:setName', 'error setting physical unit');
         end
       end
     end
@@ -109,11 +109,11 @@ classdef waveUnit < handle
     end
     
     function dim = get.dimension(obj)
-      dim = waveUnit.unit2dimension(obj.baseUnit);
+      dim = WaveUnit.unit2dimension(obj.baseUnit);
     end
     
     function y = get.exponent(obj)
-      y = waveUnit.prefix2exponent(obj.SIprefix);
+      y = WaveUnit.prefix2exponent(obj.SIprefix);
     end
     
     function invUnit = inverse(obj)
@@ -121,11 +121,11 @@ classdef waveUnit < handle
       % example: ms->kHz, GHz->ns
       if strcmp(obj.baseUnit,'s'), invBaseUnit = 'Hz';
       elseif strcmp(obj.baseUnit,'Hz'), invBaseUnit = 's';
-      else error('waveUnit:inverseUnit', ...
+      else error('WaveUnit:inverseUnit', ...
           'can only invert time and frequency units');
       end
-      invUnitPrefix = waveUnit.exponent2prefix(-obj.exponent);
-      invUnit = waveUnit(strcat(invUnitPrefix, invBaseUnit));
+      invUnitPrefix = WaveUnit.exponent2prefix(-obj.exponent);
+      invUnit = WaveUnit(strcat(invUnitPrefix, invBaseUnit));
     end
     
     function cmp = eq(unit1, unit2)
@@ -134,7 +134,7 @@ classdef waveUnit < handle
     end
     
     function disp(obj)
-      fprintf('waveUnit: (%s)\n', obj.dimension);
+      fprintf('WaveUnit: (%s)\n', obj.dimension);
       fprintf('name: ''%s''', obj.name);
       if obj.SIprefix~=0
         fprintf(' , prefix: ''%c'' (10^%d)\n', ...
@@ -149,11 +149,11 @@ classdef waveUnit < handle
     function [SIprefix, baseUnit] = parseUnit(unitName)
       % PARSEUNIT splits a unit name into prefix and base unit
       unitsPattern = strcat( ...
-        '^(?<prefix>[', strjoin(waveUnit.prefix2exponent.keys,''), '])?', ...
-        '(?<baseUnit>', strjoin(waveUnit.unit2dimension.keys,'|'), ')$');
+        '^(?<prefix>[', strjoin(WaveUnit.prefix2exponent.keys,''), '])?', ...
+        '(?<baseUnit>', strjoin(WaveUnit.unit2dimension.keys,'|'), ')$');
       matchedUnit = regexp(unitName, unitsPattern,'names');
       if isempty(matchedUnit)
-        error('waveUnit:parseUnit', ...
+        error('WaveUnit:parseUnit', ...
           ['unrecognized unit type: ', unitName])
       else
         SIprefix = matchedUnit.prefix;
@@ -164,9 +164,9 @@ classdef waveUnit < handle
     function [value2, unit2] = convertDimension(value1, ...
         unit1, unit2, referenceUnit1, referenceUnit2, conversionFormula)
       % CONVERTDIMENSION converts between frequency, wavelength and energy
-      if ~isa(unit1,'waveUnit'), unit1 = waveUnit(unit1); end
-      if ~isa(referenceUnit1,'waveUnit'), referenceUnit1 = waveUnit(referenceUnit1); end
-      if ~isa(referenceUnit2,'waveUnit'), referenceUnit2 = waveUnit(referenceUnit2); end
+      if ~isa(unit1,'WaveUnit'), unit1 = WaveUnit(unit1); end
+      if ~isa(referenceUnit1,'WaveUnit'), referenceUnit1 = WaveUnit(referenceUnit1); end
+      if ~isa(referenceUnit2,'WaveUnit'), referenceUnit2 = WaveUnit(referenceUnit2); end
       assert(strcmp(unit1.baseUnit, referenceUnit1.baseUnit), ...
         ['unit1 must have base unit:',referenceUnit1.baseUnit]);
       if ischar(unit2) && strcmp(unit2,'auto')
@@ -174,13 +174,13 @@ classdef waveUnit < handle
         unit2 = referenceUnit2;
       else
         optimizeUnit = false;
-        if ~isa(unit2,'waveUnit'), unit2 = waveUnit(unit2); end
+        if ~isa(unit2,'WaveUnit'), unit2 = WaveUnit(unit2); end
         assert(strcmp(unit2.baseUnit, referenceUnit2.baseUnit), ...
           ['unit2 must have base unit:',referenceUnit2.baseUnit]);
       end
       value2 = conversionFormula(value1 * 10^unit1.exponent) / 10^unit2.exponent;
       if optimizeUnit
-        [value2, unit2] = waveUnit.optimize(value2, unit2);
+        [value2, unit2] = WaveUnit.optimize(value2, unit2);
       end
     end
     
@@ -190,12 +190,12 @@ classdef waveUnit < handle
     function [newValue, newUnit] = optimize(value, unit)
       % OPTIMIZE rescale a unit to use the closest SI prefix
       if isscalar(value), sampleValue=value; else sampleValue=mean(abs(value(:))); end
-      if ~isa(unit,'waveUnit'), unit=waveUnit(unit); end
+      if ~isa(unit,'WaveUnit'), unit=WaveUnit(unit); end
       newExponent = floor((log10(sampleValue)+unit.exponent)/3)*3;
-      newExponent = min(waveUnit.maxExponent, max(-waveUnit.maxExponent, newExponent));
+      newExponent = min(WaveUnit.maxExponent, max(-WaveUnit.maxExponent, newExponent));
       newValue = value *10^(unit.exponent-newExponent);
-      newPrefix = waveUnit.exponent2prefix(newExponent);
-      newUnit = waveUnit(strcat(newPrefix, unit.baseUnit));
+      newPrefix = WaveUnit.exponent2prefix(newExponent);
+      newUnit = WaveUnit(strcat(newPrefix, unit.baseUnit));
     end
     
     function newValue = convert(value, unit1, unit2)
@@ -203,15 +203,15 @@ classdef waveUnit < handle
       % usage:
       % newValue = convert(value, unit1, unit2);
       
-      if ~isa(unit1,'waveUnit'), unit1 = waveUnit(unit1); end
-      if ~isa(unit2,'waveUnit'), unit2 = waveUnit(unit2); end
+      if ~isa(unit1,'WaveUnit'), unit1 = WaveUnit(unit1); end
+      if ~isa(unit2,'WaveUnit'), unit2 = WaveUnit(unit2); end
       newValue = value * 10.^(unit1.exponent - unit2.exponent);
       if strcmp(unit1.baseUnit, 'eV') && strcmp(unit2.baseUnit, 'J')
-        newValue = newValue *  waveUnit.electronCharge;
+        newValue = newValue *  WaveUnit.electronCharge;
       elseif strcmp(unit1.baseUnit, 'J') && strcmp(unit2.baseUnit, 'eV')
-        newValue = newValue /  waveUnit.electronCharge;
+        newValue = newValue /  WaveUnit.electronCharge;
       elseif ~strcmp(unit1.baseUnit, unit2.baseUnit)
-        error('waveUnit:convert', ...
+        error('WaveUnit:convert', ...
           [unit1.name,' and ',unit2.name,' have different base units']);
       end
     end
@@ -223,8 +223,8 @@ classdef waveUnit < handle
       % or, for automatically choosing the closest SI unit:
       % [wl, wlUnit] = frequency2wavelength(freq, freqUnit, 'auto')
       if ~exist('unit2','var'), unit2='m'; end
-      conversionFormula = @(x) waveUnit.speedOfLight ./ x;
-      [value2, unit2] = waveUnit.convertDimension(value1, ...
+      conversionFormula = @(x) WaveUnit.speedOfLight ./ x;
+      [value2, unit2] = WaveUnit.convertDimension(value1, ...
         unit1, unit2, 'Hz', 'm', conversionFormula);
     end
     
@@ -235,8 +235,8 @@ classdef waveUnit < handle
       % or, for automatically choosing the closest SI unit:
       % [freq, freqUnit] = wavelength2frequency(wl, wlUnit, 'auto')
       if ~exist('unit2','var'), unit2='Hz'; end
-      conversionFormula = @(x) waveUnit.speedOfLight ./ x;
-      [value2, unit2] = waveUnit.convertDimension(value1, ...
+      conversionFormula = @(x) WaveUnit.speedOfLight ./ x;
+      [value2, unit2] = WaveUnit.convertDimension(value1, ...
         unit1, unit2, 'm', 'Hz', conversionFormula);
     end
     
@@ -247,8 +247,8 @@ classdef waveUnit < handle
       % or, for automatically choosing the closest SI unit:
       % [phEn, phEnUnit] = frequency2energy(freq, freqUnit, 'auto')
       if ~exist('unit2','var'), unit2='eV'; end
-      conversionFormula = @(x) waveUnit.PlanckConstant * x;
-      [value2, unit2] = waveUnit.convertDimension(value1, ...
+      conversionFormula = @(x) WaveUnit.PlanckConstant * x;
+      [value2, unit2] = WaveUnit.convertDimension(value1, ...
         unit1, unit2, 'Hz', 'eV', conversionFormula);
     end
     
@@ -259,8 +259,8 @@ classdef waveUnit < handle
       % or, for automatically choosing the closest SI unit:
       % [freqEn, freqUnit] = energy2frequency(phEn, phEnUnit, 'auto')
       if ~exist('unit2','var'), unit2='Hz'; end
-      conversionFormula = @(x) x / waveUnit.PlanckConstant;
-      [value2, unit2] = waveUnit.convertDimension(value1, ...
+      conversionFormula = @(x) x / WaveUnit.PlanckConstant;
+      [value2, unit2] = WaveUnit.convertDimension(value1, ...
         unit1, unit2, 'eV', 'Hz', conversionFormula);
     end
     
@@ -272,8 +272,8 @@ classdef waveUnit < handle
       % [phEn, phEnUnit] = wavelength2energy(wl, wlUnit, 'auto')
       if ~exist('unit2','var'), unit2='eV'; end
       conversionFormula = @(x) ...
-        waveUnit.speedOfLight * waveUnit.PlanckConstant ./ x;
-      [value2, unit2] = waveUnit.convertDimension(value1, ...
+        WaveUnit.speedOfLight * WaveUnit.PlanckConstant ./ x;
+      [value2, unit2] = WaveUnit.convertDimension(value1, ...
         unit1, unit2, 'm', 'eV', conversionFormula);
     end
     
@@ -285,8 +285,8 @@ classdef waveUnit < handle
       % [wl, wlUnit] = energy2wavelength(phEn, phEnUnit, 'auto')
       if ~exist('unit2','var'), unit2='m'; end
       conversionFormula = @(x) ...
-        waveUnit.speedOfLight * waveUnit.PlanckConstant ./ x ;
-      [value2, unit2] = waveUnit.convertDimension(value1, ...
+        WaveUnit.speedOfLight * WaveUnit.PlanckConstant ./ x ;
+      [value2, unit2] = WaveUnit.convertDimension(value1, ...
         unit1, unit2, 'eV', 'm', conversionFormula);
     end
   end
