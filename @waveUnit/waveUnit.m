@@ -116,7 +116,7 @@ classdef waveUnit < handle
       y = waveUnit.prefix2exponent(obj.SIprefix);
     end
     
-    function invUnit = inverseUnit(obj)
+    function invUnit = inverse(obj)
       % INVERSEUNIT inverts time and frequency units
       % example: ms->kHz, GHz->ns
       if strcmp(obj.baseUnit,'s'), invBaseUnit = 'Hz';

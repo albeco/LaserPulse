@@ -55,12 +55,12 @@ prefixes = testCase.TestData.prefixes;
 invPrefixes = prefixes(end:-1:1);
 for n=1:numel(prefixes)
   % from time to frequency
-  un1 = waveUnit([prefixes{n}, 's']).inverseUnit;
+  un1 = waveUnit([prefixes{n}, 's']).inverse;
   assertTrue(testCase, isa(un1, 'waveUnit'));
   un2 = waveUnit([invPrefixes{n}, 'Hz']);
   assertEqual(testCase, un1, un2);
   % from frequency to time
-  un1 = waveUnit([prefixes{n}, 'Hz']).inverseUnit;
+  un1 = waveUnit([prefixes{n}, 'Hz']).inverse;
   assertTrue(testCase, isa(un1, 'waveUnit'));
   un2 = waveUnit([invPrefixes{n}, 's']);
   assertEqual(testCase, un1, un2);
