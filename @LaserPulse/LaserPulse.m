@@ -185,7 +185,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% optical medium properties
   properties
-    medium = OpticalMedium
+    medium = OpticalMedium('vacuum');
   end
   %% constructor method
   methods
@@ -570,6 +570,12 @@ classdef LaserPulse < matlab.mixin.Copyable
       end
     end
   end
+  %% medium setter method
+  methods
+    function set.medium(pulse, medium)
+      pulse.medium = OpticalMedium(medium);
+    end
+  end
   %% mathematical operators
   methods (Access = private)
     p = binaryOperator(op, pulse1, pulse2, activeDomain);
@@ -613,5 +619,6 @@ classdef LaserPulse < matlab.mixin.Copyable
     newax = plot(pulse, nstd, ax); % plots the fields
     disp(pulse); % displays pulse information
     varargout = size(pulse, varargin); % gives the array size of the electric field
+    propagate(pulse, x, units); % propagate the pulse through a medium
   end
 end
