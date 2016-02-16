@@ -1,9 +1,9 @@
 classdef OpticalMedium < handle
   %OpticalMedium gives refractive index and permittivity of a material.
   %
-  % It uses Sellmeyer formula to retrieve refractive index and permittivity
+  % It uses Sellmeier formula to retrieve refractive index and permittivity
   % at specified frequency, wavelength or photon energy in eV.
-  % The available materials are listed in the file 'sellmeyer.csv', which
+  % The available materials are listed in the file 'sellmeier.csv', which
   % can be easily edited to add more materials.
   %
   % class constructor:
@@ -18,7 +18,7 @@ classdef OpticalMedium < handle
   %   eps = OpticalMedium('BK7').permittivity(350, 'THz');
   %
   % materials data file:
-  %   The file 'sellmeyer.csv' contains, in a comma separated list:
+  %   The file 'sellmeier.csv' contains, in a comma separated list:
   %   materialName, lowerWavelength, upperWavelength, formula.
   %   Units are in micrometers.
   %
@@ -54,8 +54,8 @@ classdef OpticalMedium < handle
   % OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
   properties (Access = private)
-    materialsFileName_ = 'sellmeyer.csv'; % dispersion formula using micrometer units
-    dispersionFunction_ = @(x) ones(size(x)); % Sellmeyer dispersion equation
+    materialsFileName_ = 'sellmeier.csv'; % dispersion formula using micrometer units
+    dispersionFunction_ = @(x) ones(size(x)); % Sellmeier dispersion equation
     matname_; % material name (private property)
   end
   
@@ -74,7 +74,7 @@ classdef OpticalMedium < handle
     
     function n = refractiveIndex(obj, x, unit)
       if ~isa(unit,'WaveUnit'), unit=WaveUnit(unit); end
-      % convert to micrometers, for compatibility with Sellmeyer formula
+      % convert to micrometers, for compatibility with Sellmeier formula
       switch unit.baseUnit
         case 'm'
           x = WaveUnit.convert(x, unit, 'um');
@@ -113,7 +113,7 @@ classdef OpticalMedium < handle
   methods (Access = private)
     function [func, validRange] = loadDispersionData(obj, materialName)
       try
-        % import file with materials name and Sellmeyer equations
+        % import file with materials name and Sellmeier equations
         fileID = fopen(obj.materialsFileName_);
         materialsList = textscan(fileID, '%s %f %f %s', 'Delimiter', ',');
         fclose(fileID);
