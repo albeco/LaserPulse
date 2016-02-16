@@ -580,7 +580,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     tau = calculateShortestDuration(pulse); % calculates shortest pulse duration
     polynomialPhase(pulse, taylorCoeff) % sets the spectral phase to a polynomium
     increaseNumberTimeSteps(pulse, nPoints); % increases nPoints keeping timeStep fixed
-    increaseNumerFreqSteps(pulse, nPoints); % increase nPoints keeping frequencyStep fixed
+    increaseNumberFreqSteps(pulse, nPoints); % increase nPoints keeping frequencyStep fixed
     detrend(pulse, domain) % removes derivative phase offset
     varargout = std(pulse, domain, mode); % calculates standard deviation in time or freq. domain
     normalize(pulse); % sets intensity area to one.
