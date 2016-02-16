@@ -17,6 +17,11 @@ classdef OpticalMedium < handle
   %   eps = OpticalMedium('BK7').permittivity(2, 'eV');
   %   eps = OpticalMedium('BK7').permittivity(350, 'THz');
   %
+  % materials data file:
+  %   The file 'sellmeyer.csv' contains, in a comma separated list:
+  %   materialName, lowerWavelength, upperWavelength, formula.
+  %   Units are in micrometers.
+  %
   % References:
   %   Refractive index values are mainly taken from http://refractiveindex.info/
   %   and from SCHOTT data sheets.
@@ -51,24 +56,32 @@ classdef OpticalMedium < handle
   properties (Access = private)
     materialsFileName_ = 'sellmeyer.csv'; % dispersion formula using micrometer units
     dispersionFunction_ = @(x) ones(size(x)); % Sellmeyer dispersion equation
+    matname_; % material name (private property)
   end
   
+  properties (SetAccess = private)
+    validityRange = [0, inf]; % wavelength validity range (in micrometers)
+  end
+  
+  properties (Dependent)
+    name; % material name (e.g. 'BK7');
+  end
   
   methods
-    function obj = OpticalMedium(materialName)
-      obj.dispersionFunction_ = obj.loadDispersionData(materialName);
+    function obj = OpticalMedium(m)
+      obj.name = m;
     end
     
     function n = refractiveIndex(obj, x, unit)
-      if ~isa(unit,'waveUnit'), unit=waveUnit(unit); end
+      if ~isa(unit,'WaveUnit'), unit=WaveUnit(unit); end
       % convert to micrometers, for compatibility with Sellmeyer formula
       switch unit.baseUnit
         case 'm'
-          x = waveUnit.convert(x, unit, 'um');
+          x = WaveUnit.convert(x, unit, 'um');
         case 'Hz'
-          x = waveUnit.frequency2wavelength(x, unit, 'um');
+          x = WaveUnit.frequency2wavelength(x, unit, 'um');
         case 'eV'
-          x = waveUnit.energy2wavelength(x, unit, 'um');
+          x = WaveUnit.energy2wavelength(x, unit, 'um');
         otherwise
           error('OpticalMedium:argChk', 'unsupported unit type');
       end
@@ -79,14 +92,30 @@ classdef OpticalMedium < handle
       eps = obj.refractiveIndex(x, unit).^2;
     end
     
+    function disp(obj)
+      fprintf('OpticalMedium: ''%s''.\n', obj.name);
+    end
+    
+    function m = get.name(obj)
+      m = obj.matname_;
+    end
+    
+    function set.name(obj, materialName)
+      obj.matname_ = materialName;
+      [func, validRange] = obj.loadDispersionData(materialName);
+      if ~isempty(func)
+        obj.dispersionFunction_ = func;
+        obj.validityRange = validRange;
+      end; 
+    end
   end
   
   methods (Access = private)
-    function func = loadDispersionData(obj, materialName)
+    function [func, validRange] = loadDispersionData(obj, materialName)
       try
         % import file with materials name and Sellmeyer equations
         fileID = fopen(obj.materialsFileName_);
-        materialsList = textscan(fileID, '%s %s', 'Delimiter', ',');
+        materialsList = textscan(fileID, '%s %f %f %s', 'Delimiter', ',');
         fclose(fileID);
         % look up the material and assign the dispersion functin
         materialIndex = find(strcmp(materialsList{1}, materialName));
@@ -100,21 +129,22 @@ classdef OpticalMedium < handle
             obj.materialsFileName_, '". Using last entry.'])
           materialIndex = materialIndex(end);
         end
-        dispersionFunction = vectorize(materialsList{2}{materialIndex});
+        validRange = [materialsList{2}(materialIndex), materialsList{3}(materialIndex)];
+        dispersionFunction = vectorize(materialsList{end}{materialIndex});
         func = str2func(strcat('@ (x)', dispersionFunction));
       catch ME
+        func = [];
+        validRange = [];
         switch ME.identifier
           case 'MATLAB:FileIO:InvalidFid'
             warning(['cannot find file with refractive index data: "',...
-              obj.materialsFileName_, '". Using vacuum refractive index.']);
+              obj.materialsFileName_]);
           case 'OpticalMedium:argChk'
             warning(['material name: "',materialName,'" not found in: "',...
-              obj.materialsFileName_,'". Using vacuum refractive index.']);
+              obj.materialsFileName_]);
           otherwise
-            warning('error loading refractive index data, setting material to vacuum.');
+            warning('error loading refractive index data.');
         end
-        % in case of error, use vacuum dispersion function (n=1)
-        func = @(x) ones(size(x));
       end
     end
   end
