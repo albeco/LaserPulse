@@ -552,7 +552,6 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
     function set.arrivalTime(pulse, newArrivalTime)
       pulse.timeOffset = pulse.timeOffset + (newArrivalTime - pulse.arrivalTime);
-      disp(['current pulse arrival time = ', num2str(pulse.arrivalTime)]);
     end
     function set.duration(pulse, ~)
       disp(['current pulse duration = ', num2str(pulse.duration)]);

@@ -11,14 +11,18 @@ dist = WaveUnit.convert(dist, distUnits, wlUnits);
 
 refrInd = pulse.medium.refractiveIndex(wl, wlUnits);
 validRange = WaveUnit.convert(pulse.medium.validityRange, 'um', wlUnits);
-inrange = wl>validRange(1) & wl<validRange(2);
+% do not consider refractive index values outside validity range
+% here we make a simple constant extrapolation
+refrInd(wl<validRange(1)) = pulse.medium.refractiveIndex(validRange(1), wlUnits);
+refrInd(wl>validRange(2)) = pulse.medium.refractiveIndex(validRange(2), wlUnits);
 
-propterm = 2*pi ./ wl .* refrInd .* dist;
+propterm = bsxfun(@times, 2*pi ./ wl .* refrInd, dist);
 
-pulse.spectralAmplitude(inrange,:) = bsxfun(@times, ...
-  pulse.spectralAmplitude(inrange,:), exp(-imag(propterm(inrange))));
-pulse.spectralPhase(inrange,:) = bsxfun(@plus, ...
-  pulse.spectralPhase(inrange,:), real(propterm(inrange)));
+
+pulse.spectralAmplitude = bsxfun(@times, ...
+  pulse.spectralAmplitude, exp(-imag(propterm)));
+pulse.spectralPhase= bsxfun(@plus, ...
+  pulse.spectralPhase, real(propterm));
 
 pulse.detrend('frequency');
 
