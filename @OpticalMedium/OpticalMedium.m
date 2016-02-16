@@ -119,7 +119,6 @@ classdef OpticalMedium < handle
         fclose(fileID);
         % look up the material and assign the dispersion functin
         materialIndex = find(strcmp(materialsList{1}, materialName));
-        % if material not in database return n=1 (vacuum)
         if isempty(materialIndex)
           error('OpticalMedium:argChk', 'material name not found.')
         end
