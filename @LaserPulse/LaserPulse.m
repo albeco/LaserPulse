@@ -112,6 +112,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   %% time and frequency domain private properties
   properties (Access = private)
     freqUnits_ = WaveUnit('Hz'); % physical units for frequency (private variable)
+    % time units are calculated from frequency units (e.g. 'GHz'-->'ns')
     wlUnits_ = WaveUnit('m'); % physical units for wavelength (private variable)
     % the updatedDomain_ can be 'frequency', 'time', 'all', 'none'
     updatedDomain_ = 'none';
@@ -182,6 +183,10 @@ classdef LaserPulse < matlab.mixin.Copyable
     duration; % FWHM of temporal intensity
   end
   
+  %% optical medium properties
+  properties
+    medium = OpticalMedium
+  end
   %% constructor method
   methods
     function pulse = LaserPulse(domainValues, domainUnits, amp, phase)
