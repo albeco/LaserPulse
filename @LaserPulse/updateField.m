@@ -9,11 +9,9 @@ function updateField(pulse, domainType)
 % pulse.updateField('all')
 %   check which domain is currently updatded and updates the other one
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-
-%  This file is part of LaserPulse. LaserPulse is free software: you can
-%  redistribute it and/or modify it under the terms of the GNU General
-%  Public License. See README.txt for full copyright and licence notice.
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 % IMPLEMENTATION NOTE:
 % The fourier transform contain an extra phase term exp(1i*w0*t0) because

@@ -7,12 +7,9 @@ function res = conj(pulse1)
 % OUTPUTS:
 %   res: the resulting pulse
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-% This file is part of LaserPulse. See README.txt for copyright and licence
-% notice.
-
-% CHANGE LOG
-% 10/08/2015: added support for both time and frequency domain 
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 res = copy(pulse1);
 

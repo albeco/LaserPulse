@@ -1,9 +1,9 @@
 function propagate(pulse, dist, distUnits)
 %PROPAGATE propagates a pulse through a medium
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-% This file is part of LaserPulse. See README.txt for copyright and licence
-% notice.
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 wl = pulse.wavelengthArray;
 wlUnits = pulse.wavelengthUnits;

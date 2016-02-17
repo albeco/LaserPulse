@@ -11,9 +11,9 @@ function res = minus(pulse1, pulse2)
 % If the two pulses have different sampling , they are interpolated over a
 % commond domain.
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-% This file is part of LaserPulse. See README.txt for copyright and licence
-% notice.
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 res = binaryOperator(@polarMinus, pulse1, pulse2);
 

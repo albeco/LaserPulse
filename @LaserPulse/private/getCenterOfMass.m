@@ -31,15 +31,9 @@ function [x0, ix0, cm] = getCenterOfMass(x, y, selectedPulse)
 %  before doing a Fourier transform (fft): in that case 'x0' and not 'cm'
 %  should be used.
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
-
-% version log:
-% 18/06/2015: added option 'total' for calculating the center of mass like
-%   the input would be just one big array
-% 12/08/2015: added support for the case in which both x and y are
-%    multi-dimensional arrays
 
 %% process optional input arguments
 if ~exist('selectedPulse','var') || isempty(selectedPulse)

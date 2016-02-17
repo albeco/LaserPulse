@@ -25,9 +25,9 @@ function increaseTimeResolution(pulse, noPoints, resType)
 %     to the temporal standard deviation (resType=='std') or to the total
 %     number of new points (resType=='total').
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-% This file is part of LaserPulse. See README.txt for copyright and licence
-% notice.
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 % parsing input
 defaultMinPoints  = 10;

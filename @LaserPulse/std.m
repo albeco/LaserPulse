@@ -22,9 +22,9 @@ function varargout = std(pulse, domain, mode)
 % domain: 'all' | 'time' | 'frequency'
 % mode: 1 (amplitude) | 2 (intensity)
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-% This file is part of LaserPulse. See README.txt for copyright and licence
-% notice.
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 % process optional input arguments
 if ~exist('domain', 'var'); domain = 'all'; end

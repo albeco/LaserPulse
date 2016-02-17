@@ -17,6 +17,10 @@ function y = integrateFromCenter(x, y, x0, n)
 % OUTPUT:
 % y: the result of the integration
 
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
+
 % find the central index
 [~,ix0]=min(abs(x-x0));
 % reshape input into 2d matrix (because anyways y(ix0,:) does it)

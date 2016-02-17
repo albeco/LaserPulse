@@ -6,12 +6,9 @@ function translate(pulse, domain, dx)
 % pulse.translate(domain, x)
 % where domain is 'time' or 'frequency'
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-
-%  This file is part of LaserPulse. LaserPulse is free software: you can
-%  redistribute it and/or modify it under the terms of the GNU General
-%  Public License. See README.txt for full copyright and licence notice.
-
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 switch domain
   case 'frequency'

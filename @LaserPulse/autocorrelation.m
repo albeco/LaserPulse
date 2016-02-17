@@ -7,9 +7,9 @@ function ac = autocorrelation(pulse)
 % REQUIRES:
 % LaserPulse class
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-% This file is part of LaserPulse. See README.txt for copyright and licence
-% notice.
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 assert(isvector(pulse.temporalField), ...
   'LaserPulse:autocorrelation pulse must be 1D');
