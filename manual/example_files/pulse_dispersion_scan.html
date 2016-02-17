@@ -1,0 +1,129 @@
+
+<!DOCTYPE html
+  PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html><head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+   <!--
+This HTML was auto-generated from MATLAB code.
+To make changes, update the MATLAB code and republish this document.
+      --><title>Example simulation of dispersion scan</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-17"><meta name="DC.source" content="pulse_dispersion_scan.m"><style type="text/css">
+html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
+
+html { min-height:100%; margin-bottom:1px; }
+html body { height:100%; margin:0px; font-family:Arial, Helvetica, sans-serif; font-size:10px; color:#000; line-height:140%; background:#fff none; overflow-y:scroll; }
+html body td { vertical-align:top; text-align:left; }
+
+h1 { padding:0px; margin:0px 0px 25px; font-family:Arial, Helvetica, sans-serif; font-size:1.5em; color:#d55000; line-height:100%; font-weight:normal; }
+h2 { padding:0px; margin:0px 0px 8px; font-family:Arial, Helvetica, sans-serif; font-size:1.2em; color:#000; font-weight:bold; line-height:140%; border-bottom:1px solid #d6d4d4; display:block; }
+h3 { padding:0px; margin:0px 0px 5px; font-family:Arial, Helvetica, sans-serif; font-size:1.1em; color:#000; font-weight:bold; line-height:140%; }
+
+a { color:#005fce; text-decoration:none; }
+a:hover { color:#005fce; text-decoration:underline; }
+a:visited { color:#004aa0; text-decoration:none; }
+
+p { padding:0px; margin:0px 0px 20px; }
+img { padding:0px; margin:0px 0px 20px; border:none; }
+p img, pre img, tt img, li img, h1 img, h2 img { margin-bottom:0px; } 
+
+ul { padding:0px; margin:0px 0px 20px 23px; list-style:square; }
+ul li { padding:0px; margin:0px 0px 7px 0px; }
+ul li ul { padding:5px 0px 0px; margin:0px 0px 7px 23px; }
+ul li ol li { list-style:decimal; }
+ol { padding:0px; margin:0px 0px 20px 0px; list-style:decimal; }
+ol li { padding:0px; margin:0px 0px 7px 23px; list-style-type:decimal; }
+ol li ol { padding:5px 0px 0px; margin:0px 0px 7px 0px; }
+ol li ol li { list-style-type:lower-alpha; }
+ol li ul { padding-top:7px; }
+ol li ul li { list-style:square; }
+
+.content { font-size:1.2em; line-height:140%; padding: 20px; }
+
+pre, code { font-size:12px; }
+tt { font-size: 1.2em; }
+pre { margin:0px 0px 20px; }
+pre.codeinput { padding:10px; border:1px solid #d3d3d3; background:#f7f7f7; }
+pre.codeoutput { padding:10px 11px; margin:0px 0px 20px; color:#4c4c4c; }
+pre.error { color:red; }
+
+@media print { pre.codeinput, pre.codeoutput { word-wrap:break-word; width:100%; } }
+
+span.keyword { color:#0000FF }
+span.comment { color:#228B22 }
+span.string { color:#A020F0 }
+span.untermstring { color:#B20000 }
+span.syscmd { color:#B28C00 }
+
+.footer { width:auto; padding:10px 0px; margin:25px 0px 0px; border-top:1px dotted #878787; font-size:0.8em; line-height:140%; font-style:italic; color:#878787; text-align:left; float:none; }
+.footer p { margin:0px; }
+.footer a { color:#878787; }
+.footer a:hover { color:#878787; text-decoration:underline; }
+.footer a:visited { color:#878787; }
+
+table th { padding:7px 5px; text-align:left; vertical-align:middle; border: 1px solid #d6d4d4; font-weight:bold; }
+table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px solid #d6d4d4; }
+
+
+
+
+
+  </style></head><body><div class="content"><h1>Example simulation of dispersion scan</h1><!--introduction--><p>Dispersion scan (D-scan) is a pulse compression technique related to chirp-scan [1]. A sequence of second harmonic spectra is recorded, while introducing chirp by means of a glass wedge pair. A bidimensional map is thus optained, with frequency on one axis and thickness of glass on the other axis. The map is then fitted in order to extract the phase of the original pulse. This following script shows only the simulation of the D-scan map, not the fitting procedure.</p><p>[1] M. Miranda et al, Opt. Express 20, 688 (2012).</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialize laser pulse</a></li><li><a href="#2">Define an optical medium</a></li><li><a href="#3">Precompensate the GDD</a></li><li><a href="#4">Introduce glass in the setup</a></li><li><a href="#5">Calculate the second harmonic</a></li></ul></div><h2>Initialize laser pulse<a name="1"></a></h2><pre class="codeinput">p = gaussianPulse(<span class="string">'f0'</span>, 300/800, <span class="string">'t0'</span>, 0, <span class="string">'fwhm'</span>, 20, <span class="keyword">...</span>
+<span class="string">'dt'</span>,1, <span class="string">'nPoints'</span>, 2^12);
+p.polynomialPhase([2000 100 0 0])
+</pre><h2>Define an optical medium<a name="2"></a></h2><pre class="codeinput">p.medium = <span class="string">'BK7'</span>;
+</pre><h2>Precompensate the GDD<a name="3"></a></h2><p>Experimentally this can be done using chirped mirrors. It is necessary because glass can only contribute positive GDD.</p><pre class="codeinput">p.groupDelayDispersion = p.groupDelayDispersion - 500;
+</pre><h2>Introduce glass in the setup<a name="4"></a></h2><pre class="codeinput"><span class="comment">% array with glass thickness, along second dimension</span>
+glassThickness = linspace(0, 20, 100); <span class="comment">% mm</span>
+<span class="comment">% create a sequence of sub-pulse to hold the scan</span>
+p.propagate(glassThickness, <span class="string">'mm'</span>);
+</pre><h2>Calculate the second harmonic<a name="5"></a></h2><pre class="codeinput">shg = p.harmonic(2);
+
+figure()
+pcolor(glassThickness, shg.wavelengthArray, shg.spectralIntensity); shading <span class="string">flat</span>
+ylim(shg.centralWavelength + 20*[-1,1]);
+title([<span class="string">'dispersion scan using '</span>,p.medium.name,<span class="string">' glass'</span>])
+xlabel(<span class="string">'glass thickness (mm)'</span>);
+ylabel([<span class="string">'SHG wavelength ('</span>,shg.wavelengthUnits,<span class="string">')'</span>])
+</pre><img vspace="5" hspace="5" src="pulse_dispersion_scan_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+##### SOURCE BEGIN #####
+%% Example simulation of dispersion scan
+% Dispersion scan (D-scan) is a pulse compression technique related to
+% chirp-scan [1]. A sequence of second harmonic spectra is recorded, while
+% introducing chirp by means of a glass wedge pair. A bidimensional map is
+% thus optained, with frequency on one axis and thickness of glass on the
+% other axis. The map is then fitted in order to extract the phase of the
+% original pulse. This following script shows only the simulation of the
+% D-scan map, not the fitting procedure.
+% 
+% [1] M. Miranda et al, Opt. Express 20, 688 (2012).
+
+%% Initialize laser pulse
+p = gaussianPulse('f0', 300/800, 't0', 0, 'fwhm', 20, ...
+'dt',1, 'nPoints', 2^12);
+p.polynomialPhase([2000 100 0 0])
+
+%% Define an optical medium
+p.medium = 'BK7';
+
+%% Precompensate the GDD
+% Experimentally this can be done using chirped mirrors. It is necessary
+% because glass can only contribute positive GDD.
+p.groupDelayDispersion = p.groupDelayDispersion - 500;
+
+%% Introduce glass in the setup
+
+% array with glass thickness, along second dimension
+glassThickness = linspace(0, 20, 100); % mm
+% create a sequence of sub-pulse to hold the scan
+p.propagate(glassThickness, 'mm');
+
+%% Calculate the second harmonic
+shg = p.harmonic(2);
+
+figure()
+pcolor(glassThickness, shg.wavelengthArray, shg.spectralIntensity); shading flat
+ylim(shg.centralWavelength + 20*[-1,1]);
+title(['dispersion scan using ',p.medium.name,' glass'])
+xlabel('glass thickness (mm)');
+ylabel(['SHG wavelength (',shg.wavelengthUnits,')'])
+##### SOURCE END #####
+--></body></html>

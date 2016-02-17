@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Eample of nonlinear mixing</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-08"><meta name="DC.source" content="pulse_nonlinear_mixing.m"><style type="text/css">
+      --><title>Eample of nonlinear mixing</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-17"><meta name="DC.source" content="pulse_nonlinear_mixing.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -97,7 +97,7 @@ plot(p1.frequencyArray,p1.spectralAmplitude, <span class="keyword">...</span>
   pdf.frequencyArray, pdf.spectralAmplitude,<span class="string">'--'</span>);
 xlabel([<span class="string">'frequency ('</span>, p1.frequencyUnits, <span class="string">')'</span>]);
 ylabel(<span class="string">'abs(Ef)'</span>);
-legend(<span class="string">'f1'</span>,<span class="string">'f2'</span>,<span class="string">'f1+f2'</span>,<span class="string">'f1-f2'</span>, <span class="string">'location'</span>,<span class="string">'best'</span>);
+legend(<span class="string">'f1'</span>,<span class="string">'f2'</span>,<span class="string">'f1+f2'</span>,<span class="string">'f2-f1'</span>, <span class="string">'location'</span>,<span class="string">'best'</span>);
 axis([0 1.5 -0.2 18])
 </pre><img vspace="5" hspace="5" src="pulse_nonlinear_mixing_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
@@ -156,7 +156,7 @@ plot(p1.frequencyArray,p1.spectralAmplitude, ...
   pdf.frequencyArray, pdf.spectralAmplitude,'REPLACE_WITH_DASH_DASH');
 xlabel(['frequency (', p1.frequencyUnits, ')']);
 ylabel('abs(Ef)');
-legend('f1','f2','f1+f2','f1-f2', 'location','best');
+legend('f1','f2','f1+f2','f2-f1', 'location','best');
 axis([0 1.5 -0.2 18])
 
 ##### SOURCE END #####

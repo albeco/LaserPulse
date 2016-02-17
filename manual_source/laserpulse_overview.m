@@ -161,3 +161,9 @@ plot(p2)
 % *  <./example_files/pulse_MIIPS.html pulse_MIIPS.m>
 % (<matlab:edit('pulse_MIIPS.m') source>)
 %       example of Multiphoton Intrapulse Interference Phase Scan 
+% *  <./example_files/pulse_chirp_scan.html pulse_chirp_scan.m>
+% (<matlab:edit('pulse_chirp_scan.m') source>)
+%       example of chirp scan
+% *  <./example_files/pulse_dispersion_scan.html pulse_dispersion_scan.m>
+% (<matlab:edit('pulse_dispersion_scan.m') source>)
+%       example of dispersion scan 
