@@ -41,6 +41,9 @@ classdef LaserPulse < matlab.mixin.Copyable
   %   time domain and a convolution in frequency domain. See the example
   %   files for more information. For applying the operators in the
   %   frequency domain set the property 'activeDomain' to 'frequency'.
+  % # Propagation through media:
+  %   The effect of propagation through a transparent medium is supported
+  %   via a 'medium' property and a 'propagate' method.
   % # Pulse Trains:
   %   Multiple sub-pulses are stored as columns in a multidimensional
   %   arrays. Pulse parameters, like pulse duration and bandwidth, are
@@ -95,7 +98,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   %  system used for the private properties is centered at
   %  (timeOffset,frequencyOffset). There are two reasons for this choice:
   %  1) reduce the number of points; 2) minimize phase wrapping issues,
-  %  which occur when the derivative of the phase is too steep.
+  %  which occurs when the derivative of the phase is too steep.
   %
   % - Due to properties of fourier transform, the time offset is also
   %  a derivative offset for the spectral phase, and the other way round.
@@ -107,6 +110,20 @@ classdef LaserPulse < matlab.mixin.Copyable
   %  formulas include a extra phase term (2*pi*timeOffset*frequencyOffset).
   %  If this term would not be included, the carrier-envelope phase offset
   %  could be altered when translating a domain axes (see translate.m).
+  %
+  % On physical units:
+  % - The physical units for time and frequency are linked, i.e. if time is
+  %   in millisecond, frequency is in kilohertz. This is to minimize the
+  %   possibility or errors, especially in interactive sessions.
+  % - When time or frequency units are modified via their public
+  %   properties, the time and frequency steps are automatically scaled.
+  % - When the wavelength unit is changed, the frequency step does is not 
+  %   changed, because wavelengthArray is recalculated everytime.
+  %
+  % On optical medium:
+  %   The propagate method only provides meaningful results if the whole
+  %   spectrum of the laser pulse is within the limits of validity of the
+  %   dispersion equation for the chosen optical medium.
   
   
   %% time and frequency domain private properties
