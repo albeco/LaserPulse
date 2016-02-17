@@ -53,5 +53,5 @@ plot(p1.frequencyArray,p1.spectralAmplitude, ...
   pdf.frequencyArray, pdf.spectralAmplitude,'--');
 xlabel(['frequency (', p1.frequencyUnits, ')']);
 ylabel('abs(Ef)');
-legend('f1','f2','f1+f2','f1-f2', 'location','best');
+legend('f1','f2','f1+f2','f2-f1', 'location','best');
 axis([0 1.5 -0.2 18])

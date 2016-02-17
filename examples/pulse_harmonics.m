@@ -1,9 +1,9 @@
 %% Example of calculation of harmonics
 
 %% New pulse in time domain
+n = 2^12; dt = 0.2; s = 10; t0 = 10; f0 = 0.4;
 
 % pulse parameters
-n = 2^12; dt = 0.2; s = 10; t0 = 10; f0 = 0.4;
 % time array
 t = (-n/2:n/2-1).' * dt;
 % electric field
