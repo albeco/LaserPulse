@@ -52,11 +52,16 @@ classdef LaserPulse < matlab.mixin.Copyable
   %   storing the field components for different orthogonal polarizations.
   %
   % NOTES:
-  %  To copy a pulse use the syntax:
-  %   'pulse1 = copy(pulse2)' or
-  %   'pulse1 = pulse2.copy()'.
-  %  The assignment 'pulse1 = pulse2' does not create a copy of the object,
-  %  but only a second reference to it.
+  %  1) To copy a pulse use the syntax:
+  %     'pulse1 = copy(pulse2)' or
+  %     'pulse1 = pulse2.copy()'.
+  %     The assignment 'pulse1 = pulse2' does not create a copy of the object,
+  %     but only a second reference to it.
+  %  2) There are two properties that give the intensity of the frequency
+  %     domain electric field:
+  %     pulse.spectralIntensity gives the intensity in function of frequency,
+  %     pulse.spectrum gives the intensity in function of wavelength.
+  %     They are related by the formula: I(f)df == I(l)*dl
   %
   % REQUIREMENTS:
   %   The LaserPulseMatlab uses features introduced with matlab R2011a,
@@ -197,6 +202,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     groupDelayDispersion; % second derivative d^2(phi)/dw^2 of spectral phase
     spectralField; % complex field in frequency domain
     spectralIntensity;% intensity of frequency domain field
+    spectrum; % spectral intensity in function of wavelength
     centralFrequency; % center of mass of spectral intensity
     centralWavelength; % speedOfLight / centralFrequency
     bandwidth; % FWHM of spectral intensity
@@ -336,6 +342,12 @@ classdef LaserPulse < matlab.mixin.Copyable
     function z = get.spectralIntensity(pulse)
       pulse.updateField('frequency');
       z = abs(pulse.specAmp_).^2;
+    end
+    function z = get.spectrum(pulse)
+      pulse.updateField('frequency');
+      c = WaveUnit.getSpeedOfLight(pulse.wavelengthUnits, pulse.timeUnits);
+      z = bsxfun(@times, pulse.spectralIntensity, ...
+        pulse.frequencyArray.^2/c);
     end
     function f = get.centralFrequency(pulse)
       switch pulse.updatedDomain_
@@ -504,19 +516,20 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
     
     function set.spectralField(pulse, efield)
-      if isrow(efield)
-        efield = reshape(efield,[],1);
-      end
+      if isrow(efield), efield = reshape(efield,[],1); end
       pulse.spectralAmplitude = abs(efield);
       pulse.spectralPhase = getUnwrappedPhase(efield);
       % updatedDomain_ has been set to 'frequency'
     end
     function set.spectralIntensity(pulse, z)
-      if isrow(z)
-        z = reshape(z,[],1);
-      end
+      if isrow(z), z = reshape(z,[],1); end
       pulse.spectralAmplitude = sqrt(z);
       % updatedDomain_ has been set to 'frequency'
+    end
+    function set.spectrum(pulse, z)
+      if isrow(z), z=reshape(z,[],1); end
+      c = WaveUnit.getSpeedOfLight(pulse.wavelengthUnits, pulse.timeUnits);
+      pulse.spectralIntensity = bsxfun(@rdivide, z, pulse.frequencyArray.^2/c);
     end
     function set.centralFrequency(pulse, newCentralFrequency)
       pulse.frequencyOffset = pulse.frequencyOffset + (newCentralFrequency - pulse.centralFrequency);
@@ -532,9 +545,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   end
   methods
     function set.temporalAmplitude(pulse, amp)
-      if isrow(amp)
-        amp = reshape(amp,[],1);
-      end
+      if isrow(amp), amp = reshape(amp,[],1); end
       % make sure time domain is updated, to avoid information loss
       if strcmp(pulse.updatedDomain_, 'frequency')
         pulse.updateField('time');
@@ -543,9 +554,7 @@ classdef LaserPulse < matlab.mixin.Copyable
       pulse.updatedDomain_ = 'time';
     end
     function set.temporalPhase(pulse, phase)
-      if isrow(phase)
-        phase = reshape(phase,[],1);
-      end
+      if isrow(phase), phase = reshape(phase,[],1); end
       % make sure time domain is updated, to avoid information loss
       if strcmp(pulse.updatedDomain_, 'frequency')
         pulse.updateField('time');
@@ -645,6 +654,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     increaseTimeResolution(pulse, minPointsPerPeriod, perPeriod); % interpolates using fft
     increaseTimeRange(pulse, newrange, units); % decreases frequency step to increase time range
     newax = plot(pulse, nstd, ax); % plots the fields
+    h = plotSpectrum( pulse, hf, nstd) % plots wavelength spectrum
     disp(pulse); % displays pulse information
     varargout = size(pulse, varargin); % gives the array size of the electric field
     propagate(pulse, x, units); % propagate the pulse through a medium
