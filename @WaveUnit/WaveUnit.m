@@ -62,10 +62,12 @@ classdef WaveUnit < handle
   % OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
   
   %%
-  properties (Constant, Hidden, Access = private)
+  properties (Constant)
     speedOfLight = 2.99792458e8; % m/s
     electronCharge = 1.602176620898e-19; % Coulomb
     PlanckConstant = 4.13566766225e-15; % eV * s
+  end
+  properties (Constant, Hidden, Access = private)
     maxExponent = 24; % max SI exponent
     prefix2exponent = containers.Map( ...
       {'y','z','a','f','p','n','u','m','','k','M','G','T','P','E','Z','Y'}, ...
@@ -288,6 +290,13 @@ classdef WaveUnit < handle
         WaveUnit.speedOfLight * WaveUnit.PlanckConstant ./ x ;
       [value2, unit2] = WaveUnit.convertDimension(value1, ...
         unit1, unit2, 'eV', 'm', conversionFormula);
+    end
+    
+    function c = getSpeedOfLight(lengthUnit, timeUnit)
+      % GETSPEEDOFLIGHT gives the speed of light in specified units
+      if ~isa(lengthUnit,'WaveUnit'), lengthUnit = WaveUnit(lengthUnit); end
+      if ~isa(timeUnit,'WaveUnit'), timeUnit = WaveUnit(timeUnit); end
+      c = WaveUnit.speedOfLight * 10^(timeUnit.exponent-lengthUnit.exponent);
     end
   end
 end
