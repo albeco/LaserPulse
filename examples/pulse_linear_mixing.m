@@ -29,7 +29,8 @@ figure()
 subplot(2,1,1)
 plot(p1.timeArray,p1.temporalAmplitude, ...
   p2.timeArray, p2.temporalAmplitude, ...
-  psum.timeArray, psum.temporalAmplitude,'k--');
+  psum.timeArray, psum.temporalAmplitude,'k--', ...
+  'LineWidth', 1.5);
 xlabel(['time (', p1.timeUnits, ')']);
 ylabel('abs(Et)');
 legend('p1','p2','p1+p2','location','best');
@@ -39,7 +40,8 @@ axis([-100 100 0 2.2]);
 subplot(2,1,2)
 plot(p1.frequencyArray,p1.spectralAmplitude,'-', ...
   p2.frequencyArray, p2.spectralAmplitude,'--', ...
-  psum.frequencyArray, psum.spectralAmplitude,'k-');
+  psum.frequencyArray, psum.spectralAmplitude,'k-', ...
+  'LineWidth', 1.5);
 xlabel(['frequency (', p1.frequencyUnits, ')']);
 ylabel('abs(Ef)');
 legend('p1','p2','p1+p2','location','best');

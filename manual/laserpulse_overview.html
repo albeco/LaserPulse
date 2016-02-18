@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>LaserPulse</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-17"><meta name="DC.source" content="laserpulse_overview.m"><style type="text/css">
+      --><title>LaserPulse</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-18"><meta name="DC.source" content="laserpulse_overview.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -91,7 +91,8 @@ fprintf(<span class="string">'central frequencies are %.2f %s and %.2f %s\n'</sp
 </pre><img vspace="5" hspace="5" src="laserpulse_overview_01.png" alt=""> <p>A second pulse can be plotted on the top of the first one, by calling <a href="matlab:doc('LaserPulse/plot')">plot()</a>  with the axes handle array as second argument:</p><pre class="codeinput">p2.plot(h);
 </pre><img vspace="5" hspace="5" src="laserpulse_overview_02.png" alt=""> <p>More plot types can be obtained using the standard matlab commands. For instance, the next figure shows how to display the real part of the electric field in time domain:</p><pre class="codeinput">figure()
 plot(p1.timeArray, real(p1.temporalField), <span class="keyword">...</span>
-     p2.timeArray, real(p2.temporalField));
+     p2.timeArray, real(p2.temporalField), <span class="keyword">...</span>
+     <span class="string">'LineWidth'</span>, 1.5);
 xlim([-2, 2]*p1.duration)
 xlabel(sprintf(<span class="string">'time (%s)'</span>, p1.timeUnits));
 ylabel(<span class="string">'E(t)'</span>);
@@ -211,7 +212,8 @@ p2.plot(h);
 % electric field in time domain:
 figure()
 plot(p1.timeArray, real(p1.temporalField), ...
-     p2.timeArray, real(p2.temporalField));
+     p2.timeArray, real(p2.temporalField), ...
+     'LineWidth', 1.5);
 xlim([-2, 2]*p1.duration)
 xlabel(sprintf('time (%s)', p1.timeUnits));
 ylabel('E(t)');

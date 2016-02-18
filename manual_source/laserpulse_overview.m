@@ -106,7 +106,8 @@ p2.plot(h);
 % electric field in time domain:
 figure()
 plot(p1.timeArray, real(p1.temporalField), ...
-     p2.timeArray, real(p2.temporalField));
+     p2.timeArray, real(p2.temporalField), ...
+     'LineWidth', 1.5);
 xlim([-2, 2]*p1.duration)
 xlabel(sprintf('time (%s)', p1.timeUnits));
 ylabel('E(t)');

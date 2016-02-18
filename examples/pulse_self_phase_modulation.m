@@ -13,7 +13,8 @@
 %% Set-up simulation
 
 % 5fs gaussian pulse centered at t0 = 1fs and f0 = 300THz
-p = gaussianPulse('units', 'fs', 'fwhm', 5, 't0', 0, 'f0', 300/800, 'dt', 0.2, 'nPoints', 2048);
+p = gaussianPulse('units', 'fs', 'fwhm', 5, 't0', 0, 'f0', 300/800, ...
+  'dt', 0.1, 'nPoints', 2048);
 
 % physical constants
 speedOfLight = 300; % nm / fs
@@ -34,7 +35,8 @@ legend(ax(2),'flat phase','SPM');
 
 % real part of electric field
 figure()
-plot(p.timeArray, real(p.temporalField), p2.timeArray, real(p2.temporalField))
+plot(p.timeArray, real(p.temporalField), p2.timeArray, real(p2.temporalField), ...
+  'LineWidth', 1.5)
 xlim([-2,2]*p.duration)
 xlabel(sprintf('time (%s)', p.timeUnits));
 ylabel('E(t)')
