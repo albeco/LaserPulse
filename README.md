@@ -52,11 +52,4 @@ Both domains are automatically kept synchronized.
    generate it using the matlab 'publish' function. See
    'install_LaserPulse.m' for an example.
 
-
-
-
-<<<<<<< HEAD
-=======
-
->>>>>>> develop
 Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen.
