@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of MIIPS simulation</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-13"><meta name="DC.source" content="pulse_MIIPS.m"><style type="text/css">
+      --><title>Example of MIIPS simulation</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-18"><meta name="DC.source" content="pulse_MIIPS.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -85,7 +85,7 @@ p = p * modulationMask;
 </pre><p>Calculate the second harmonic and get a LaserPulse object which contain the MIIPS trace.</p><pre class="codeinput"><span class="comment">% harmonics are easier to calculate in time domain</span>
 p.activeDomain = <span class="string">'time'</span>;
 miips = p^2;
-</pre><h2>Display the MIIPS trace<a name="6"></a></h2><pre class="codeinput">figure(1)
+</pre><h2>Display the MIIPS trace<a name="6"></a></h2><pre class="codeinput">figure()
 pcolor(PHI, W, miips.spectralIntensity); shading <span class="string">flat</span>
 ylim([-4*pi, 4*pi]*miips.bandwidth + 2*pi*miips.centralFrequency)
 
@@ -147,7 +147,7 @@ p.activeDomain = 'time';
 miips = p^2;
 
 %% Display the MIIPS trace
-figure(1)
+figure()
 pcolor(PHI, W, miips.spectralIntensity); shading flat
 ylim([-4*pi, 4*pi]*miips.bandwidth + 2*pi*miips.centralFrequency)
 

@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Examples of linear superposition of LaserPulse objects</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-13"><meta name="DC.source" content="pulse_linear_mixing.m"><style type="text/css">
+      --><title>Examples of linear superposition of LaserPulse objects</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-18"><meta name="DC.source" content="pulse_linear_mixing.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -84,7 +84,8 @@ figure()
 subplot(2,1,1)
 plot(p1.timeArray,p1.temporalAmplitude, <span class="keyword">...</span>
   p2.timeArray, p2.temporalAmplitude, <span class="keyword">...</span>
-  psum.timeArray, psum.temporalAmplitude,<span class="string">'k--'</span>);
+  psum.timeArray, psum.temporalAmplitude,<span class="string">'k--'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 1.5);
 xlabel([<span class="string">'time ('</span>, p1.timeUnits, <span class="string">')'</span>]);
 ylabel(<span class="string">'abs(Et)'</span>);
 legend(<span class="string">'p1'</span>,<span class="string">'p2'</span>,<span class="string">'p1+p2'</span>,<span class="string">'location'</span>,<span class="string">'best'</span>);
@@ -94,7 +95,8 @@ axis([-100 100 0 2.2]);
 subplot(2,1,2)
 plot(p1.frequencyArray,p1.spectralAmplitude,<span class="string">'-'</span>, <span class="keyword">...</span>
   p2.frequencyArray, p2.spectralAmplitude,<span class="string">'--'</span>, <span class="keyword">...</span>
-  psum.frequencyArray, psum.spectralAmplitude,<span class="string">'k-'</span>);
+  psum.frequencyArray, psum.spectralAmplitude,<span class="string">'k-'</span>, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 1.5);
 xlabel([<span class="string">'frequency ('</span>, p1.frequencyUnits, <span class="string">')'</span>]);
 ylabel(<span class="string">'abs(Ef)'</span>);
 legend(<span class="string">'p1'</span>,<span class="string">'p2'</span>,<span class="string">'p1+p2'</span>,<span class="string">'location'</span>,<span class="string">'best'</span>);
@@ -132,7 +134,8 @@ figure()
 subplot(2,1,1)
 plot(p1.timeArray,p1.temporalAmplitude, ...
   p2.timeArray, p2.temporalAmplitude, ...
-  psum.timeArray, psum.temporalAmplitude,'kREPLACE_WITH_DASH_DASH');
+  psum.timeArray, psum.temporalAmplitude,'kREPLACE_WITH_DASH_DASH', ...
+  'LineWidth', 1.5);
 xlabel(['time (', p1.timeUnits, ')']);
 ylabel('abs(Et)');
 legend('p1','p2','p1+p2','location','best');
@@ -142,7 +145,8 @@ axis([-100 100 0 2.2]);
 subplot(2,1,2)
 plot(p1.frequencyArray,p1.spectralAmplitude,'-', ...
   p2.frequencyArray, p2.spectralAmplitude,'REPLACE_WITH_DASH_DASH', ...
-  psum.frequencyArray, psum.spectralAmplitude,'k-');
+  psum.frequencyArray, psum.spectralAmplitude,'k-', ...
+  'LineWidth', 1.5);
 xlabel(['frequency (', p1.frequencyUnits, ')']);
 ylabel('abs(Ef)');
 legend('p1','p2','p1+p2','location','best');

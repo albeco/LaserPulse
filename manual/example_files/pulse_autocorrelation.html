@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of interferometric autocorrelation</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-13"><meta name="DC.source" content="pulse_autocorrelation.m"><style type="text/css">
+      --><title>Example of interferometric autocorrelation</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-18"><meta name="DC.source" content="pulse_autocorrelation.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -81,10 +81,10 @@ p1.polynomialPhase([50 20 0 0])
 </pre><h2>Calculate interferometric autocorrelation<a name="2"></a></h2><pre class="codeinput">ac = p1.autocorrelation();
 </pre><h2>Plot pulse<a name="3"></a></h2><pre class="codeinput">p1.plot([],10) <span class="comment">% plots a range of +/-10 standard deviation</span>
 </pre><img vspace="5" hspace="5" src="pulse_autocorrelation_01.png" alt=""> <h2>Plot autocorrelation<a name="4"></a></h2><pre class="codeinput">figure()
-plot(p1.timeArray, ac)
-xlim([-4,4]*p1.duration + p1.timeOffset)
-xlabel(sprintf(<span class="string">'time delay (%s)'</span>, p1.timeUnits))
-ylabel(<span class="string">'SHG (arb.units)'</span>)
+plot(p1.timeArray, ac, <span class="string">'LineWidth'</span>, 1.5);
+xlim([-4,4]*p1.duration + p1.timeOffset);
+xlabel(sprintf(<span class="string">'time delay (%s)'</span>, p1.timeUnits));
+ylabel(<span class="string">'SHG (arb.units)'</span>);
 title(<span class="string">'Interferometric Autocorrelation'</span>);
 </pre><img vspace="5" hspace="5" src="pulse_autocorrelation_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
@@ -113,10 +113,10 @@ ac = p1.autocorrelation();
 p1.plot([],10) % plots a range of +/-10 standard deviation
 %% Plot autocorrelation
 figure()
-plot(p1.timeArray, ac)
-xlim([-4,4]*p1.duration + p1.timeOffset)
-xlabel(sprintf('time delay (%s)', p1.timeUnits))
-ylabel('SHG (arb.units)')
+plot(p1.timeArray, ac, 'LineWidth', 1.5);
+xlim([-4,4]*p1.duration + p1.timeOffset);
+xlabel(sprintf('time delay (%s)', p1.timeUnits));
+ylabel('SHG (arb.units)');
 title('Interferometric Autocorrelation');
 
 

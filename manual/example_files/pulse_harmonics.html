@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of calculation of harmonics</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2015-08-13"><meta name="DC.source" content="pulse_harmonics.m"><style type="text/css">
+      --><title>Example of calculation of harmonics</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-18"><meta name="DC.source" content="pulse_harmonics.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,43 +66,52 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Example of calculation of harmonics</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">New pulse in time domain</a></li><li><a href="#2">Calculate harmonics</a></li><li><a href="#3">Plot harmonics</a></li></ul></div><h2>New pulse in time domain<a name="1"></a></h2><pre class="codeinput"><span class="comment">% pulse parameters</span>
-n = 2^12; dt = 0.2; s = 10; t0 = 10; f0 = 0.4;
+  </style></head><body><div class="content"><h1>Example of calculation of harmonics</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">New pulse in time domain</a></li><li><a href="#2">Calculate harmonics</a></li><li><a href="#3">Plot harmonics</a></li></ul></div><h2>New pulse in time domain<a name="1"></a></h2><pre class="codeinput">n = 2^12; dt = 0.2; s = 10; t0 = 10; f0 = 0.4;
+
+<span class="comment">% pulse parameters</span>
 <span class="comment">% time array</span>
 t = (-n/2:n/2-1).' * dt;
 <span class="comment">% electric field</span>
 Et = exp(-(t-t0).^2/s^2 -2i*pi*t*f0);
 <span class="comment">% LaserPulse object</span>
 p1 = LaserPulse(t, <span class="string">'fs'</span>, Et);
+p1.frequencyUnits = <span class="string">'THz'</span>;
 p1.normalize()
 </pre><h2>Calculate harmonics<a name="2"></a></h2><p>The power operator works, by default, on the time dimension. This allows calculating harmonics using a short notation:</p><pre class="codeinput">pshg = p1.^2;
 pthg = p1.^3;
 pfhg = p1.^4;
 <span class="comment">% Normalized the pulses to make it easier to plot them on the same scale.</span>
 normalize(pshg); normalize(pthg); normalize(pfhg);
-</pre><h2>Plot harmonics<a name="3"></a></h2><pre class="codeinput">figure(4);
+</pre><h2>Plot harmonics<a name="3"></a></h2><p>The following figure displays the spectral intensity of the harmonics, in function of frequency.</p><pre class="codeinput">figure();
 plot(p1.frequencyArray,p1.spectralIntensity, <span class="keyword">...</span>
   pshg.frequencyArray,pshg.spectralIntensity, <span class="keyword">...</span>
   pthg.frequencyArray,pthg.spectralIntensity, <span class="keyword">...</span>
-  pfhg.frequencyArray,pfhg.spectralIntensity);
+  pfhg.frequencyArray,pfhg.spectralIntensity, <span class="keyword">...</span>
+  <span class="string">'LineWidth'</span>, 1.5);
 xlabel([<span class="string">'frequency ('</span>, p1.frequencyUnits, <span class="string">')'</span>]);
 ylabel(<span class="string">'abs(Ef).^2'</span>);
-axis([0 2 0 30])
+axis([0 2000 0 0.03])
 legend(<span class="string">'1st'</span>,<span class="string">'2nd'</span>,<span class="string">'3rd'</span>, <span class="string">'4th'</span>);
-</pre><img vspace="5" hspace="5" src="pulse_harmonics_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="pulse_harmonics_01.png" alt=""> <p>The following figure displays the spectra, in function of wavelength.</p><pre class="codeinput">p1.plotSpectrum; hold <span class="string">on</span>
+pshg.plotSpectrum(gcf);
+pthg.plotSpectrum(gcf);
+pfhg.plotSpectrum(gcf); hold <span class="string">off</span>
+legend(<span class="string">'1st'</span>,<span class="string">'2nd'</span>,<span class="string">'3rd'</span>, <span class="string">'4th'</span>);
+</pre><img vspace="5" hspace="5" src="pulse_harmonics_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Example of calculation of harmonics
 
 %% New pulse in time domain
+n = 2^12; dt = 0.2; s = 10; t0 = 10; f0 = 0.4;
 
 % pulse parameters
-n = 2^12; dt = 0.2; s = 10; t0 = 10; f0 = 0.4;
 % time array
 t = (-n/2:n/2-1).' * dt;
 % electric field
 Et = exp(-(t-t0).^2/s^2 -2i*pi*t*f0);
 % LaserPulse object
 p1 = LaserPulse(t, 'fs', Et);
+p1.frequencyUnits = 'THz';
 p1.normalize()
 
 %% Calculate harmonics
@@ -114,14 +123,26 @@ pfhg = p1.^4;
 % Normalized the pulses to make it easier to plot them on the same scale.
 normalize(pshg); normalize(pthg); normalize(pfhg);
 %% Plot harmonics
-figure(4);
+% The following figure displays the spectral intensity of the harmonics, in
+% function of frequency.
+
+figure();
 plot(p1.frequencyArray,p1.spectralIntensity, ...
   pshg.frequencyArray,pshg.spectralIntensity, ...
   pthg.frequencyArray,pthg.spectralIntensity, ...
-  pfhg.frequencyArray,pfhg.spectralIntensity);
+  pfhg.frequencyArray,pfhg.spectralIntensity, ...
+  'LineWidth', 1.5);
 xlabel(['frequency (', p1.frequencyUnits, ')']);
 ylabel('abs(Ef).^2');
-axis([0 2 0 30])
+axis([0 2000 0 0.03])
+legend('1st','2nd','3rd', '4th');
+
+%%
+% The following figure displays the spectra, in function of wavelength.
+p1.plotSpectrum; hold on
+pshg.plotSpectrum(gcf);
+pthg.plotSpectrum(gcf);
+pfhg.plotSpectrum(gcf); hold off
 legend('1st','2nd','3rd', '4th');
 
 ##### SOURCE END #####
