@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>LaserPulse</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-01-08"><meta name="DC.source" content="laserpulse_overview.m"><style type="text/css">
+      --><title>LaserPulse</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-18"><meta name="DC.source" content="laserpulse_overview.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -91,7 +91,8 @@ fprintf(<span class="string">'central frequencies are %.2f %s and %.2f %s\n'</sp
 </pre><img vspace="5" hspace="5" src="laserpulse_overview_01.png" alt=""> <p>A second pulse can be plotted on the top of the first one, by calling <a href="matlab:doc('LaserPulse/plot')">plot()</a>  with the axes handle array as second argument:</p><pre class="codeinput">p2.plot(h);
 </pre><img vspace="5" hspace="5" src="laserpulse_overview_02.png" alt=""> <p>More plot types can be obtained using the standard matlab commands. For instance, the next figure shows how to display the real part of the electric field in time domain:</p><pre class="codeinput">figure()
 plot(p1.timeArray, real(p1.temporalField), <span class="keyword">...</span>
-     p2.timeArray, real(p2.temporalField));
+     p2.timeArray, real(p2.temporalField), <span class="keyword">...</span>
+     <span class="string">'LineWidth'</span>, 1.5);
 xlim([-2, 2]*p1.duration)
 xlabel(sprintf(<span class="string">'time (%s)'</span>, p1.timeUnits));
 ylabel(<span class="string">'E(t)'</span>);
@@ -101,7 +102,7 @@ legend(<span class="string">'p1'</span>, <span class="string">'p2'</span>)
 p2 = LaserPulse(f, <span class="string">'THz'</span>, <span class="keyword">...</span>
   [exp(-(f-1).^2 + 2i*pi*f), exp(-2*(f-2).^2 + 3i*pi*f)]);
 plot(p2)
-</pre><img vspace="5" hspace="5" src="laserpulse_overview_04.png" alt=""> <h2>Examples<a name="14"></a></h2><div><ul><li><a href="./example_files/pulse_autocorrelation.html">pulse_autocorrelation.m</a> (<a href="matlab:edit('pulse_autocorrelation.m')">source</a>)       example of interferometric autocorrelation</li><li><a href="./example_files/pulse_create_new.html">pulse_create_new.m</a> (<a href="matlab:edit('pulse_create_new.m')">source</a>)     examples of how to set-up a LaserPulse object</li><li><a href="./example_files/pulse_display_properties.html">pulse_display_properties.m</a> (<a href="matlab:edit('pulse_display_properties.m')">source</a>)       example of how to obtain LaserPulse properties</li><li><a href="./example_files/pulse_four_wave_mixing.html">pulse_four_wave_mixing.m</a> (<a href="matlab:edit('pulse_four_wave_mixing.m')">source</a>)       example of nonlinear process with LaserPulse class</li><li><a href="./example_files/pulse_harmonics.html">pulse_harmonics.m</a> (<a href="matlab:edit('pulse_harmonics.m')">source</a>)       examples of higher harmonics</li><li><a href="./example_files/pulse_linear_mixing.html">pulse_linear_mixing.m</a> (<a href="matlab:edit('pulse_linear_mixing.m')">source</a>)       examples of linear superposition of LaserPulse objects</li><li><a href="./example_files/pulse_nonlinear_mixing.html">pulse_nonlinear_mixing.m</a> (<a href="matlab:edit('pulse_nonlinear_mixing.m')">source</a>)       example of nonlinear mixing of LaserPulse objects</li><li><a href="./example_files/pulse_replicas.html">pulse_replicas.m</a> (<a href="matlab:edit('pulse_replicas.m')">source</a>)       example of how to create time-shifted replicas and pulse trains</li><li><a href="./example_files/pulse_gaussian_sech_lorentzian.html">pulse_gaussian_sech_lorentzian.m</a> (<a href="matlab:edit('pulse_gaussian_sech_lorentzian.m')">source</a>)       example of Gaussian, Lorentian and hyperbolic secant pulse shapes</li><li><a href="./example_files/pulse_self_phase_modulation.html">pulse_self_phase_modulation.m</a> (<a href="matlab:edit('pulse_self_phase_modulation.m')">source</a>)       example simulation of self-phase modulation using LaserPulse class</li><li><a href="./example_files/pulse_interferometric_FROG.html">pulse_interferometric_FROG.m</a> (<a href="matlab:edit('pulse_interferometric_FROG.m')">source</a>)       example of Interometric Frequency Resolved Autocorrelation</li><li><a href="./example_files/pulse_MIIPS.html">pulse_MIIPS.m</a> (<a href="matlab:edit('pulse_MIIPS.m')">source</a>)       example of Multiphoton Intrapulse Interference Phase Scan</li></ul></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="laserpulse_overview_04.png" alt=""> <h2>Examples<a name="14"></a></h2><div><ul><li><a href="./example_files/pulse_autocorrelation.html">pulse_autocorrelation.m</a> (<a href="matlab:edit('pulse_autocorrelation.m')">source</a>)       example of interferometric autocorrelation</li><li><a href="./example_files/pulse_create_new.html">pulse_create_new.m</a> (<a href="matlab:edit('pulse_create_new.m')">source</a>)     examples of how to set-up a LaserPulse object</li><li><a href="./example_files/pulse_display_properties.html">pulse_display_properties.m</a> (<a href="matlab:edit('pulse_display_properties.m')">source</a>)       example of how to obtain LaserPulse properties</li><li><a href="./example_files/pulse_four_wave_mixing.html">pulse_four_wave_mixing.m</a> (<a href="matlab:edit('pulse_four_wave_mixing.m')">source</a>)       example of nonlinear process with LaserPulse class</li><li><a href="./example_files/pulse_harmonics.html">pulse_harmonics.m</a> (<a href="matlab:edit('pulse_harmonics.m')">source</a>)       examples of higher harmonics</li><li><a href="./example_files/pulse_linear_mixing.html">pulse_linear_mixing.m</a> (<a href="matlab:edit('pulse_linear_mixing.m')">source</a>)       examples of linear superposition of LaserPulse objects</li><li><a href="./example_files/pulse_nonlinear_mixing.html">pulse_nonlinear_mixing.m</a> (<a href="matlab:edit('pulse_nonlinear_mixing.m')">source</a>)       example of nonlinear mixing of LaserPulse objects</li><li><a href="./example_files/pulse_replicas.html">pulse_replicas.m</a> (<a href="matlab:edit('pulse_replicas.m')">source</a>)       example of how to create time-shifted replicas and pulse trains</li><li><a href="./example_files/pulse_gaussian_sech_lorentzian.html">pulse_gaussian_sech_lorentzian.m</a> (<a href="matlab:edit('pulse_gaussian_sech_lorentzian.m')">source</a>)       example of Gaussian, Lorentian and hyperbolic secant pulse shapes</li><li><a href="./example_files/pulse_self_phase_modulation.html">pulse_self_phase_modulation.m</a> (<a href="matlab:edit('pulse_self_phase_modulation.m')">source</a>)       example simulation of self-phase modulation using LaserPulse class</li><li><a href="./example_files/pulse_interferometric_FROG.html">pulse_interferometric_FROG.m</a> (<a href="matlab:edit('pulse_interferometric_FROG.m')">source</a>)       example of Interometric Frequency Resolved Autocorrelation</li><li><a href="./example_files/pulse_MIIPS.html">pulse_MIIPS.m</a> (<a href="matlab:edit('pulse_MIIPS.m')">source</a>)       example of Multiphoton Intrapulse Interference Phase Scan</li><li><a href="./example_files/pulse_chirp_scan.html">pulse_chirp_scan.m</a> (<a href="matlab:edit('pulse_chirp_scan.m')">source</a>)       example of chirp scan</li><li><a href="./example_files/pulse_dispersion_scan.html">pulse_dispersion_scan.m</a> (<a href="matlab:edit('pulse_dispersion_scan.m')">source</a>)       example of dispersion scan</li></ul></div><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% LaserPulse
 %
@@ -211,7 +212,8 @@ p2.plot(h);
 % electric field in time domain:
 figure()
 plot(p1.timeArray, real(p1.temporalField), ...
-     p2.timeArray, real(p2.temporalField));
+     p2.timeArray, real(p2.temporalField), ...
+     'LineWidth', 1.5);
 xlim([-2, 2]*p1.duration)
 xlabel(sprintf('time (%s)', p1.timeUnits));
 ylabel('E(t)');
@@ -266,5 +268,11 @@ plot(p2)
 % *  <./example_files/pulse_MIIPS.html pulse_MIIPS.m>
 % (<matlab:edit('pulse_MIIPS.m') source>)
 %       example of Multiphoton Intrapulse Interference Phase Scan 
+% *  <./example_files/pulse_chirp_scan.html pulse_chirp_scan.m>
+% (<matlab:edit('pulse_chirp_scan.m') source>)
+%       example of chirp scan
+% *  <./example_files/pulse_dispersion_scan.html pulse_dispersion_scan.m>
+% (<matlab:edit('pulse_dispersion_scan.m') source>)
+%       example of dispersion scan 
 ##### SOURCE END #####
 --></body></html>

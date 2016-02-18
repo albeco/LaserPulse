@@ -23,7 +23,8 @@ pfwm = p1.^2 .* conj(p1);
 %% Plot fields
 figure();
 plot(p1.frequencyArray,p1.spectralIntensity, ...
-  pfwm.frequencyArray,pfwm.spectralIntensity*100);
+  pfwm.frequencyArray,pfwm.spectralIntensity*100, ...
+  'LineWidth', 1.5);
 xlabel(['frequency (', p1.frequencyUnits, ')']);
 ylabel('abs(Ef).^2'); axis([0.2 0.5 0 30])
 legend('laser', 'FWM*100');

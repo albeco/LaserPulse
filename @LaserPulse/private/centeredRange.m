@@ -3,7 +3,9 @@ function y = centeredRange(n)
 % it is compatible with matlab definitions of fftshift and iffshift
 % for even and odd numbers
 
-% 2015 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 assert(n > 0 && mod(n, 1) == 0, ...
   'centeredRange:ArgChk argument must be positive integer')

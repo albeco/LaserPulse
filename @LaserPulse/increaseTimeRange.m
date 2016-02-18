@@ -1,6 +1,7 @@
 function increaseTimeRange(pulse, newrange, units)
 % INCREASETIMERANGE increases the time range of the pulse.
-% In order to increase the time range, the frequency step is made smaller.
+% It increases the number of time steps while keeping timeStep constant,
+% zhen it interpolates over the frequency domain.
 %
 % USAGE:
 % for setting a new range of (deltaT) femtoseconds
@@ -13,24 +14,36 @@ function increaseTimeRange(pulse, newrange, units)
 % for setting a range of n standard deviations
 % pulse.increaseTimeRange(n, 'std')
 
-%% Copyright (C) 2015 Alberto Comin, LMU Muenchen
+%% Copyright (c) 2015-2016, Alberto Comin, LMU Muenchen
+% All rights reserved.
 %
-%  This file is part of LaserPulse.
-% 
-%  LaserPulse is free software: you can redistribute it and/or modify it
-%  under the terms of the GNU General Public License as published by the
-%  Free Software Foundation, either version 3 of the License, or (at your
-%  option) any later version. LaserPulse is distributed in the hope that
-%  it will be useful, but WITHOUT ANY WARRANTY; without even the implied
-%  warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See
-%  the GNU General Public License for more details. You should have
-%  received a copy of the GNU General Public License along with
-%  LaserPulse.  If not, see <http://www.gnu.org/licenses/>.
+% Redistribution and use in source and binary forms, with or without
+% modification, are permitted provided that the following conditions are
+% met:
+%
+% 1. Redistributions of source code must retain the above copyright notice,
+% this list of conditions and the following disclaimer.
+%
+% 2. Redistributions in binary form must reproduce the above copyright
+% notice, this list of conditions and the following disclaimer in the
+% documentation and/or other materials provided with the distribution.
+%
+% THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS
+% IS" AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO,
+% THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR
+% PURPOSE ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT HOLDER OR
+% CONTRIBUTORS BE LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL,
+% EXEMPLARY, OR CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO,
+% PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR
+% PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF
+% LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING
+% NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
+% SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 
 %% IMPLEMENTATION DETAILS:
-%  increasing time range by reducing the frequency step is better than doing
-%  so by padding time domain arrays with zeros, because in the second case
-%  the temporal field is not changed.
+%  increasing time range by interpolating over the frequency domain is
+%  better than doing so by padding time domain arrays with zeros, because
+%  in the second case the temporal field is not changed.
 
 %% MAIN BODY:
 if ~exist('units', 'var') || strcmp(units, 'fs')
@@ -43,19 +56,17 @@ else
   error('LaserPulse:increasTimeRage:argChk', 'unsupported unit type');
 end
 
-% dermine the number of required points
-minTimePoints = newTimeRange/pulse.timeStep;
+% determine the number of required points
+new_nPoints = roundeven(newTimeRange/pulse.timeStep);
 
-if pulse.nPoints < minTimePoints
+if pulse.nPoints < new_nPoints
+  % update frequency domain before changing step sizes, to avoid rescaling
+  % signal amplitude when calculating fft integrals (see updateField.m)
   pulse.updateField('frequency');
-  nOldPoints = pulse.nPoints;
-  oldFreqStep = pulse.frequencyStep;
   oldFreqArray = pulse.shiftedFreqArray_;
-  % it is enough to change nPoints and frequencyStep, to update both time
-  % and frequency arrays
-  pulse.nPoints = roundeven(minTimePoints);
-  pulse.frequencyStep = oldFreqStep * nOldPoints / pulse.nPoints;
-  % now pulse.shiftedFreqArray_ has been automatically updated
+  % decrease frequencyStep by increasing nPoints keeping timeStep fixed
+  pulse.increaseNumberTimeSteps(new_nPoints);
+  % pulse.shiftedFreqArray_ has been automatically updated
   pulse.specAmp_ = interp1(oldFreqArray, pulse.specAmp_, pulse.shiftedFreqArray_, 'pchip',0);
   pulse.specPhase_ = interp1(oldFreqArray, pulse.specPhase_, pulse.shiftedFreqArray_, 'pchip',0);
   pulse.updatedDomain_ = 'frequency';

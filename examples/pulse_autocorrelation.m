@@ -23,9 +23,9 @@ ac = p1.autocorrelation();
 p1.plot([],10) % plots a range of +/-10 standard deviation
 %% Plot autocorrelation
 figure()
-plot(p1.timeArray, ac)
-xlim([-4,4]*p1.duration + p1.timeOffset)
-xlabel(sprintf('time delay (%s)', p1.timeUnits))
-ylabel('SHG (arb.units)')
+plot(p1.timeArray, ac, 'LineWidth', 1.5);
+xlim([-4,4]*p1.duration + p1.timeOffset);
+xlabel(sprintf('time delay (%s)', p1.timeUnits));
+ylabel('SHG (arb.units)');
 title('Interferometric Autocorrelation');
 

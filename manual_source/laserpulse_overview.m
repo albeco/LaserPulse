@@ -106,7 +106,8 @@ p2.plot(h);
 % electric field in time domain:
 figure()
 plot(p1.timeArray, real(p1.temporalField), ...
-     p2.timeArray, real(p2.temporalField));
+     p2.timeArray, real(p2.temporalField), ...
+     'LineWidth', 1.5);
 xlim([-2, 2]*p1.duration)
 xlabel(sprintf('time (%s)', p1.timeUnits));
 ylabel('E(t)');
@@ -161,3 +162,9 @@ plot(p2)
 % *  <./example_files/pulse_MIIPS.html pulse_MIIPS.m>
 % (<matlab:edit('pulse_MIIPS.m') source>)
 %       example of Multiphoton Intrapulse Interference Phase Scan 
+% *  <./example_files/pulse_chirp_scan.html pulse_chirp_scan.m>
+% (<matlab:edit('pulse_chirp_scan.m') source>)
+%       example of chirp scan
+% *  <./example_files/pulse_dispersion_scan.html pulse_dispersion_scan.m>
+% (<matlab:edit('pulse_dispersion_scan.m') source>)
+%       example of dispersion scan 

@@ -3,13 +3,14 @@ function interpFreqDomain(p, newfreq)
 %
 % It uses linear interpolation and zeros for extrapolation.
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 
-%% MAIN BODY:
+p.updateField('frequency');
+
 % save the old spectralPhase, because it automatically changes when
-% resetting frequencyArray.
+% resetting frequencyArray (see get.spectralPhase in LaserPulse.m).
 freqArray = p.frequencyArray;
 amp = p.spectralAmplitude;
 phase = p.spectralPhase;
@@ -20,4 +21,6 @@ p.timeOffset = 0;
 p.frequencyArray = newfreq;
 p.spectralAmplitude = interp1(freqArray, amp, newfreq, 'linear',0);
 p.spectralPhase = interp1(freqArray, phase, newfreq, 'linear', 0);
+
+p.updatedDomain_ = 'frequency';
 end

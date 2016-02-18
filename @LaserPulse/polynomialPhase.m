@@ -10,9 +10,9 @@ function polynomialPhase(pulse, taylorCoeff)
 %
 % See also: polyval
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-% This file is part of LaserPulse. See README.txt for copyright and licence
-% notice.
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 % calculate polynomial phase
 phase = polyval(...
@@ -22,7 +22,7 @@ phase = polyval(...
 
 % replicate the phase for all sub-pulses
 if ~isvector(pulse.spectralPhase)
-  phase = bsxfun(phase, ones(size(pulse.spectralPhase)));
+  phase = bsxfun(@times, phase, ones(size(pulse.spectralPhase)));
 end
 
 % apply the phase

@@ -12,16 +12,11 @@ function res = rdivide(pulse1, pulse2)
 % If the two pulses have different sampling , they are interpolated over a
 % commond domain.
 
-% Copyright (C) 2015 Alberto Comin, LMU Muenchen
-% This file is part of LaserPulse. See README.txt for copyright and licence
-% notice.
-
-% CHANGE LOG
-% 10/08/2015: added support for both time and frequency domain and for the
-%             creation of multidimensional arrays via bsxfun
+% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% This file is part of LaserPulse. See README.txt in the LaserPulse folder
+% for copyright and licence notice.
 
 % at least one of the arguments must be a LaserPulse if we landed here
-
 %% check if the type of both operands is LaserPulse
 if isa(pulse1, 'LaserPulse') && isa(pulse2, 'LaserPulse')
   % both pulse1 and pulse2 are instances of LaserPulse
