@@ -55,7 +55,7 @@ function v = stdev(x, fieldInt, mode)
 
 % if pulse train, get the total intensity
 if ndims(fieldInt)>1
-  % first stack all the sub-pulses in a matrix, and them sum them
+  % first stack all the sub-pulses in a matrix, and then sum them
   fieldInt = reshape(fieldInt, size(fieldInt,1), []);
   fieldInt = sum(fieldInt, 2);
 end
