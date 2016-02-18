@@ -1,4 +1,4 @@
-function newax = plot(pulse, ax, nstd)
+function newax = plot(pulse, target, nstd)
 % PLOT display a LaserPulse is either time or frequency domain.
 %
 % USAGE:
@@ -11,7 +11,7 @@ function newax = plot(pulse, ax, nstd)
 % p.plot([], n)
 %   create new figure and restrict horizontal range to +/-n standard deviations
 %
-% The first argument ('ax') is optional. It can be either a handle to a
+% The first argument ('target') is optional. It can be either a handle to a
 % figure, or an array with four axes handles (as obtained by subplot(2,2,n)
 % for n=1:4).
 
@@ -24,15 +24,25 @@ if ~exist('nstd', 'var') || isempty(nstd)
   nstd = 5; % default no. stddev for plot
 end
 
-if ~exist('ax', 'var') || isempty(ax) % create new figure and new axes
+isValidHandle = @(x, handletype) (isa(x, 'handle') && all(isvalid(x)) && ...
+  all(strcmp(get(x, 'type'), handletype)));
+
+if ~exist('target', 'var') || isempty(target) 
+  % need to create new figure and axes
   hf = figure();
   ax = get_subplot_axes(hf);
-elseif numel(ax)==1          % user provided handle to figure
-  hf = ax;                   % save handle to figure
-  ax = get_subplot_axes(hf); % get handles of subplot axes
-elseif numel(ax)~=4          
-  error('LaserPulse:plot', 'first argument must be handle to figure or to axes of 4 subplots')
-end  
+elseif numel(target)==1  && isValidHandle(target, 'figure')
+  % user provided handle to figure
+  hf = target;                   
+  ax = get_subplot_axes(hf);
+elseif numel(target)==4 && isValidHandle(target, 'axes')
+  % user provided array of valid axes handles
+  hf = get(target(1), 'Parent');
+  ax = target;
+else
+  error('LaserPulse:plot', ['first argument must be a ''figure'' handle', ...
+    ' or a 4-elements array of valid ''axes'' handles']);
+end
 
 %% determine plot range
 [sigma_t, sigma_f] = pulse.std();
@@ -47,11 +57,20 @@ if isnan(freqRange(2)); freqRange(2) = inf; end;
 freqRegion = ...
   pulse.frequencyArray>freqRange(1) & pulse.frequencyArray<freqRange(2);
 
+%% set plot options
+set(hf, 'Color', 'w', 'name', 'LaserPulse.plot');
+set(ax, 'LineWidth', 1.5);
+plotOptions = {'LineWidth', 1.5};
 
-plot(ax(1), pulse.timeArray(timeRegion, :), pulse.temporalAmplitude(timeRegion, :));
-plot(ax(2), pulse.timeArray(timeRegion, :), pulse.temporalPhase(timeRegion, :));
-plot(ax(3), pulse.frequencyArray(freqRegion, :), pulse.spectralAmplitude(freqRegion, :));
-plot(ax(4), pulse.frequencyArray(freqRegion, :), pulse.spectralPhase(freqRegion, :));
+%% plot electric field
+plot(ax(1), pulse.timeArray(timeRegion, :), ...
+  pulse.temporalAmplitude(timeRegion, :), plotOptions{:});
+plot(ax(2), pulse.timeArray(timeRegion, :), ...
+  pulse.temporalPhase(timeRegion, :), plotOptions{:});
+plot(ax(3), pulse.frequencyArray(freqRegion, :), ...
+  pulse.spectralAmplitude(freqRegion, :), plotOptions{:});
+plot(ax(4), pulse.frequencyArray(freqRegion, :), ...
+  pulse.spectralPhase(freqRegion, :), plotOptions{:});
 
 
 xlabel(ax(1), sprintf('time (%s)', pulse.timeUnits))
