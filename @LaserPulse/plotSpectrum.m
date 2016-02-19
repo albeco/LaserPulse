@@ -32,5 +32,9 @@ ylabel('Spectrum (arb. units)');
 
 grid(gca, 'on');
 set(gca, 'LineWidth', 1.5, 'GridAlpha', 0.1, 'GridLineStyle', ':');
+
+if nargout > 0
+  h = lineHandle;
+end;
 end
 

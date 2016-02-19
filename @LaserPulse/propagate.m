@@ -1,5 +1,17 @@
 function propagate(pulse, dist, distUnits)
-%PROPAGATE propagates a pulse through a medium
+%PROPAGATE propagates a pulse through an optical medium.
+%
+% USAGE:
+% pulse.propagate(distance, units);
+%
+% EXAMPLE:
+% pulse.propagate(1, 'mm');
+%
+% NOTES:
+% It is possible to define a specific optical medium using the syntax
+% pulse.medium = mediumname, for example: pulse.medium = 'BK7'.
+%
+% See also: LaserPulse, OpticalMedium
 
 % Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder

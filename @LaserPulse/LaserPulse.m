@@ -176,7 +176,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   end
   properties (Dependent)
     frequencyUnits; % physical units for frequency
-    frequencyArray = []; % frequency array
+    frequencyArray; % frequency array
     wavelengthUnits; % physical units for wavelength
     wavelengthArray; % wavelength array
   end
