@@ -610,7 +610,11 @@ classdef LaserPulse < matlab.mixin.Copyable
   %% medium setter method
   methods
     function set.medium(pulse, medium)
-      pulse.medium = OpticalMedium(medium);
+      if isa(medium,'OpticalMedium')
+        pulse.medium = medium;
+      else
+        pulse.medium = OpticalMedium(medium);
+      end
     end
   end
   %% mathematical operators

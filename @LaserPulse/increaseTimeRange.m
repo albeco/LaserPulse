@@ -46,14 +46,21 @@ function increaseTimeRange(pulse, newrange, units)
 %  in the second case the temporal field is not changed.
 
 %% MAIN BODY:
-if ~exist('units', 'var') || strcmp(units, 'fs')
+if ~exist('units', 'var')
   newTimeRange = newrange;
 elseif strcmp(units, 'fwhm')
   newTimeRange = newrange * pulse.duration;
 elseif strcmp(units, 'std')
   newTimeRange = newrange * pulse.std('time');
 else
-  error('LaserPulse:increasTimeRage:argChk', 'unsupported unit type');
+  % check if 'units' is a valid SI time unit
+  try
+    timeunit = WaveUnit(units);
+    assert(strcmp(timeunit.dimension, 'time'));
+    newTimeRange = WaveUnit.convert(newrange, timeunit, pulse.timeUnits);
+  catch
+    error('LaserPulse:increasTimeRage:argChk', 'unsupported unit type');
+  end
 end
 
 % determine the number of required points
