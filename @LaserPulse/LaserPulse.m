@@ -220,7 +220,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% optical medium properties
   properties
-    medium = OpticalMedium('vacuum');
+    medium = OpticalMedium('vacuum'); % optical medium
   end
   %% constructor method
   methods
