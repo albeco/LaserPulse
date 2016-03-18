@@ -408,16 +408,18 @@ classdef LaserPulse < matlab.mixin.Copyable
       dt = calculateFWHM(pulse.timeArray, abs(pulse.tempAmp_).^2);
     end
     function phi = get.phaseOffset(pulse)
-      switch pulse.updatedDomain_
-        case {'time', 'all'}
+      switch pulse.activeDomain
+        case 'time'
+          pulse.updateField('time');
           [~, it0, ~] = getCenterOfMass(pulse.timeArray, abs(pulse.tempAmp_).^2);
           phi = pulse.temporalPhase(it0);
         case 'frequency'
+          pulse.updateField('frequency');
           [~, if0, ~] = getCenterOfMass(pulse.frequencyArray, abs(pulse.specAmp_).^2);
           phi = pulse.spectralPhase(if0);
         otherwise
           phi = nan;
-          warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
+          warning('LaserPulse:get.phaseOffset activeDomain not correctly set')
       end
     end
   end
@@ -597,13 +599,13 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
     
     function set.phaseOffset(pulse, phi)
-      switch pulse.updatedDomain_
-        case {'time', 'all'}
+      switch pulse.activeDomain
+        case 'time'
           pulse.temporalPhase = pulse.temporalPhase - pulse.phaseOffset + phi;
         case 'frequency'
           pulse.spectralPhase = pulse.spectralPhase - pulse.phaseOffset + phi;
         otherwise
-          warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
+          warning('LaserPulse:get.phaseOffset activeDomain not correctly set')
       end
     end
   end
