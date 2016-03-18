@@ -20,12 +20,8 @@ assert(mod(n,1)==0 && n>0, ['LaserPulse:harmonic', ...
 
 % make sure to calculate pulse.^n in time domain
 pulse.activeDomain = 'time';
-% center the time domain using the derivative offset
-pulse.detrend('time');
-% shift frequency offset to zero, calculate power and shift back
-oldFreqOffset = pulse.frequencyOffset;
-pulse.frequencyOffset = 0;
+
 p = pulse.^n;
-p.frequencyOffset = oldFreqOffset * n;
+p.detrend('time');
 
 end
