@@ -621,8 +621,8 @@ classdef LaserPulse < matlab.mixin.Copyable
   end
   %% mathematical operators
   methods (Access = private)
-    p = binaryOperator(op, pulse1, pulse2, activeDomain);
-    p = multByDouble(pulse1, x); % rescale field by a numerical factor
+    p = binaryOperator(pulse1, pulse2, op, activeDomain);
+    p = multByDouble(pulse, x); % rescale field by a numerical factor
   end
   methods
     p = plus(pulse1, pulse2); % sum two pulses in active domain
@@ -657,12 +657,12 @@ classdef LaserPulse < matlab.mixin.Copyable
     normalize(pulse); % sets intensity area to one.
     translate(pulse, domain, dx); % translates the time or frequency axis
     matchDomains(p1, p2, tol) % makes time/frequency domains of two pulses the same.
-    increaseTimeResolution(pulse, minPointsPerPeriod, perPeriod); % interpolates using fft
+    increaseTimeResolution(pulse, noPoints, resType); % interpolates using fft
     increaseTimeRange(pulse, newrange, units); % decreases frequency step to increase time range
-    newax = plot(pulse, nstd, ax); % plots the fields
+    newax = plot(pulse, target, nstd); % plots the fields
     h = plotSpectrum( pulse, hf, nstd) % plots wavelength spectrum
     disp(pulse); % displays pulse information
     varargout = size(pulse, varargin); % gives the array size of the electric field
-    propagate(pulse, x, units); % propagate the pulse through a medium
+    propagate(pulse, dist, distUnits); % propagate the pulse through a medium
   end
 end

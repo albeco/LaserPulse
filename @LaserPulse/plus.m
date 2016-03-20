@@ -15,7 +15,7 @@ function res = plus(pulse1, pulse2)
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 
-res = binaryOperator(@polarsum, pulse1, pulse2);
+res = binaryOperator(pulse1, pulse2, @polarsum);
 
 end
 

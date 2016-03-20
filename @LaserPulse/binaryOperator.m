@@ -1,19 +1,20 @@
-function res = binaryOperator(op, pulse1, pulse2, activeDomain)
+function res = binaryOperator(pulse1, pulse2, op, activeDomain)
 % BINARYOPERATOR applies a binary operator to two LaserPulse objects.
 %
 % EXAMPLE:
-% p = binaryOperator(@func, p1, p2, 'frequency')
+% p = binaryOperator(p1, p2, @func, 'frequency')
 %  calculates p == amp*exp(1i*phase) in frequency domain
 %  from p1 == a1(f)*exp(1i*phi1(f)) and p2 == a2(f)*exp(1i*phi2(f))
 %  using [amp,phase] = func(a1,phi1,a2,phi2).
 %
 % INPUTS:
-%   op: handle to a function [amp,phase] = f(amp1,phase1,amp2,phase2)
-%   pulse1: instance of LaserPulse pulse2: instance of LaserPulse
+%   pulse1: instance of LaserPulse
+%   pulse2: instance of LaserPulse
+%   op: handle to a function [amp,phase]=f(amp1,phase1,amp2,phase2)
 %   activeDomain (optional): domain in which the binary operator is
-%   applied. If not specified the domain specified by the property
-%   'updatedDomain_' is used. If both domains are currently updated
-%   (updatedDomain_=='all'), the time domain is used.
+%     applied. If not specified the domain specified by the property
+%     'updatedDomain_' is used. If both domains are currently updated
+%     (updatedDomain_=='all'), the time domain is used.
 %
 % OUTPUTS:
 %   p: the output pulse
