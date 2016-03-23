@@ -28,7 +28,7 @@
 %   propagate                 - propagates a pulse through a medium
 %   rdivide                   - calculates the ratio of two pulses in the active domain of the first pulse.
 %   size                      - gives the array size of the electric field
-%   std                       - calculates standard deviation of field amplitude in time and frequency domain
+%   std                       - calculates standard deviation of field amplitude/intensity in time/frequency domain
 %   times                     - multiplies two pulses in the active domain of the first pulse.
 %   translate                 - translates the time or freq. axis using the conjugated domain
 %   updateField               - calculates time or frequency domain via fft

@@ -654,6 +654,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     increaseNumberFreqSteps(pulse, nPoints); % increase nPoints keeping frequencyStep fixed
     detrend(pulse, domain) % removes derivative phase offset
     varargout = std(pulse, domain, mode); % calculates standard deviation in time or freq. domain
+    x = tbp(pulse, mode); % calculates time-bandwidth product
     normalize(pulse); % sets intensity area to one.
     translate(pulse, domain, dx); % translates the time or frequency axis
     matchDomains(p1, p2, tol) % makes time/frequency domains of two pulses the same.
