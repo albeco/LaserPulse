@@ -648,6 +648,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     updateField(pulse, domainType); % updates fields using fft
   end
   methods
+    blankPhase(pulse, domain, threshold); % put phase to zero below a threshold
     tau = calculateShortestDuration(pulse); % calculates shortest pulse duration
     polynomialPhase(pulse, taylorCoeff) % sets the spectral phase to a polynomium
     increaseNumberTimeSteps(pulse, nPoints); % increases nPoints keeping timeStep fixed
