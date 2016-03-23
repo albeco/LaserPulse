@@ -22,5 +22,6 @@ assert(mod(n,1)==0 && n>0, ['LaserPulse:harmonic', ...
 pulse.activeDomain = 'time';
 
 p = pulse.^n;
+p.detrend('time');
 
 end

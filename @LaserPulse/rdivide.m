@@ -20,7 +20,7 @@ function res = rdivide(pulse1, pulse2)
 %% check if the type of both operands is LaserPulse
 if isa(pulse1, 'LaserPulse') && isa(pulse2, 'LaserPulse')
   % both pulse1 and pulse2 are instances of LaserPulse
-  res = binaryOperator(@polarRDivide, pulse1, pulse2, pulse1.activeDomain);
+  res = binaryOperator(pulse1, pulse2, @polarRDivide, pulse1.activeDomain);
   return
 end
 

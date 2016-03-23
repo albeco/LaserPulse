@@ -220,7 +220,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   
   %% optical medium properties
   properties
-    medium = OpticalMedium('vacuum');
+    medium = OpticalMedium('vacuum'); % optical medium
   end
   %% constructor method
   methods
@@ -408,16 +408,18 @@ classdef LaserPulse < matlab.mixin.Copyable
       dt = calculateFWHM(pulse.timeArray, abs(pulse.tempAmp_).^2);
     end
     function phi = get.phaseOffset(pulse)
-      switch pulse.updatedDomain_
-        case {'time', 'all'}
+      switch pulse.activeDomain
+        case 'time'
+          pulse.updateField('time');
           [~, it0, ~] = getCenterOfMass(pulse.timeArray, abs(pulse.tempAmp_).^2);
           phi = pulse.temporalPhase(it0);
         case 'frequency'
+          pulse.updateField('frequency');
           [~, if0, ~] = getCenterOfMass(pulse.frequencyArray, abs(pulse.specAmp_).^2);
           phi = pulse.spectralPhase(if0);
         otherwise
           phi = nan;
-          warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
+          warning('LaserPulse:get.phaseOffset activeDomain not correctly set')
       end
     end
   end
@@ -597,13 +599,13 @@ classdef LaserPulse < matlab.mixin.Copyable
     end
     
     function set.phaseOffset(pulse, phi)
-      switch pulse.updatedDomain_
-        case {'time', 'all'}
+      switch pulse.activeDomain
+        case 'time'
           pulse.temporalPhase = pulse.temporalPhase - pulse.phaseOffset + phi;
         case 'frequency'
           pulse.spectralPhase = pulse.spectralPhase - pulse.phaseOffset + phi;
         otherwise
-          warning('LaserPulse:get.centralFrequency pulse domain not correctly set')
+          warning('LaserPulse:get.phaseOffset activeDomain not correctly set')
       end
     end
   end
@@ -619,8 +621,8 @@ classdef LaserPulse < matlab.mixin.Copyable
   end
   %% mathematical operators
   methods (Access = private)
-    p = binaryOperator(op, pulse1, pulse2, activeDomain);
-    p = multByDouble(pulse1, x); % rescale field by a numerical factor
+    p = binaryOperator(pulse1, pulse2, op, activeDomain);
+    p = multByDouble(pulse, x); % rescale field by a numerical factor
   end
   methods
     p = plus(pulse1, pulse2); % sum two pulses in active domain
@@ -652,15 +654,16 @@ classdef LaserPulse < matlab.mixin.Copyable
     increaseNumberFreqSteps(pulse, nPoints); % increase nPoints keeping frequencyStep fixed
     detrend(pulse, domain) % removes derivative phase offset
     varargout = std(pulse, domain, mode); % calculates standard deviation in time or freq. domain
+    x = tbp(pulse, mode); % calculates time-bandwidth product
     normalize(pulse); % sets intensity area to one.
     translate(pulse, domain, dx); % translates the time or frequency axis
     matchDomains(p1, p2, tol) % makes time/frequency domains of two pulses the same.
-    increaseTimeResolution(pulse, minPointsPerPeriod, perPeriod); % interpolates using fft
+    increaseTimeResolution(pulse, noPoints, resType); % interpolates using fft
     increaseTimeRange(pulse, newrange, units); % decreases frequency step to increase time range
-    newax = plot(pulse, nstd, ax); % plots the fields
+    newax = plot(pulse, target, nstd); % plots the fields
     h = plotSpectrum( pulse, hf, nstd) % plots wavelength spectrum
     disp(pulse); % displays pulse information
     varargout = size(pulse, varargin); % gives the array size of the electric field
-    propagate(pulse, x, units); % propagate the pulse through a medium
+    propagate(pulse, dist, distUnits); % propagate the pulse through a medium
   end
 end

@@ -1,5 +1,5 @@
 function varargout = std(pulse, domain, mode)
-%STD calculates standard deviation of field amplitude in time and frequency domain
+%STD calculates standard deviation of field amplitude/intensity in time/frequency domain
 %
 % USAGE:
 %
