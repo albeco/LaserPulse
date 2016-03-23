@@ -25,13 +25,13 @@ end
 
 if strcmp(domain, 'time')
   % max intensity is calculated over all sub-pulses
-  maxInt = max(abs(pulse.temporalIntensity(:)));
-  blankingRegion = abs(pulse.temporalIntensity) < threshold * maxInt;
+  maxInt = max(pulse.temporalIntensity(:));
+  blankingRegion = pulse.temporalIntensity < threshold * maxInt;
   pulse.temporalPhase(blankingRegion) = 0;
 elseif strcmp(domain, 'frequency')
   % max intensity is calculated over all sub-pulses
-  maxInt = max(abs(pulse.spectralIntensity(:)));
-  blankingRegion = abs(pulse.spectralIntensity) < threshold * maxInt;
+  maxInt = max(pulse.spectralIntensity(:));
+  blankingRegion = pulse.spectralIntensity < threshold * maxInt;
   pulse.spectralPhase(blankingRegion) = 0;
 else
   error('LaserPulse:blankPhase:argChk', 'domain must be either time or frequency');

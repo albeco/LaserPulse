@@ -253,6 +253,7 @@ classdef LaserPulse < matlab.mixin.Copyable
           pulse.frequencyArray = domainValues;
           pulse.spectralAmplitude = amp;
           pulse.spectralPhase = phase;
+          pulse.checkSampling('frequency', 'warning', true);
           % remove derivative offset and store it as timeOffset
           pulse.detrend('frequency');
         case 's'
@@ -260,6 +261,7 @@ classdef LaserPulse < matlab.mixin.Copyable
           pulse.timeArray = domainValues;
           pulse.temporalAmplitude = amp;
           pulse.temporalPhase = phase;
+          pulse.checkSampling('time', 'warning', true);
           % remove derivative offset and store it as frequencyOffset
           pulse.detrend('time');
         otherwise
@@ -648,7 +650,8 @@ classdef LaserPulse < matlab.mixin.Copyable
     updateField(pulse, domainType); % updates fields using fft
   end
   methods
-    blankPhase(pulse, domain, threshold); % put phase to zero below a threshold
+    status = checkSampling(pulse, domain, varargin); % checks if step size allows to represent the cojugated fourier domain.
+    blankPhase(pulse, domain, threshold); % puts phase to zero below a threshold
     tau = calculateShortestDuration(pulse); % calculates shortest pulse duration
     polynomialPhase(pulse, taylorCoeff) % sets the spectral phase to a polynomium
     increaseNumberTimeSteps(pulse, nPoints); % increases nPoints keeping timeStep fixed
