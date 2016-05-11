@@ -33,8 +33,9 @@ trend = diff( sign( yNorm - 0.5-eps ) );
 crossPoint = find(trend);
 
 if length(crossPoint) ~= 2
-  FWHM = NaN;
-  return;
+  warning(['LaserPulse.calculateFWHM found more that two points ', ...
+    'at half intensity: using first and last.']);
+  crossPoint = [crossPoint(1), crossPoint(end)];
 end
 
 try
