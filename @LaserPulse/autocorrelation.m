@@ -1,8 +1,10 @@
-function ac = autocorrelation(pulse)
+function ac = autocorrelation(pulse, order)
 % AUTOCORRELATION gives the interferometric autocorrelation
 %
 % USAGE:
 % ac = pulse.autocorrelation()
+% ac = pulse.autocorrelation(order)
+% if not specified it is assumed order==2
 %
 % REQUIRES:
 % LaserPulse class
@@ -13,6 +15,7 @@ function ac = autocorrelation(pulse)
 
 assert(isvector(pulse.temporalField), ...
   'LaserPulse:autocorrelation pulse must be 1D');
+if ~exist('order', 'var') || isempty(order), order = 2; end
 
 dt = pulse.timeStep;
 N = pulse.nPoints;
@@ -28,9 +31,9 @@ end
 % bring time0 to the center
 pulserep = fftshift(pulserep,2);
 
-%% Second Harmonic Generation
-% calculate second harmonic intensity
-pulserep = abs(pulserep.^2).^2;
+%% Harmonic Generation
+% calculate harmonic intensity
+pulserep = abs(pulserep.^order).^2;
 
 %% Autocorrelation
 % integrate over time

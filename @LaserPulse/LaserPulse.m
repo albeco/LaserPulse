@@ -642,7 +642,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   %% derived physical quantities
   methods
     p = harmonic(pulse, n); % calculates n^th harmonic
-    ac = autocorrelation(pulse); % interferometric autocorrelation
+    ac = autocorrelation(pulse, order); % interferometric autocorrelation
   end
   
   %% utility methods
