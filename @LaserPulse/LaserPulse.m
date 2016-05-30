@@ -123,7 +123,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   %  and frequency domains.
   %
   % - Fourier transforms are performed on private properties defined
-  %  in a offsetted reference system (see above). For this reason the fft
+  %  in a offset reference system (see above). For this reason the fft
   %  formulas include a extra phase term (2*pi*timeOffset*frequencyOffset).
   %  If this term would not be included, the carrier-envelope phase offset
   %  could be altered when translating a domain axes (see translate.m).
