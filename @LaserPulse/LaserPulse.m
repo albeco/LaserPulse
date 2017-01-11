@@ -668,6 +668,6 @@ classdef LaserPulse < matlab.mixin.Copyable
     h = plotSpectrum( pulse, hf, nstd) % plots wavelength spectrum
     disp(pulse); % displays pulse information
     varargout = size(pulse, varargin); % gives the array size of the electric field
-    propagate(pulse, dist, distUnits); % propagate the pulse through a medium
+    propagate(pulse, dist, distUnits, varargin); % propagate the pulse through a medium
   end
 end
