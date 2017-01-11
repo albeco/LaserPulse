@@ -27,7 +27,7 @@ p.groupDelayDispersion = p.groupDelayDispersion - 500;
 % array with glass thickness, along second dimension
 glassThickness = linspace(0, 20, 100); % mm
 % create a sequence of sub-pulse to hold the scan
-p.propagate(glassThickness, 'mm');
+p.propagate(glassThickness, 'mm', 'broadening');
 
 %% Calculate the second harmonic
 shg = p.harmonic(2);
