@@ -1,11 +1,8 @@
 function status = checkSampling(pulse, domain, varargin)
 % CHECKSAMPLING checks if step size allows to represent the cojugated fourier domain.
 %
-%  If the frequencyStep is not small enough, the time window might be too
-%  narrow to represent the temporal field. In this case, it can be useful
-%  to reduce the frequency step by interpolation. A similar argument also
-%  applies for the timeStep when going from time domain to frequency
-%  domain.
+%  This function checks if the phase steps between domain points is small
+%  compared to pi.
 %
 % USAGE:
 %   status = checkSampling(pulse, domain)
@@ -47,18 +44,14 @@ end
 switch domain
   case 'time'
     pulse.updateField('time');
-    maxFieldAmp = max(abs(pulse.tempAmp_(:)));
-    pulseRegion = abs(pulse.tempAmp_) > threshold * maxFieldAmp;
-    status = all(abs(diff(pulse.tempPhase_(pulseRegion))) < maxPhase);
+    status = checkPhase(pulse.tempAmp_, pulse.tempPhase_);
     if ~status && issueWarning
       warning(['Frequency window (1/timeStep) appears narrow. ', ...
         'It might be useful to decrease timeStep.']);
     end
   case 'frequency'
     pulse.updateField('frequency');
-    maxFieldAmp = max(abs(pulse.specAmp_(:)));
-    pulseRegion = abs(pulse.specAmp_) > threshold * maxFieldAmp;
-    status = all(abs(diff(pulse.specPhase_(pulseRegion))) < maxPhase);
+    status = checkPhase(pulse.specAmp_, pulse.specPhase_);
     if ~status && issueWarning
       warning(['Time window (1/frequencyStep) appears narrow. ', ...
         'It might be useful to decrease frequencyStep.']);
@@ -66,4 +59,14 @@ switch domain
   otherwise
     error('LaserPulse:checkSampling', ...
       'requested domain name is not supported');
+end
+
+function status = checkPhase(amp, phase)
+    amp = reshape(amp, size(amp,1), []);
+    phase = reshape(phase, size(phase,1), []);
+    pulseRegion = abs(amp) > threshold .* max(abs(amp(:)));
+    phaseDiffs = diff(phase);
+    status = all(phaseDiffs(pulseRegion(1:end-1,:)) < maxPhase);
+end
+
 end

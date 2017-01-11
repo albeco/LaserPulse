@@ -28,8 +28,9 @@ validRange = WaveUnit.convert(pulse.medium.validityRange, 'um', wlUnits);
 refrInd(wl<validRange(1)) = pulse.medium.refractiveIndex(validRange(1), wlUnits);
 refrInd(wl>validRange(2)) = pulse.medium.refractiveIndex(validRange(2), wlUnits);
 
+assert(size(dist,1) == 1); % propagation distance is the same for all frequencies
 propterm = bsxfun(@times, 2*pi ./ wl .* refrInd, dist);
-
+propterm(wl<=0) = 0;
 
 pulse.spectralAmplitude = bsxfun(@times, ...
   pulse.spectralAmplitude, exp(-imag(propterm)));
