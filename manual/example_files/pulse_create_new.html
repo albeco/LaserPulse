@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Examples of how to set-up a LaserPulse object</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-18"><meta name="DC.source" content="pulse_create_new.m"><style type="text/css">
+      --><title>Examples of how to set-up a LaserPulse object</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-02-09"><meta name="DC.source" content="pulse_create_new.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Examples of how to set-up a LaserPulse object</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">New pulse in time domain</a></li><li><a href="#2">New pulse in frequency domain as complex field</a></li><li><a href="#3">New pulse in frequency domain as amplitude/phase pair</a></li></ul></div><h2>New pulse in time domain<a name="1"></a></h2><pre class="codeinput"><span class="comment">% time array</span>
+  </style></head><body><div class="content"><h1>Examples of how to set-up a LaserPulse object</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">New pulse in time domain</a></li><li><a href="#2">New pulse in frequency domain as complex field</a></li><li><a href="#3">New pulse in frequency domain as amplitude/phase pair</a></li></ul></div><h2 id="1">New pulse in time domain</h2><pre class="codeinput"><span class="comment">% time array</span>
 t = linspace(0, 10, 1000);
 <span class="comment">% electric field</span>
 Et = exp(-(t-5).^2) .* exp(-2i*pi*t);
@@ -74,7 +74,7 @@ Et = exp(-(t-5).^2) .* exp(-2i*pi*t);
 p1 = LaserPulse(t, <span class="string">'fs'</span>, Et);
 <span class="comment">% plot the pulse</span>
 p1.plot();
-</pre><img vspace="5" hspace="5" src="pulse_create_new_01.png" alt=""> <h2>New pulse in frequency domain as complex field<a name="2"></a></h2><pre class="codeinput"><span class="comment">% frequency array</span>
+</pre><img vspace="5" hspace="5" src="pulse_create_new_01.png" alt=""> <h2 id="2">New pulse in frequency domain as complex field</h2><pre class="codeinput"><span class="comment">% frequency array</span>
 f = linspace(0, 1, 1000);
 <span class="comment">% electric field</span>
 Ef = exp(-(f-0.5).^2/(0.1)^2) .* exp(1i* 100*(f-0.5).^2);
@@ -82,7 +82,7 @@ Ef = exp(-(f-0.5).^2/(0.1)^2) .* exp(1i* 100*(f-0.5).^2);
 p2 = LaserPulse(f, <span class="string">'PHz'</span>, Ef);
 <span class="comment">% plot the pulse</span>
 p2.plot();
-</pre><img vspace="5" hspace="5" src="pulse_create_new_02.png" alt=""> <h2>New pulse in frequency domain as amplitude/phase pair<a name="3"></a></h2><pre class="codeinput"><span class="comment">% frequency array</span>
+</pre><img vspace="5" hspace="5" src="pulse_create_new_02.png" alt=""> <h2 id="3">New pulse in frequency domain as amplitude/phase pair</h2><pre class="codeinput"><span class="comment">% frequency array</span>
 f = linspace(0, 10, 1000);
 <span class="comment">% electric field</span>
 Af = exp(-(f-0.5).^2/(0.1)^2);
@@ -91,7 +91,7 @@ phi = 1000*(f-0.5).^3;
 p2 = LaserPulse(f, <span class="string">'PHz'</span>, Af, phi);
 <span class="comment">% plot the pulse</span>
 p2.plot();
-</pre><img vspace="5" hspace="5" src="pulse_create_new_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="pulse_create_new_03.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Examples of how to set-up a LaserPulse object
 
