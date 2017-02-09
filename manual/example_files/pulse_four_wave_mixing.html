@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of four wave mixing simulation with LaserPulse class</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2016-02-18"><meta name="DC.source" content="pulse_four_wave_mixing.m"><style type="text/css">
+      --><title>Example of four wave mixing simulation with LaserPulse class</title><meta name="generator" content="MATLAB 9.1"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-02-09"><meta name="DC.source" content="pulse_four_wave_mixing.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Example of four wave mixing simulation with LaserPulse class</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">New pulse in time domain</a></li><li><a href="#2">Four wave mixing</a></li><li><a href="#3">Plot fields</a></li></ul></div><h2>New pulse in time domain<a name="1"></a></h2><pre class="codeinput"><span class="comment">% pulse parameters</span>
+  </style></head><body><div class="content"><h1>Example of four wave mixing simulation with LaserPulse class</h1><!--introduction--><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">New pulse in time domain</a></li><li><a href="#2">Four wave mixing</a></li><li><a href="#3">Plot fields</a></li></ul></div><h2 id="1">New pulse in time domain</h2><pre class="codeinput"><span class="comment">% pulse parameters</span>
 n = 2^12; dt = 0.2; s = 10; t0 = 10; f0 = 0.4;
 <span class="comment">% time array</span>
 t = (-n/2:n/2-1).' * dt;
@@ -75,15 +75,15 @@ Et = exp(-(t-t0).^2/s^2 -2i*pi*t*f0);
 <span class="comment">% LaserPulse object</span>
 p1 = LaserPulse(t, <span class="string">'ns'</span>, Et);
 p1.normalize()
-</pre><h2>Four wave mixing<a name="2"></a></h2><p>Combining the power and the complex conjugate operators it is possible to simulate many types of nonlinear signals.</p><p>The four-wave-mixing (FWM) signal is defined as:</p><pre class="codeinput">pfwm = p1.^2 .* conj(p1);
-</pre><h2>Plot fields<a name="3"></a></h2><pre class="codeinput">figure();
+</pre><h2 id="2">Four wave mixing</h2><p>Combining the power and the complex conjugate operators it is possible to simulate many types of nonlinear signals.</p><p>The four-wave-mixing (FWM) signal is defined as:</p><pre class="codeinput">pfwm = p1.^2 .* conj(p1);
+</pre><h2 id="3">Plot fields</h2><pre class="codeinput">figure();
 plot(p1.frequencyArray,p1.spectralIntensity, <span class="keyword">...</span>
   pfwm.frequencyArray,pfwm.spectralIntensity*100, <span class="keyword">...</span>
   <span class="string">'LineWidth'</span>, 1.5);
 xlabel([<span class="string">'frequency ('</span>, p1.frequencyUnits, <span class="string">')'</span>]);
 ylabel(<span class="string">'abs(Ef).^2'</span>); axis([0.2 0.5 0 30])
 legend(<span class="string">'laser'</span>, <span class="string">'FWM*100'</span>);
-</pre><img vspace="5" hspace="5" src="pulse_four_wave_mixing_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="pulse_four_wave_mixing_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2016b</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Example of four wave mixing simulation with LaserPulse class
 
