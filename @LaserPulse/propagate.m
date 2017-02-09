@@ -39,6 +39,7 @@ end
 
 wl = pulse.wavelengthArray;
 wlUnits = pulse.wavelengthUnits;
+assert(size(dist,1) == 1); % propagation distance is the same for all frequencies
 dist = WaveUnit.convert(dist, distUnits, wlUnits);
 
 refrInd = pulse.medium.refractiveIndex(wl, wlUnits);
@@ -48,20 +49,16 @@ validRange = WaveUnit.convert(pulse.medium.validityRange, 'um', wlUnits);
 refrInd(wl<validRange(1)) = pulse.medium.refractiveIndex(validRange(1), wlUnits);
 refrInd(wl>validRange(2)) = pulse.medium.refractiveIndex(validRange(2), wlUnits);
 
-assert(size(dist,1) == 1); % propagation distance is the same for all frequencies
 propterm = bsxfun(@times, 2*pi ./ wl .* refrInd, dist);
 propterm(wl<=0) = 0;
-
 damping = exp(-imag(propterm));
 addedPhase = real(propterm);
 if onlyBroadening
   addedPhase = ndDetrend(addedPhase);
 end
 
-pulse.spectralAmplitude = bsxfun(@times, ...
-  pulse.spectralAmplitude, damping);
-pulse.spectralPhase= bsxfun(@plus, ...
-  pulse.spectralPhase, addedPhase);
+pulse.spectralAmplitude = bsxfun(@times, pulse.spectralAmplitude, damping);
+pulse.spectralPhase= bsxfun(@plus, pulse.spectralPhase, addedPhase);
 
 pulse.detrend('frequency');
 
