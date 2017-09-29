@@ -28,7 +28,7 @@ classdef OpticalMedium < handle
   % See also: LaserPulse
   
   
-  %% Copyright (c) 2016, Alberto Comin All rights reserved.
+  %% Copyright (c) 2016-2017, Alberto Comin All rights reserved.
   %
   % Redistribution and use in source and binary forms, with or without
   % modification, are permitted provided that the following conditions are
