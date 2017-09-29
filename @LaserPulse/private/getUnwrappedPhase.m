@@ -7,7 +7,7 @@ function phi = getUnwrappedPhase(efield)
 %   phi: the phase angle(efield) unwrapped symmetrically from the center of
 %    mass of abs(efield).^2
 
-% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2017 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 

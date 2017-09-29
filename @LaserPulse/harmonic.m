@@ -7,7 +7,7 @@ function p  = harmonic(pulse,n)
 % pulse  = harmonic(pulse)
 %   gives the 2-nd harmonics
 
-% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2017 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 

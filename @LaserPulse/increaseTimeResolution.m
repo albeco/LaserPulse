@@ -25,7 +25,7 @@ function increaseTimeResolution(pulse, noPoints, resType)
 %     to the temporal standard deviation (resType=='std') or to the total
 %     number of new points (resType=='total').
 
-% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2017 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 
@@ -39,13 +39,14 @@ switch lower(resType)
   case 'total'
      noNewPoints = noPoints;
   case 'perperiod'
-    noNewPoints = noPoints * pulse.centralFrequency/pulse.frequencyStep;
+    noNewPoints = noPoints * pulse.centralFrequency / pulse.frequencyStep;
   case 'fwhm'
     noNewPoints = noPoints/pulse.duration/pulse.frequencyStep;
   case 'std'
-    noNewPoints = noPoints/pulse.std('time',1)/pulse.frequencyStep;
+    noNewPoints = noPoints/pulse.std('time',1) / pulse.frequencyStep;
   otherwise
-    error('LaserPulse:increaseTimeResolution:argChk', 'unsupported argument type')
+    error('LaserPulse:increaseTimeResolution:argChk', ...
+      'unsupported argument type')
 end
 
 % only pads the spectrum if needed

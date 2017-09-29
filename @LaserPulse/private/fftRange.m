@@ -3,7 +3,7 @@ function y = fftRange(n)
 % it is compatible with matlab definitions of fftshift and iffshift
 % for even and odd numbers
 
-% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2017 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 

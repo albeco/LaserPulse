@@ -15,7 +15,7 @@ function newax = plot(pulse, target, nstd)
 % figure, or an array with four axes handles (as obtained by subplot(2,2,n)
 % for n=1:4).
 
-% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2017 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 
@@ -47,13 +47,13 @@ end
 %% determine plot range
 [sigma_t, sigma_f] = pulse.std();
 timeRange = [-1, 1] * nstd * sigma_t + pulse.arrivalTime;
-if isnan(timeRange(1)); timeRange(1) = -inf; end;
-if isnan(timeRange(2)); timeRange(2) = inf; end;
+if isnan(timeRange(1)); timeRange(1) = -inf; end
+if isnan(timeRange(2)); timeRange(2) = inf; end
 timeRegion = pulse.timeArray>timeRange(1) & pulse.timeArray<timeRange(2);
 
 freqRange = [-1, 1] * nstd * sigma_f + pulse.centralFrequency;
-if isnan(freqRange(1)); freqRange(1) = -inf; end;
-if isnan(freqRange(2)); freqRange(2) = inf; end;
+if isnan(freqRange(1)); freqRange(1) = -inf; end
+if isnan(freqRange(2)); freqRange(2) = inf; end
 freqRegion = ...
   pulse.frequencyArray>freqRange(1) & pulse.frequencyArray<freqRange(2);
 

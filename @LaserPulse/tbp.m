@@ -12,7 +12,7 @@ function x = tbp(pulse, mode)
 % x=tbp(pulse,'fwhm')
 %    equilvalent to pulse.duration*pulse.bandwidth;
 
-% Copyright 2016 Alberto Comin, LMU Muenchen
+% Copyright 2016-2017 Alberto Comin, LMU Muenchen
 
 if nargin<2, mode='rms'; end;
 

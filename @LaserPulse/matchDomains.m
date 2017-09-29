@@ -21,7 +21,7 @@ function matchDomains(p1, p2, tol)
 %  distorted. Conversely the temporal field features always very fast
 %  oscillations.
 
-%% Copyright (c) 2015-2016, Alberto Comin, LMU Muenchen
+%% Copyright (c) 2015-2017, Alberto Comin, LMU Muenchen
 % All rights reserved.
 %
 % Redistribution and use in source and binary forms, with or without
@@ -49,7 +49,7 @@ function matchDomains(p1, p2, tol)
 
 %% MAIN BODY
 defaultTolerance = 1e-10;
-if ~exist('tol', 'var'); tol = defaultTolerance; end;
+if ~exist('tol', 'var'); tol = defaultTolerance; end
 
 assert(sameUnits(p1, p2), ...
   'LaserPulse:matchDomain cannot match domains with different units');

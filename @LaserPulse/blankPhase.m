@@ -1,7 +1,7 @@
 function blankPhase(pulse, domain, threshold)
 % BLANKPHASE puts the phase to zero below a threshold
 %
-% Blanking the phase can be useful when plotting experimental data, when
+% Blanking the phase can be useful for plotting real experimental data, when
 % the signal intensity drops below the noise level.
 %
 % USAGE:
@@ -14,7 +14,7 @@ function blankPhase(pulse, domain, threshold)
 %   pulse.blankPhase();
 %    blank phase in the active domain with default threshold (eps==1e-4)
 
-% Copyright 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright 2015-2017 Alberto Comin, LMU Muenchen
 
 if ~exist('domain', 'var') || isempty(domain)
   domain = pulse.activeDomain;
@@ -34,7 +34,8 @@ elseif strcmp(domain, 'frequency')
   blankingRegion = pulse.spectralIntensity < threshold * maxInt;
   pulse.spectralPhase(blankingRegion) = 0;
 else
-  error('LaserPulse:blankPhase:argChk', 'domain must be either time or frequency');
+  error('LaserPulse:blankPhase:argChk', ...
+    'domain must be either ''time'' or ''frequency''');
 end
 
 end
