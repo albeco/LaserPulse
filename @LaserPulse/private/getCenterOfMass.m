@@ -31,7 +31,7 @@ function [x0, ix0, cm] = getCenterOfMass(x, y, selectedPulse)
 %  before doing a Fourier transform (fft): in that case 'x0' and not 'cm'
 %  should be used.
 
-% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2017 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 

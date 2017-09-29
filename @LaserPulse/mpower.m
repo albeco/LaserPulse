@@ -9,7 +9,7 @@ function res = mpower(pulse1, n)
 % OUTPUTS:
 %   p: the resulting pulse
 
-% Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright (C) 2015-2017 Alberto Comin, LMU Muenchen
 % This file is part of LaserPulse. See README.txt in the LaserPulse folder
 % for copyright and licence notice.
 

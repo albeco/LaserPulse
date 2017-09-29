@@ -14,7 +14,7 @@ function increaseTimeRange(pulse, newrange, units)
 % for setting a range of n standard deviations
 % pulse.increaseTimeRange(n, 'std')
 
-%% Copyright (c) 2015-2016, Alberto Comin, LMU Muenchen
+%% Copyright (c) 2015-2017, Alberto Comin, LMU Muenchen
 % All rights reserved.
 %
 % Redistribution and use in source and binary forms, with or without
@@ -74,8 +74,10 @@ if pulse.nPoints < new_nPoints
   % decrease frequencyStep by increasing nPoints keeping timeStep fixed
   pulse.increaseNumberTimeSteps(new_nPoints);
   % pulse.shiftedFreqArray_ has been automatically updated
-  pulse.specAmp_ = interp1(oldFreqArray, pulse.specAmp_, pulse.shiftedFreqArray_, 'pchip',0);
-  pulse.specPhase_ = interp1(oldFreqArray, pulse.specPhase_, pulse.shiftedFreqArray_, 'pchip',0);
+  pulse.specAmp_ = interp1(oldFreqArray, pulse.specAmp_, ...
+    pulse.shiftedFreqArray_, 'pchip',0);
+  pulse.specPhase_ = interp1(oldFreqArray, pulse.specPhase_, ...
+    pulse.shiftedFreqArray_, 'pchip',0);
   pulse.updatedDomain_ = 'frequency';
 end
 end

@@ -18,7 +18,7 @@ function status = checkSampling(pulse, domain, varargin)
 % OUTPUTS:
 %   status: true is sampling is ok, false otherwise
 
-% Copyright 2015-2016 Alberto Comin, LMU Muenchen
+% Copyright 2015-2017 Alberto Comin, LMU Muenchen
 
 
 %% process input
@@ -46,19 +46,21 @@ switch domain
     pulse.updateField('time');
     status = checkPhase(pulse.tempAmp_, pulse.tempPhase_);
     if ~status && issueWarning
-      warning(['Frequency window (1/timeStep) appears narrow. ', ...
-        'It might be useful to decrease timeStep.']);
+      warning(['Frequency window (1/timeStep == %.2f %s) appears narrow. ', ...
+        'It might be useful to decrease the timeStep.'], ...
+        1/pulse.timeStep, pulse.frequencyUnits);
     end
   case 'frequency'
     pulse.updateField('frequency');
     status = checkPhase(pulse.specAmp_, pulse.specPhase_);
     if ~status && issueWarning
-      warning(['Time window (1/frequencyStep) appears narrow. ', ...
-        'It might be useful to decrease frequencyStep.']);
+      warning(['Time window (1/frequencyStep == %.2f %s) appears narrow. ', ...
+        'It might be useful to decrease the frequencyStep.'], ...
+        1/pulse.frequencyStep, pulse.timeUnits);
     end
   otherwise
     error('LaserPulse:checkSampling', ...
-      'requested domain name is not supported');
+      'requested domain name (''%s'') is not supported', domain);
 end
 
 function status = checkPhase(amp, phase)

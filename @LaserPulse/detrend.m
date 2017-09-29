@@ -4,7 +4,7 @@ function detrend(pulse, domain)
 %   pulse.detrend('time') for temporal phase
 %   pulse.detrend('all') or pulse.detrend() for both phases
 
-%% Copyright (c) 2015-2016, Alberto Comin, LMU Muenchen
+%% Copyright (c) 2015-2017, Alberto Comin, LMU Muenchen
 % All rights reserved.
 %
 % Redistribution and use in source and binary forms, with or without
@@ -43,7 +43,7 @@ switch domain
     pulse.detrend('frequency');
     pulse.detrend('time');
   otherwise
-    error('LaserPulse:detrend', 'unsupported domain Type');
+    error('LaserPulse:detrend', 'unsupported domain Type (''%s'')', domain);
 end
 
 end

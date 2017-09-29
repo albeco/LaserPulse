@@ -67,7 +67,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   %   The LaserPulseMatlab uses features introduced with matlab R2011a,
   %   like for example the matlab.mixin.Copyable class.
   
-  %% Copyright (c) 2015-2016, Alberto Comin, LMU Muenchen
+  %% Copyright (c) 2015-2017, Alberto Comin, LMU Muenchen
   % All rights reserved.
   %
   % Redistribution and use in source and binary forms, with or without
@@ -191,7 +191,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   properties
     activeDomain = 'time'; % Fourier domain used for mathematical operators
   end
-  properties (SetAccess = private);
+  properties (SetAccess = private)
     nPoints = 0; % number of domain points
   end
   %% electric field public properties
