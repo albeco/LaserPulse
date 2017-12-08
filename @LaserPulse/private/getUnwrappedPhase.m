@@ -1,8 +1,9 @@
-function phi = getUnwrappedPhase(efield)
+function phi = getUnwrappedPhase(efield, domainValues)
 %GETUNWRAPPEDPAHSE returns the phase unwrapped symmetrically from center.
 % 
 % INPUTS:
 %   efield: NxM array containg M pulses of N points each
+%   domainValues: (optional) array of domain values (e.g. frequencies)
 % OUTPUTS:
 %   phi: the phase angle(efield) unwrapped symmetrically from the center of
 %    mass of abs(efield).^2
@@ -13,18 +14,23 @@ function phi = getUnwrappedPhase(efield)
 
 
 inputSize = size(efield);
-if iscolumn(efield)
-  fieldint = abs(efield).^2;
+if isvector(efield)
+  efield = efield(:); % make sure efield is a colum vector
+  fieldint = abs(efield(:)).^2;
 else
-  efield = reshape(efield, size(efield,1),[]); %reshape into a 2D array
+  efield = reshape(efield, size(efield,1),[]); % reshape into a 2D array
   fieldint = sum(abs(efield).^2, 2); % get total intensity in one column
+end
+
+if ~exist('domainValues', 'var')
+  domainValues = (1:size(fieldint,1)).';
 end
 
 
 % phase = angle(efield);
 phase = atan2(imag(efield), real(efield));
 
-[~, ix0, ~] = getCenterOfMass([], fieldint, 'total');
+[~, ix0, ~] = getCenterOfMass(domainValues, fieldint, 'total');
 
 
 lowFreq = flipud(unwrap(phase(ix0:-1:1, :)));
