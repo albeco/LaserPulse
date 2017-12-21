@@ -7,5 +7,22 @@
 # Compiled MEX binaries (all platforms)
 *.mex*
 
-# Session info
+# Packaged app and toolbox files 
+*.mlappinstall 
+*.mltbx 
+  
+# Generated helpsearch folders 
+helpsearch*/ 
+
+# Simulink code generation folders
+slprj/
+sccprj/
+
+# Simulink autosave extension
+*.autosave
+
+# Octave session info
 octave-workspace
+
+# Matlab data
+*.mat
