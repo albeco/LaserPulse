@@ -190,6 +190,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   end
   properties
     activeDomain = 'time'; % Fourier domain used for mathematical operators
+    unwrapPhase = true; % whether to unwrap the phase after modifying fields
   end
   properties (SetAccess = private)
     nPoints = 0; % number of domain points
@@ -479,11 +480,19 @@ classdef LaserPulse < matlab.mixin.Copyable
   methods
     function set.specField_(pulse, efield)
       pulse.specAmp_ = abs(efield);
-      pulse.specPhase_ = getUnwrappedPhase(efield);
+      if pulse.unwrapPhase
+        pulse.specPhase_ = getUnwrappedPhase(efield);
+      else
+        pulse.specPhase_ = atan2(imag(efield), real(efield));
+      end
     end
     function set.tempField_(pulse, efield)
-      pulse.tempAmp_ = abs(efield);
-      pulse.tempPhase_ = getUnwrappedPhase(efield);
+      pulse.tempAmp_ = abs(efield);   
+      if pulse.unwrapPhase
+        pulse.tempPhase_ = getUnwrappedPhase(efield);
+      else
+        pulse.tempPhase_ = atan2(imag(efield), real(efield));
+      end
     end
   end
   methods
@@ -534,7 +543,11 @@ classdef LaserPulse < matlab.mixin.Copyable
     function set.spectralField(pulse, efield)
       if isrow(efield), efield = reshape(efield,[],1); end
       pulse.spectralAmplitude = abs(efield);
-      pulse.spectralPhase = getUnwrappedPhase(efield);
+      if pulse.unwrapPhase
+        pulse.spectralPhase = getUnwrappedPhase(efield);
+      else
+        pulse.spectralPhase = atan2(imag(efield), real(efield));
+      end
       % updatedDomain_ has been set to 'frequency'
     end
     function set.spectralIntensity(pulse, z)
@@ -595,7 +608,12 @@ classdef LaserPulse < matlab.mixin.Copyable
         efield = reshape(efield,[],1);
       end
       pulse.temporalAmplitude = abs(efield);
-      pulse.temporalPhase = getUnwrappedPhase(efield);
+      if pulse.unwrapPhase
+        pulse.temporalPhase = getUnwrappedPhase(efield);
+      else
+        pulse.temporalPhase = atan2(imag(efield), real(efield));
+      end
+
     end
     function set.temporalIntensity(pulse, z)
       if isrow(z)
