@@ -11,8 +11,10 @@ res = copy(pulse);
 amplitude = abs(x);
 if isscalar(x)
   phase = angle(x);
-else
+elseif pulse.unwrapPhase
   phase = getUnwrappedPhase(x);
+else
+  phase = atan2(imag(x), real(x));
 end
 
 switch pulse.activeDomain

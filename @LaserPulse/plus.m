@@ -23,5 +23,9 @@ function [amp, phase] = polarsum(amp1,phase1,amp2,phase2)
 realpart = amp1 .* cos(phase1) + amp2 .* cos(phase2);
 imagpart = amp1 .* sin(phase1) + amp2 .* sin(phase2);
 amp = hypot(realpart, imagpart);
-phase = getUnwrappedPhase(realpart +1i * imagpart);
+if pulse1.unwrapPhase 
+  phase = getUnwrappedPhase(realpart +1i * imagpart);
+else
+  phase = atan2(imagpart, realpart);
+end
 end

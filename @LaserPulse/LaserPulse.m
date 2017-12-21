@@ -21,7 +21,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   % INPUTS:
   %  domainValues: frequency or time steps
   %     (Nx1 array)
-  %  domainUnits: time or frequency units (e.g 'fs' or 'PHz')
+  %  domainUnits: time, frequency or wavelengthunits (e.g 'fs', 'PHz', 'nm')
   %     (string)
   %  amp: amplitude of the electric field
   %     (Nx1 array for single pulse or NxM array for M pulses)
@@ -190,6 +190,7 @@ classdef LaserPulse < matlab.mixin.Copyable
   end
   properties
     activeDomain = 'time'; % Fourier domain used for mathematical operators
+    unwrapPhase = true; % whether to unwrap the phase after modifying fields
   end
   properties (SetAccess = private)
     nPoints = 0; % number of domain points
@@ -233,7 +234,7 @@ classdef LaserPulse < matlab.mixin.Copyable
       
       % if phase is not specified, assume that amplitude is complex
       if ~exist('phase','var')
-        phase = getUnwrappedPhase(amp);
+        phase = getUnwrappedPhase(amp, domainValues);
         amp = abs(amp);
       end
       
@@ -253,6 +254,18 @@ classdef LaserPulse < matlab.mixin.Copyable
           pulse.frequencyArray = domainValues;
           pulse.spectralAmplitude = amp;
           pulse.spectralPhase = phase;
+          pulse.checkSampling('frequency', 'warning', true);
+          % remove derivative offset and store it as timeOffset
+          pulse.detrend('frequency');
+        case 'm'
+          [f, pulse.freqUnits_] = WaveUnit.wavelength2frequency(domainValues, domainUnits, 'auto');
+          % timeUnits is automatically updated to match freqUnits_
+          c = WaveUnit.getSpeedOfLight(domainUnits, pulse.timeUnits);
+          % dl/l == - df/f
+          amp = bsxfun(@times, amp, sqrt(c) ./ f);   
+          pulse.frequencyArray = linspace(min(f), max(f), roundeven(size(amp,1)));
+          pulse.spectralAmplitude = interp1(f, amp, pulse.frequencyArray);
+          pulse.spectralPhase = interp1(f, phase, pulse.frequencyArray);
           pulse.checkSampling('frequency', 'warning', true);
           % remove derivative offset and store it as timeOffset
           pulse.detrend('frequency');
@@ -467,11 +480,19 @@ classdef LaserPulse < matlab.mixin.Copyable
   methods
     function set.specField_(pulse, efield)
       pulse.specAmp_ = abs(efield);
-      pulse.specPhase_ = getUnwrappedPhase(efield);
+      if pulse.unwrapPhase
+        pulse.specPhase_ = getUnwrappedPhase(efield);
+      else
+        pulse.specPhase_ = atan2(imag(efield), real(efield));
+      end
     end
     function set.tempField_(pulse, efield)
-      pulse.tempAmp_ = abs(efield);
-      pulse.tempPhase_ = getUnwrappedPhase(efield);
+      pulse.tempAmp_ = abs(efield);   
+      if pulse.unwrapPhase
+        pulse.tempPhase_ = getUnwrappedPhase(efield);
+      else
+        pulse.tempPhase_ = atan2(imag(efield), real(efield));
+      end
     end
   end
   methods
@@ -522,7 +543,11 @@ classdef LaserPulse < matlab.mixin.Copyable
     function set.spectralField(pulse, efield)
       if isrow(efield), efield = reshape(efield,[],1); end
       pulse.spectralAmplitude = abs(efield);
-      pulse.spectralPhase = getUnwrappedPhase(efield);
+      if pulse.unwrapPhase
+        pulse.spectralPhase = getUnwrappedPhase(efield);
+      else
+        pulse.spectralPhase = atan2(imag(efield), real(efield));
+      end
       % updatedDomain_ has been set to 'frequency'
     end
     function set.spectralIntensity(pulse, z)
@@ -583,7 +608,12 @@ classdef LaserPulse < matlab.mixin.Copyable
         efield = reshape(efield,[],1);
       end
       pulse.temporalAmplitude = abs(efield);
-      pulse.temporalPhase = getUnwrappedPhase(efield);
+      if pulse.unwrapPhase
+        pulse.temporalPhase = getUnwrappedPhase(efield);
+      else
+        pulse.temporalPhase = atan2(imag(efield), real(efield));
+      end
+
     end
     function set.temporalIntensity(pulse, z)
       if isrow(z)
@@ -648,14 +678,14 @@ classdef LaserPulse < matlab.mixin.Copyable
   %% utility methods
   methods (Access = private)
     updateField(pulse, domainType); % updates fields using fft
+    increaseNumberTimeSteps(pulse, nPoints); % increases nPoints keeping timeStep fixed
+    increaseNumberFreqSteps(pulse, nPoints); % increase nPoints keeping frequencyStep fixed
   end
   methods
     status = checkSampling(pulse, domain, varargin); % checks if step size allows to represent the cojugated fourier domain.
     blankPhase(pulse, domain, threshold); % puts phase to zero below a threshold
     tau = calculateShortestDuration(pulse); % calculates shortest pulse duration
     polynomialPhase(pulse, taylorCoeff) % sets the spectral phase to a polynomium
-    increaseNumberTimeSteps(pulse, nPoints); % increases nPoints keeping timeStep fixed
-    increaseNumberFreqSteps(pulse, nPoints); % increase nPoints keeping frequencyStep fixed
     detrend(pulse, domain) % removes derivative phase offset
     varargout = std(pulse, domain, mode); % calculates standard deviation in time or freq. domain
     x = tbp(pulse, mode); % calculates time-bandwidth product

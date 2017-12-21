@@ -44,8 +44,10 @@ switch pulse2.activeDomain
     amp = bsxfun(@rdivide, abs(pulse1), (pulse2.temporalAmplitude + eps));
     if isscalar(pulse1)
       phi = bsxfun(@minus, angle(pulse1), pulse2.temporalPhase);
-    else
+    elseif pulse2.unwrapPhase % pulse1 is not an object, follow pulse2 setting
       phi = bsxfun(@minus, getUnwrappedPhase(pulse1), pulse2.temporalPhase);
+    else
+      phi = bsxfun(@minus, atan2(imag(pulse1), real(pulse1)), pulse2.temporalPhase);
     end
   case 'frequency'
     x = pulse2.frequencyArray;
@@ -53,8 +55,10 @@ switch pulse2.activeDomain
     amp = bsxfun(@rdivide, abs(pulse1), (pulse2.spectralAmplitude + eps));
     if isscalar(pulse1)
       phi = bsxfun(@minus, angle(pulse1), pulse2.spectralPhase);
-    else
+    elseif pulse2.unwrapPhase
       phi = bsxfun(@minus, getUnwrappedPhase(pulse1), pulse2.spectralPhase);
+    else
+      phi = bsxfun(@minus, atan2(imag(pulse1), real(pulse1)), pulse2.spectralPhase);
     end
 end
 
