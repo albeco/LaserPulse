@@ -1,10 +1,10 @@
-#LaserPulse
+# LaserPulse
 
 [LaserPulse](http://albeco.github.io/LaserPulse) is a class for storing and handling laser pulses.
 Pulses can be defined in either time or frequency domain.
 Both domains are automatically kept synchronized.
 
-#####Functionalities:
+##### Functionalities:
  * **Automatic Fourier Transform:**
    When a pulse is modified in time domain the spectral field is
    automatically updated using fft, and vice versa.
@@ -34,10 +34,10 @@ Both domains are automatically kept synchronized.
    scan.
    
 
-#####Requirements:
+##### Requirements:
    The LaserPulse class is tested on Matlab R2015a.
 
-#####Installation:
+##### Installation:
  * Automatic Installation:
    From matlab: go to the folder where the LaserPulse is located (for
    example 'cd LaserPulseClass') and run the installer script
@@ -52,4 +52,4 @@ Both domains are automatically kept synchronized.
    generate it using the matlab 'publish' function. See
    'install_LaserPulse.m' for an example.
 
-Copyright (C) 2015-2016 Alberto Comin, LMU Muenchen.
+Copyright (C) 2015-2019 Alberto Comin.
