@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of MIIPS simulation</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-09-29"><meta name="DC.source" content="pulse_MIIPS.m"><style type="text/css">
+      --><title>Example of MIIPS simulation</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-21"><meta name="DC.source" content="pulse_MIIPS.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,32 +66,40 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Example of MIIPS simulation</h1><!--introduction--><p>Multiphoton Intrapulse Interference Phase Scan (MIIPS) is a popular technique for femtosecond pulse compression, which involves modulating the spectral phase and recording second harmonic spectra.</p><p>The second harmonic generation (SHG) is sensitive to the spectral phase, so by analyzing the dependence of the SHG from the modulation parameters it is possible to derive an estimate of the spectral phase.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialize laser pulse</a></li><li><a href="#2">Set up the modulation parameters</a></li><li><a href="#3">Create a matrix with the phase modulation mask</a></li><li><a href="#4">Calculate the MIIPS trace</a></li><li><a href="#6">Display the MIIPS trace</a></li></ul></div><h2 id="1">Initialize laser pulse</h2><pre class="codeinput">p = gaussianPulse(<span class="string">'f0'</span>, 300/800, <span class="string">'t0'</span>, 0, <span class="string">'fwhm'</span>, 20, <span class="keyword">...</span>
+  </style></head><body><div class="content"><h1>Example of MIIPS simulation</h1><!--introduction--><p>Multiphoton Intrapulse Interference Phase Scan (MIIPS) is a popular technique for femtosecond pulse compression, which involves modulating the spectral phase and recording second harmonic spectra.</p><p>The second harmonic generation (SHG) is sensitive to the spectral phase, so by analyzing the dependence of the SHG from the modulation parameters it is possible to derive an estimate of the spectral phase.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Initialize laser pulse</a></li><li><a href="#2">Set up the modulation parameters</a></li><li><a href="#3">Create a matrix with the phase modulation mask</a></li><li><a href="#4">Calculate the MIIPS trace</a></li><li><a href="#6">Display the MIIPS trace</a></li></ul></div><h2>Initialize laser pulse<a name="1"></a></h2><pre class="codeinput">p = gaussianPulse(<span class="string">'f0'</span>, 300/800, <span class="string">'t0'</span>, 0, <span class="string">'fwhm'</span>, 20, <span class="keyword">...</span>
   <span class="string">'dt'</span>,1, <span class="string">'nPoints'</span>, 2^12);
 p.polynomialPhase([1e4 100 0 0])
-</pre><h2 id="2">Set up the modulation parameters</h2><p>In the most common implementation of MIIPS, the phase modulation is a sinusoid, given by:</p><p>amp * sin( tau * (w - w0) - phi)</p><p>where phi is a scanning parameter.</p><pre class="codeinput"><span class="comment">% modulation amplitude</span>
+</pre><pre class="codeoutput error">Error using LaserPulse/polynomialPhase
+Too many output arguments.
+
+Error in LaserPulse/subsref (line 23)
+    efield = pulse.(ref(1).subs);
+
+Error in pulse_MIIPS (line 13)
+p.polynomialPhase([1e4 100 0 0])
+</pre><h2>Set up the modulation parameters<a name="2"></a></h2><p>In the most common implementation of MIIPS, the phase modulation is a sinusoid, given by:</p><p>amp * sin( tau * (w - w0) - phi)</p><p>where phi is a scanning parameter.</p><pre class="codeinput"><span class="comment">% modulation amplitude</span>
 amp = 10; <span class="comment">% rad</span>
 <span class="comment">% modulation frequency</span>
 tau = 10; <span class="comment">% fs</span>
 <span class="comment">% scanning parameters</span>
 phaseSteps = -2*pi: 0.01 : 2*pi;
-</pre><h2 id="3">Create a matrix with the phase modulation mask</h2><p>The modulation mask must be a matrix with frequency on the first dimension and scanning parameter on the second dimension.</p><pre class="codeinput">[W, PHI] = ndgrid(2*pi * p.frequencyArray, phaseSteps);
+</pre><h2>Create a matrix with the phase modulation mask<a name="3"></a></h2><p>The modulation mask must be a matrix with frequency on the first dimension and scanning parameter on the second dimension.</p><pre class="codeinput">[W, PHI] = ndgrid(2*pi * p.frequencyArray, phaseSteps);
 W0 = 2*pi * p.centralFrequency;
 <span class="comment">% the phase modulation mask is:</span>
 modulationMask = exp(1i * amp * sin(tau * (W-W0) - PHI));
-</pre><h2 id="4">Calculate the MIIPS trace</h2><p>Multiply the pulse by the phase modulation mask</p><pre class="codeinput"><span class="comment">% make sure to multiply in the frequency domain</span>
+</pre><h2>Calculate the MIIPS trace<a name="4"></a></h2><p>Multiply the pulse by the phase modulation mask</p><pre class="codeinput"><span class="comment">% make sure to multiply in the frequency domain</span>
 p.activeDomain = <span class="string">'frequency'</span>;
 p = p * modulationMask;
 </pre><p>Calculate the second harmonic and get a LaserPulse object which contain the MIIPS trace.</p><pre class="codeinput"><span class="comment">% harmonics are easier to calculate in time domain</span>
 p.activeDomain = <span class="string">'time'</span>;
 miips = p^2;
-</pre><h2 id="6">Display the MIIPS trace</h2><pre class="codeinput">figure()
+</pre><h2>Display the MIIPS trace<a name="6"></a></h2><pre class="codeinput">figure()
 pcolor(PHI, W, miips.spectralIntensity); shading <span class="string">flat</span>
 ylim([-4*pi, 4*pi]*miips.bandwidth + 2*pi*miips.centralFrequency)
 
 xlabel(<span class="string">'scanning phase (rad)'</span>);
 ylabel(sprintf(<span class="string">' angular frequency (rad / %s)'</span>, miips.timeUnits))
-</pre><img vspace="5" hspace="5" src="pulse_MIIPS_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Example of MIIPS simulation
 % Multiphoton Intrapulse Interference Phase Scan (MIIPS) is a popular

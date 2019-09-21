@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>LaserPulse class properties</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-09-29"><meta name="DC.source" content="pulse_display_properties.m"><style type="text/css">
+      --><title>LaserPulse class properties</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-21"><meta name="DC.source" content="pulse_display_properties.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,7 +66,7 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>LaserPulse class properties</h1><!--introduction--><p>Several physical properties of LaserPulse objects are automatically calculated and can be accessed using the dot notation.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">New pulse in frequency domain</a></li><li><a href="#3">Display physical properties</a></li></ul></div><p>Several physical properties of LaserPulse objects are automatically calculated and can be accessed using the dot notation.</p><h2 id="2">New pulse in frequency domain</h2><pre class="codeinput"><span class="comment">% frequency array</span>
+  </style></head><body><div class="content"><h1>LaserPulse class properties</h1><!--introduction--><p>Several physical properties of LaserPulse objects are automatically calculated and can be accessed using the dot notation.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#2">New pulse in frequency domain</a></li><li><a href="#3">Display physical properties</a></li></ul></div><p>Several physical properties of LaserPulse objects are automatically calculated and can be accessed using the dot notation.</p><h2>New pulse in frequency domain<a name="2"></a></h2><pre class="codeinput"><span class="comment">% frequency array</span>
 f = linspace(0, 10, 1000);
 <span class="comment">% electric field</span>
 Af = exp(-(f-0.5).^2/(0.1)^2);
@@ -76,7 +76,7 @@ p2 = LaserPulse(f, <span class="string">'THz'</span>, Af, phi);
 
 <span class="comment">% Plot the pulse</span>
 p2.plot();
-</pre><img vspace="5" hspace="5" src="pulse_display_properties_01.png" alt=""> <h2 id="3">Display physical properties</h2><pre class="codeinput">fprintf(<span class="string">'\ntime domain properties'</span>)
+</pre><img vspace="5" hspace="5" src="pulse_display_properties_01.png" alt=""> <h2>Display physical properties<a name="3"></a></h2><pre class="codeinput">fprintf(<span class="string">'\ntime domain properties'</span>)
 fprintf(<span class="string">'\n----------------------\n'</span>)
 propertyName = {<span class="string">'arrivalTime'</span>, <span class="string">'duration'</span>, <span class="string">'timeOffset'</span>, <span class="string">'timeStep'</span>};
 <span class="keyword">for</span> i = 1:numel(propertyName)
@@ -103,7 +103,7 @@ centralFrequency = 0.50 THz
 bandwidth = 0.12 THz
 frequencyOffset = 5.01 THz
 frequencyStep = 0.01 THz
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% LaserPulse class properties
 % Several physical properties of LaserPulse objects are automatically

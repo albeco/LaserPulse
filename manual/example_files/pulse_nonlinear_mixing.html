@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Eample of nonlinear mixing</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-09-29"><meta name="DC.source" content="pulse_nonlinear_mixing.m"><style type="text/css">
+      --><title>Eample of nonlinear mixing</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-21"><meta name="DC.source" content="pulse_nonlinear_mixing.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,20 +66,20 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Eample of nonlinear mixing</h1><!--introduction--><p>Within the LaserPulse class, by default multiplications and divisions between pulses are done in the time domain. Multiplying two pulses then gives the sum-frequency signal. The difference frequency is obtained by multiplying the first pulse by the complex conjugate of the second.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">First laser pulse</a></li><li><a href="#2">Second laser pulse</a></li><li><a href="#3">Sum Frequency</a></li><li><a href="#4">Difference Frequency</a></li><li><a href="#5">Plot pulses</a></li></ul></div><h2 id="1">First laser pulse</h2><p>Let us define a 10fs Gaussian pulse centered at 0.4 PHz (750 nm)</p><pre class="codeinput"><span class="comment">% parameters</span>
+  </style></head><body><div class="content"><h1>Eample of nonlinear mixing</h1><!--introduction--><p>Within the LaserPulse class, by default multiplications and divisions between pulses are done in the time domain. Multiplying two pulses then gives the sum-frequency signal. The difference frequency is obtained by multiplying the first pulse by the complex conjugate of the second.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">First laser pulse</a></li><li><a href="#2">Second laser pulse</a></li><li><a href="#3">Sum Frequency</a></li><li><a href="#4">Difference Frequency</a></li><li><a href="#5">Plot pulses</a></li></ul></div><h2>First laser pulse<a name="1"></a></h2><p>Let us define a 10fs Gaussian pulse centered at 0.4 PHz (750 nm)</p><pre class="codeinput"><span class="comment">% parameters</span>
 n = 2^12; dt = 0.1; s = 10; t0 = 10; f0 = 0.4;
 t = (-n/2:n/2-1).' * dt;
 et = exp(-(t-t0).^2/s^2 -2i*pi*t*f0);
 <span class="comment">% pulse initialization</span>
 p1 = LaserPulse(t, <span class="string">'fs'</span>, et);
-</pre><h2 id="2">Second laser pulse</h2><p>Now let us a define a second pulse centered at a different frequency: 0.6 PHz (500 nm)</p><pre class="codeinput"><span class="comment">% modified parameters</span>
+</pre><h2>Second laser pulse<a name="2"></a></h2><p>Now let us a define a second pulse centered at a different frequency: 0.6 PHz (500 nm)</p><pre class="codeinput"><span class="comment">% modified parameters</span>
 f0 = 0.6;
 et2 = exp(-(t).^2/(s/2)^2 -2i*pi*t*f0);
 <span class="comment">% pulse initialization</span>
 p2 = LaserPulse(t, <span class="string">'fs'</span>, et2);
-</pre><h2 id="3">Sum Frequency</h2><p>The sum frequency can be obtained by simple multiplication.</p><pre class="codeinput">psf = p1 * p2 ;
-</pre><h2 id="4">Difference Frequency</h2><p>The frequency difference can be obtained by multiplying the first pulse with the complex conjugate of the second.</p><pre class="codeinput">pdf = p2 * conj(p1);
-</pre><h2 id="5">Plot pulses</h2><pre class="codeinput">figure()
+</pre><h2>Sum Frequency<a name="3"></a></h2><p>The sum frequency can be obtained by simple multiplication.</p><pre class="codeinput">psf = p1 * p2 ;
+</pre><h2>Difference Frequency<a name="4"></a></h2><p>The frequency difference can be obtained by multiplying the first pulse with the complex conjugate of the second.</p><pre class="codeinput">pdf = p2 * conj(p1);
+</pre><h2>Plot pulses<a name="5"></a></h2><pre class="codeinput">figure()
 subplot(2,1,1)
 plot(p1.timeArray,p1.temporalAmplitude, <span class="keyword">...</span>
   p2.timeArray, p2.temporalAmplitude, <span class="keyword">...</span>
@@ -101,7 +101,7 @@ xlabel([<span class="string">'frequency ('</span>, p1.frequencyUnits, <span clas
 ylabel(<span class="string">'abs(Ef)'</span>);
 legend(<span class="string">'f1'</span>,<span class="string">'f2'</span>,<span class="string">'f1+f2'</span>,<span class="string">'f2-f1'</span>, <span class="string">'location'</span>,<span class="string">'best'</span>);
 axis([0 1.5 -0.2 18])
-</pre><img vspace="5" hspace="5" src="pulse_nonlinear_mixing_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="pulse_nonlinear_mixing_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Eample of nonlinear mixing
 % Within the LaserPulse class, by default multiplications and divisions

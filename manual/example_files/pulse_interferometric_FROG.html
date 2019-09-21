@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of interometric frequency resolved optical gating</title><meta name="generator" content="MATLAB 9.3"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2017-09-29"><meta name="DC.source" content="pulse_interferometric_FROG.m"><style type="text/css">
+      --><title>Example of interometric frequency resolved optical gating</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-21"><meta name="DC.source" content="pulse_interferometric_FROG.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -66,10 +66,18 @@ table td { padding:7px 5px; text-align:left; vertical-align:top; border:1px soli
 
 
 
-  </style></head><body><div class="content"><h1>Example of interometric frequency resolved optical gating</h1><!--introduction--><p>Frequency resolved Optical Gating (FROG) is a popular technique for measuring ultrafast laser pulses. In this example we show how to simulate FROG in collinear geometry. This is not the most common implementation, but it is the easiest to implement using a pulse-shaper.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Define a LaserPulse object</a></li><li><a href="#2">Create a pulse sequence</a></li><li><a href="#3">Calculate the second harmonic</a></li><li><a href="#4">Plot the FROG traces</a></li></ul></div><h2 id="1">Define a LaserPulse object</h2><p>Let us define a 10fs Gaussian pulse, centered at 800 nm, with a group delay dispersion of 100 fs^2.</p><pre class="codeinput">p = gaussianPulse(<span class="string">'f0'</span>, 300/800,<span class="string">'dt'</span>,0.2,<span class="string">'nPoints'</span>,2^10,<span class="string">'fwhm'</span>,10);
+  </style></head><body><div class="content"><h1>Example of interometric frequency resolved optical gating</h1><!--introduction--><p>Frequency resolved Optical Gating (FROG) is a popular technique for measuring ultrafast laser pulses. In this example we show how to simulate FROG in collinear geometry. This is not the most common implementation, but it is the easiest to implement using a pulse-shaper.</p><!--/introduction--><h2>Contents</h2><div><ul><li><a href="#1">Define a LaserPulse object</a></li><li><a href="#2">Create a pulse sequence</a></li><li><a href="#3">Calculate the second harmonic</a></li><li><a href="#4">Plot the FROG traces</a></li></ul></div><h2>Define a LaserPulse object<a name="1"></a></h2><p>Let us define a 10fs Gaussian pulse, centered at 800 nm, with a group delay dispersion of 100 fs^2.</p><pre class="codeinput">p = gaussianPulse(<span class="string">'f0'</span>, 300/800,<span class="string">'dt'</span>,0.2,<span class="string">'nPoints'</span>,2^10,<span class="string">'fwhm'</span>,10);
 GDD = 100; <span class="comment">% fs^2</span>
 p.polynomialPhase([GDD 0 0]);
-</pre><h2 id="2">Create a pulse sequence</h2><p>For creating a pulse sequence, we multiply the frequency domain electric field by a cosine amplitude modulation.</p><pre class="codeinput"><span class="comment">% the cosine amplitude modulation is stored in a matrix with frequency</span>
+</pre><pre class="codeoutput error">Error using LaserPulse/polynomialPhase
+Too many output arguments.
+
+Error in LaserPulse/subsref (line 23)
+    efield = pulse.(ref(1).subs);
+
+Error in pulse_interferometric_FROG (line 13)
+p.polynomialPhase([GDD 0 0]);
+</pre><h2>Create a pulse sequence<a name="2"></a></h2><p>For creating a pulse sequence, we multiply the frequency domain electric field by a cosine amplitude modulation.</p><pre class="codeinput"><span class="comment">% the cosine amplitude modulation is stored in a matrix with frequency</span>
 <span class="comment">% on the first dimension and time delay on the second dimension</span>
 timeShift = cos(2*pi * p.frequencyArray * p.timeArray'/2);
 
@@ -78,10 +86,10 @@ p.activeDomain = <span class="string">'frequency'</span>;
 
 p = p * timeShift;
 <span class="comment">% now p contains a pulse sequence</span>
-</pre><h2 id="3">Calculate the second harmonic</h2><pre class="codeinput"><span class="comment">% harmonics are easier to calculate in time domain</span>
+</pre><h2>Calculate the second harmonic<a name="3"></a></h2><pre class="codeinput"><span class="comment">% harmonics are easier to calculate in time domain</span>
 p.activeDomain = <span class="string">'time'</span>;
 p2 = p.^2;
-</pre><h2 id="4">Plot the FROG traces</h2><pre class="codeinput">figure()
+</pre><h2>Plot the FROG traces<a name="4"></a></h2><pre class="codeinput">figure()
 
 subplot(2,1,1)
 pcolor(p2.timeArray,p2.timeArray, p2.temporalIntensity); shading <span class="string">flat</span>
@@ -95,7 +103,7 @@ xlim([-100, 100]); ylim([-1.5 1.5]*p2.bandwidth+p2.centralFrequency)
 xlabel(sprintf(<span class="string">'time delay (%s)'</span>, p2.timeUnits))
 ylabel(sprintf(<span class="string">'frequency (%s)'</span>, p2.frequencyUnits))
 title(<span class="string">'Interferometric FROG - frequency domain'</span>)
-</pre><img vspace="5" hspace="5" src="pulse_interferometric_FROG_01.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2017b</a><br></p></div><!--
+</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Example of interometric frequency resolved optical gating
 % Frequency resolved Optical Gating (FROG) is a popular technique for
