@@ -682,6 +682,7 @@ classdef LaserPulse < matlab.mixin.Copyable
     increaseNumberFreqSteps(pulse, nPoints); % increase nPoints keeping frequencyStep fixed
   end
   methods
+    x = subsref(pulse, ref);
     status = checkSampling(pulse, domain, varargin); % checks if step size allows to represent the cojugated fourier domain.
     blankPhase(pulse, domain, threshold); % puts phase to zero below a threshold
     tau = calculateShortestDuration(pulse); % calculates shortest pulse duration
