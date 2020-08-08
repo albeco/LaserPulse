@@ -21,6 +21,7 @@ function efield = subsref(pulse, ref)
 switch ref(1).type
   case '.'
     efield = pulse.(ref(1).subs);
+    return
   case '{}'
     error('LaserPulse:subsref:argChk', 'unsupported {} indexing');
   case '()'
