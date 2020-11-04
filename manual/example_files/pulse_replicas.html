@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of time-shifted pulse replicas and pulse trains</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-21"><meta name="DC.source" content="pulse_replicas.m"><style type="text/css">
+      --><title>Example of time-shifted pulse replicas and pulse trains</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-11-04"><meta name="DC.source" content="pulse_replicas.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -77,15 +77,7 @@ p2.spectralPhase = p2.spectralPhase + linearPhase;
 ax = p.plot();
 p2.plot(ax);
 set(get(ax(1),<span class="string">'Parent'</span>),<span class="string">'Name'</span>,<span class="string">'Time Shifted Pulse'</span>)
-</pre><pre class="codeoutput error">Error using subsindex
-Function 'subsindex' is not defined for values of class 'matlab.graphics.axis.Axes'.
-
-Error in LaserPulse/subsref (line 40)
-  efield = subsref(efield, ref(2:end));
-
-Error in pulse_replicas (line 17)
-p2.plot(ax);
-</pre><h2>Pulse replicas<a name="3"></a></h2><p>A cosine amplitude modulation gives two pulse replicas.</p><pre class="codeinput">timeSeparation = 20; <span class="comment">% fs</span>
+</pre><img vspace="5" hspace="5" src="pulse_replicas_01.png" alt=""> <h2>Pulse replicas<a name="3"></a></h2><p>A cosine amplitude modulation gives two pulse replicas.</p><pre class="codeinput">timeSeparation = 20; <span class="comment">% fs</span>
 
 p3 = p.copy;
 p3.spectralField = p3.spectralField .* <span class="keyword">...</span>
@@ -93,7 +85,7 @@ p3.spectralField = p3.spectralField .* <span class="keyword">...</span>
 
 ax = p3.plot();
 set(get(ax(1),<span class="string">'Parent'</span>),<span class="string">'Name'</span>,<span class="string">'Pulse Pair'</span>)
-</pre><h2>Pulse train<a name="4"></a></h2><p>There are at least two ways for simulating a pulse train. The first one is to create a big array which contains all the pulses of the train. The second one is to store the individual sub-pulses as columns of a multi-dimensional array. The first approach is useful if the train contains only few pulses not too far apart from each other. The second approach is more convenient for simulating pulse trains produced by high-repetition rate laser sources.</p><p><b>Example of pulse train stored in one dimensional array:</b></p><pre class="codeinput"><span class="comment">% A sinusoidal phase modulation gives a pulse train.</span>
+</pre><img vspace="5" hspace="5" src="pulse_replicas_02.png" alt=""> <h2>Pulse train<a name="4"></a></h2><p>There are at least two ways for simulating a pulse train. The first one is to create a big array which contains all the pulses of the train. The second one is to store the individual sub-pulses as columns of a multi-dimensional array. The first approach is useful if the train contains only few pulses not too far apart from each other. The second approach is more convenient for simulating pulse trains produced by high-repetition rate laser sources.</p><p><b>Example of pulse train stored in one dimensional array:</b></p><pre class="codeinput"><span class="comment">% A sinusoidal phase modulation gives a pulse train.</span>
 timeSeparation = 20; <span class="comment">% fs</span>
 
 p4 = p.copy();
@@ -102,7 +94,7 @@ p4.spectralPhase = p4.spectralPhase + <span class="keyword">...</span>
 
 ax = p4.plot();
 set(get(ax(1),<span class="string">'Parent'</span>),<span class="string">'Name'</span>,<span class="string">'Pulse Train'</span>)
-</pre><p><b>Example of pulse train stored in a multidimensional array:</b></p><p>We assume that the train has pulse-pulse amplitude instability.</p><pre class="codeinput"><span class="comment">% number of pulses of the train</span>
+</pre><img vspace="5" hspace="5" src="pulse_replicas_03.png" alt=""> <p><b>Example of pulse train stored in a multidimensional array:</b></p><p>We assume that the train has pulse-pulse amplitude instability.</p><pre class="codeinput"><span class="comment">% number of pulses of the train</span>
 nPulses = 100;
 
 <span class="comment">% create row vector with amplitude jitter</span>
@@ -113,7 +105,7 @@ ampJitter = 1  + (rand(1, nPulses)-0.5) * maxAmpJitter;
 p5 = p.copy();
 p5 = p5 * ampJitter;
 p5.plot;
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="pulse_replicas_04.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Example of time-shifted pulse replicas and pulse trains
 

@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of calculation of harmonics</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-21"><meta name="DC.source" content="pulse_harmonics.m"><style type="text/css">
+      --><title>Example of calculation of harmonics</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-11-04"><meta name="DC.source" content="pulse_harmonics.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -77,14 +77,6 @@ Et = exp(-(t-t0).^2/s^2 -2i*pi*t*f0);
 p1 = LaserPulse(t, <span class="string">'fs'</span>, Et);
 p1.frequencyUnits = <span class="string">'THz'</span>;
 p1.normalize()
-</pre><pre class="codeoutput error">Error using LaserPulse/normalize
-Too many output arguments.
-
-Error in LaserPulse/subsref (line 23)
-    efield = pulse.(ref(1).subs);
-
-Error in pulse_harmonics (line 14)
-p1.normalize()
 </pre><h2>Calculate harmonics<a name="2"></a></h2><p>The power operator works, by default, on the time dimension. This allows calculating harmonics using a short notation:</p><pre class="codeinput">pshg = p1.^2;
 pthg = p1.^3;
 pfhg = p1.^4;
@@ -100,12 +92,12 @@ xlabel([<span class="string">'frequency ('</span>, p1.frequencyUnits, <span clas
 ylabel(<span class="string">'abs(Ef).^2'</span>);
 axis([0 2000 0 0.03])
 legend(<span class="string">'1st'</span>,<span class="string">'2nd'</span>,<span class="string">'3rd'</span>, <span class="string">'4th'</span>);
-</pre><p>The following figure displays the spectra, in function of wavelength.</p><pre class="codeinput">p1.plotSpectrum; hold <span class="string">on</span>
+</pre><img vspace="5" hspace="5" src="pulse_harmonics_01.png" alt=""> <p>The following figure displays the spectra, in function of wavelength.</p><pre class="codeinput">p1.plotSpectrum; hold <span class="string">on</span>
 pshg.plotSpectrum(gcf);
 pthg.plotSpectrum(gcf);
 pfhg.plotSpectrum(gcf); hold <span class="string">off</span>
 legend(<span class="string">'1st'</span>,<span class="string">'2nd'</span>,<span class="string">'3rd'</span>, <span class="string">'4th'</span>);
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="pulse_harmonics_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Example of calculation of harmonics
 

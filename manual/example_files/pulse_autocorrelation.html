@@ -6,7 +6,7 @@
    <!--
 This HTML was auto-generated from MATLAB code.
 To make changes, update the MATLAB code and republish this document.
-      --><title>Example of interferometric autocorrelation</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2019-09-21"><meta name="DC.source" content="pulse_autocorrelation.m"><style type="text/css">
+      --><title>Example of interferometric autocorrelation</title><meta name="generator" content="MATLAB 8.5"><link rel="schema.DC" href="http://purl.org/dc/elements/1.1/"><meta name="DC.date" content="2020-11-04"><meta name="DC.source" content="pulse_autocorrelation.m"><style type="text/css">
 html,body,div,span,applet,object,iframe,h1,h2,h3,h4,h5,h6,p,blockquote,pre,a,abbr,acronym,address,big,cite,code,del,dfn,em,font,img,ins,kbd,q,s,samp,small,strike,strong,sub,sup,tt,var,b,u,i,center,dl,dt,dd,ol,ul,li,fieldset,form,label,legend,table,caption,tbody,tfoot,thead,tr,th,td{margin:0;padding:0;border:0;outline:0;font-size:100%;vertical-align:baseline;background:transparent}body{line-height:1}ol,ul{list-style:none}blockquote,q{quotes:none}blockquote:before,blockquote:after,q:before,q:after{content:'';content:none}:focus{outine:0}ins{text-decoration:none}del{text-decoration:line-through}table{border-collapse:collapse;border-spacing:0}
 
 html { min-height:100%; margin-bottom:1px; }
@@ -76,25 +76,17 @@ Ef = exp(-(f-f0).^2/s^2 +2i*pi*t0*f);
 p1 = LaserPulse(f, <span class="string">'PHz'</span>, Ef);
 <span class="comment">% set a polynomial phase, 2nd order: 50fs^2, 3rd order 50fs^3</span>
 p1.polynomialPhase([50 50 0 0])
-</pre><pre class="codeoutput error">Error using LaserPulse/polynomialPhase
-Too many output arguments.
-
-Error in LaserPulse/subsref (line 23)
-    efield = pulse.(ref(1).subs);
-
-Error in pulse_autocorrelation (line 14)
-p1.polynomialPhase([50 50 0 0])
 </pre><h2>Calculate interferometric autocorrelation<a name="2"></a></h2><pre class="codeinput">ac = p1.autocorrelation();
 </pre><h2>Plot pulse<a name="3"></a></h2><pre class="codeinput">fh1 = figure();
 axLst(5) = subplot(3,2,[5,6]);
 <span class="keyword">for</span> k = 1:4, axLst(k) = subplot(3, 2, k); <span class="keyword">end</span>
 p1.plot(axLst(1:4), 3) <span class="comment">% plots a range of +/-3 standard deviation</span>
 <span class="keyword">for</span> k=1:4, axis(axLst(k), <span class="string">'tight'</span>); <span class="keyword">end</span>
-</pre><h2>Plot autocorrelation<a name="4"></a></h2><pre class="codeinput">plot(axLst(5), p1.timeArray, ac, <span class="string">'LineWidth'</span>, 1.5);
+</pre><img vspace="5" hspace="5" src="pulse_autocorrelation_01.png" alt=""> <h2>Plot autocorrelation<a name="4"></a></h2><pre class="codeinput">plot(axLst(5), p1.timeArray, ac, <span class="string">'LineWidth'</span>, 1.5);
 xlim(axLst(5), [-4,4]*p1.duration + p1.timeOffset);
 xlabel(axLst(5), sprintf(<span class="string">'time delay (%s)'</span>, p1.timeUnits));
 ylabel(axLst(5), <span class="string">'SHG (arb.units)'</span>);
-</pre><p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
+</pre><img vspace="5" hspace="5" src="pulse_autocorrelation_02.png" alt=""> <p class="footer"><br><a href="http://www.mathworks.com/products/matlab/">Published with MATLAB&reg; R2015a</a><br></p></div><!--
 ##### SOURCE BEGIN #####
 %% Example of interferometric autocorrelation
 
